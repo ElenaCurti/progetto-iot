@@ -1,0 +1,7 @@
+[submodule "ESP32-OV7670-WebSocket-Camera"]
+	path = CampanelloFotocamera_Esp32/.pio/libdeps/esp32dev/ESP32-OV7670-WebSocket-Camera
+	url = https://github.com/mudassar-tamboli/ESP32-OV7670-WebSocket-Camera/
+
+[submodule "CampanelloFotocamera_Esp32/.pio/libdeps/esp32dev/ESP32-OV7670-WebSocket-Camera"]
+	path = CampanelloFotocamera_Esp32/.pio/libdeps/esp32dev/ESP32-OV7670-WebSocket-Camera
+	url = https://github.com/mudassar-tamboli/ESP32-OV7670-WebSocket-Camera/

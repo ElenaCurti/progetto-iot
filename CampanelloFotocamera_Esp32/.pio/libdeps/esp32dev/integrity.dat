@@ -1,0 +1,5 @@
+lib_extra_dirs =
+https://github.com/mudassar-tamboli/ESP32-OV7670-WebSocket-Camera.git
+../mia_libreria/
+links2004/WebSockets@^2.4.1
+knolleary/PubSubClient@^2.8
