@@ -68,8 +68,8 @@ void setup() {
     Serial.println("MQTT per mandare immagine.");
     connessione_wifi();
     ip_address_esp = WiFi.localIP();
-    MILLISECONDS_SEND_PIC = 10*1000;
-    IPAddress ip_broker = IPAddress(192,168,43,252);  
+    MILLISECONDS_SEND_PIC = 100;//1*1000;
+    IPAddress ip_broker = IPAddress(192,168,1,53);    // TODO mettere configurazione
     // bool ris_ping = Ping.ping(ip_broker, 3);
     // if(ris_ping)
     //     Serial.println("Ping pc succesful.");
@@ -83,9 +83,10 @@ void setup() {
     //     Serial.println("Ping google failed");
 
     // mqtt_inizializzaServerAndCallback("192.168.1.53", "esp32", 1883, true);
-    mqtt_client.setKeepAlive(30);
     
-    mqtt_client.setServer(ip_broker, 1883);
+    // mqtt_client.setKeepAlive(60); // TODO se non da problemi togli questa riga
+    
+    mqtt_client.setServer("broker.hivemq.com", 1883);
     // mqtt_client.setCallback(mqtt_callback);
 
 
@@ -104,6 +105,7 @@ void setup() {
 
 void mqtt_clientLoop(){
   int num_tentativi_falliti = 0 ;
+  String  clientId = "elenaId-esp32-";
 
     while (!mqtt_client.connected()) {
     if (WiFi.status() != WL_CONNECTED)
@@ -112,7 +114,9 @@ void mqtt_clientLoop(){
     Serial.print("Attempting MQTT connection...");
     
     // Attempt to connect
-    if (mqtt_client.connect("elenaId-esp32")) {
+    clientId += String(random(0xffff), HEX);
+
+    if (mqtt_client.connect(clientId.c_str())) {
       Serial.println("connected");  
     } else {
       num_tentativi_falliti ++;
@@ -178,8 +182,10 @@ void loop() {
       
     } else if (modalita_usata == IMMAGINE_CON_MQTT){
       // Se uso mqtt, pubblico la foto sul topic
+      Serial.print("Faccio foto...") ;
       size_t size;
       unsigned char* foto = take_picture(size);
+      Serial.print("ok\t") ;
       
       // if (size!=size_foto){
       //   Serial.println("size cambiata!");
@@ -188,7 +194,11 @@ void loop() {
       // Serial.print("Pubblico foto: \tSize:");
       // Serial.print(2*size+1);
       // Serial.print("\tRisultato:");
+      Serial.print("Converto...") ;
+
       String string_to_send = convert_to_mqtt_string(foto, size);
+      Serial.print("ok\t") ;
+
 
       // for (size_t i = 0; i < 10; i++) {
       //   Serial.print(foto[i]);
@@ -216,7 +226,8 @@ void loop() {
       //   Serial.println(mqtt_client.publish("immagine2", prova.c_str()));
       // }
 
-      Serial.println(mqtt_client.publish(TOPIC_PUBLISH_IMMAGINE, (uint8_t*) string_to_send.c_str(), string_to_send.length(), false));
+      // Serial.println(mqtt_client.publish(TOPIC_PUBLISH_IMMAGINE, (uint8_t*) string_to_send.c_str(), string_to_send.length(), false));
+      Serial.println(mqtt_client.publish(TOPIC_PUBLISH_IMMAGINE, string_to_send.c_str()));
       Serial.println("Lunghezza stringa:" + (String) string_to_send.length());
       Serial.println("Tempo impiegato: " + (String) (millis() - tempo_prec));
 //      Serial.println("Differenza di chiamata del client loop: " + (String) (millis() - last_mqtt_loop_called));

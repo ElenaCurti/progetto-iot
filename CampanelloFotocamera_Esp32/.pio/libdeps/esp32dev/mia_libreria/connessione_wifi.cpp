@@ -4,7 +4,7 @@ void connessione_wifi(){
     // TODO se la esp non si connette (es. entro 5 sec) -> prova a fare restart dell'esp
 
     // #define WIFI_PROF
-    // #define WIFI_CASA
+    #define WIFI_CASA
 
 
     #ifdef WIFI_PROF

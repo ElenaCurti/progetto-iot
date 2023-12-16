@@ -71,12 +71,34 @@ void convertToHexString(unsigned char* array, size_t size, char* hexArray) {
     }
 }
 
+String convert_to_mqtt_string(const unsigned char* array, size_t size, const char* formato) {
+    // Il formato può essere: %c -> per ritornare il carattere ASCII    %d -> decimale      %02X -> hex
 
-String convert_to_mqtt_string(unsigned char* array, size_t size, char* formato){
+    if (strcmp(formato, "%d") != 0 && strcmp(formato, "%c") != 0 && strcmp(formato, "%02X") != 0) {
+        Serial.println("Formato non valido!");
+        return "";
+    }
+
+    char buffer[3];  // Buffer for each byte in hexadecimal representation
+    String ret_str;
+
+    for (size_t i = 0; i < size; i++) {
+        sprintf(buffer, "%02X", array[i]);
+        ret_str += buffer;
+    }
+
+    ret_str.toUpperCase(); // Convert to uppercase
+
+    return ret_str;
+}
+
+
+String old_convert_to_mqtt_string(unsigned char* array, size_t size, char* formato){
     // Il formato puo' essere: 
     // %c    -> per ritornare il carattere ASCII
     // %d    -> decimale
     // %02X  -> hex
+
 
     if (formato!="%d" && formato!="%c" && formato!="%02X"){
         Serial.println("Formato non valido!");
