@@ -32,7 +32,7 @@ PubSubClient mqtt_client(espClient);
 const int SECONDI_TENTATIVO_RICONNESSIONE_MQTT = 2;
 
 
-char* TOPIC_PUBLISH_IMMAGINE ="immagine";
+char* TOPIC_PUBLISH_IMMAGINE = "immagine";
 char* hexArray;
 size_t size_foto = 9600;
 
@@ -86,7 +86,7 @@ void setup() {
     
     // mqtt_client.setKeepAlive(60); // TODO se non da problemi togli questa riga
     
-    mqtt_client.setServer("broker.hivemq.com", 1883);
+    mqtt_client.setServer(ip_broker, 1883);
     // mqtt_client.setCallback(mqtt_callback);
 
 

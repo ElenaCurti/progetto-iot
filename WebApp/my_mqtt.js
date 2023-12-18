@@ -1,7 +1,7 @@
-var HOST = "broker.hivemq.com"
+var HOST = "192.168.1.53"
 var PORT = 8000;
 var TOPIC_IN = "immagine";
-var userId = "";
+var userId = "elenaId-webapp-";
 var passwordId ="";
 
 function print_message(messaggio){
@@ -15,19 +15,19 @@ function startConnect(){
             return;
     } catch (err){}
 
-    clientID = "clientID-"+parseInt(Math.random() * 100);
+    userId += parseInt(Math.random() * 100);
 
     print_message("Connecting to " + HOST + " on port " +PORT);
-    print_message("Using the client Id " + clientID );
+    print_message("Using the client Id " + userId );
 
-    client = new Paho.MQTT.Client(HOST,Number(PORT),clientID);
+    client = new Paho.MQTT.Client(HOST,Number(PORT),userId);
     client.onConnectionLost = onConnectionLost;
     client.onMessageArrived = onMessageArrived;
 
     client.connect({
-        onSuccess: onConnect
+        onSuccess: onConnect,
         // TODO implementa username e password
-//        userName: userId,
+        userName: userId
  //       passwordId: passwordId
     });
 
