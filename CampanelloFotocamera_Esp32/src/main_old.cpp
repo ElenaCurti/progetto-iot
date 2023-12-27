@@ -1,14 +1,20 @@
-#include <Arduino.h>
-#include <connessione_wifi.h>
+/*#include <connessione_wifi.h>
 #include "camera_ov7670.h"  // TODO vedi se conveniva usare questa: https://github.com/bitluni/ESP32CameraI2S
-// #include "mio_websocket.h"
+#include "mio_websocket.h"
 #include <WiFi.h>
-// #include <WebSocketsServer.h>
-// #include "mio_mqtt.h"
+#include <WebSocketsServer.h>
+#include "mio_mqtt.h"
 #include <MQTTClient.h>
 #include <HardwareBLESerial.h>
-#include "modalita_comunicazione.h"
 
+
+// Modalita per mandare l'immagine:
+enum modalita_comunicazione_immagine {
+  IMMAGINE_CON_WEBSOCKET, 
+  IMMAGINE_CON_MQTT, 
+  IMMAGINE_CON_BLE
+} ; 
+modalita_comunicazione_immagine modalita_usata = IMMAGINE_CON_BLE;
 
 
 // Variabili per fare foto ogni MILLISECONDS_SEND_PIC millisecondi
@@ -17,8 +23,10 @@ long MILLISECONDS_SEND_PIC = -1;
 
 // Variabili per il websocket
 IPAddress ip_address_esp ;
+extern WebSocketsServer mio_webSocket;
 
 // Variabili per mqtt
+const int SECONDI_TENTATIVO_RICONNESSIONE_MQTT = 2;
 char* TOPIC_PUBLISH_IMMAGINE = "immagine";
 char* hexArray;
 size_t size_foto = 9600;
@@ -29,40 +37,32 @@ MQTTClient mqtt_client(size_foto*2+100);
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 
-void messageReceived2(String &topic, String &payload) {
-  // NB: NON USARE mqtt_client QUI -> se devi usarlo, cambia una variabile globale
-  Serial.println("incoming: " + topic + " - " + payload);
-
-}
-
-
 void setup() {
-  Serial.begin(115200); // TODO serial forse e' considerata quella del BLE ?
+  Serial.begin(115200);
 
-  modalita_comunicazione modalita_usata = getModalitaComunicazioneUsata();
+  if (modalita_usata == IMMAGINE_CON_WEBSOCKET){
+    Serial.println("Web socket per mandare immagine.");
+    ip_address_esp = esp_as_AP();
+    ws_setup(ip_address_esp); 
+    MILLISECONDS_SEND_PIC = 100;
+    
 
-  if (modalita_usata == IMMAGINE_CON_MQTT){
+  } else if (modalita_usata == IMMAGINE_CON_MQTT){
     Serial.println("MQTT per mandare immagine.");
 
     connessione_wifi();
     ip_address_esp = WiFi.localIP();
     
-    IPAddress ip_broker = IPAddress(192,168,43,252);    // TODO mettere broker come configurazione
+    IPAddress ip_broker = IPAddress(192,168,1,53);    // TODO mettere broker come configurazione
     mqtt_client.begin(ip_broker, net);
-    mqtt_client.onMessage(messageReceived2);
-    // mqtt_client.subscribe("topic");
-    // mqtt_client.setKeepAlive(60);
-    // mqtt_client.setCleanSession(false);
-    // mqtt_client.setTimeout(7000);
-
-    // mqtt_clientLoop_old(mqtt_client, false);
-    gestisciComunicazioneIdle(mqtt_client, bleSerial);
+    mqtt_client.onMessage(messageReceived);
+    mqtt_clientLoop(mqtt_client);
 
     MILLISECONDS_SEND_PIC = 100;
 
-    // Creo l'array che conterra' i bytes della foto 
+    // Creo l'array che conterra' i bytes  
     while(hexArray == NULL)
-      hexArray = (char*) malloc(size_foto * 2 + 1);
+      hexArray = (char*)malloc(size_foto * 2 + 1);
 
     // Inizializzo la camera facendo una foto
     size_t size;
@@ -94,26 +94,18 @@ void setup() {
 unsigned int last_mqtt_loop_called = -1;
 void loop() {
 
-  // Serial.print(WiFi.isConnected());
-  // Serial.print("\t");
-  // Serial.println(WiFi.status() != WL_CONNECTED);
-  
 
-  // Modalita di comunicazione
-  // mqtt_clientLoop_old(mqtt_client, true);
-  gestisciComunicazioneIdle(mqtt_client, bleSerial);
-  // delay(20);
-  
-/*
   // Chiamo i loop di web socket o mqtt 
-  if (modalita_usata == IMMAGINE_CON_MQTT){
+  if (modalita_usata == IMMAGINE_CON_WEBSOCKET) {
+    ws_loop(); 
+  } else if (modalita_usata == IMMAGINE_CON_MQTT){
     mqtt_clientLoop(mqtt_client);
     last_mqtt_loop_called = millis();
   } else if (modalita_usata == IMMAGINE_CON_BLE){
     bleSerial.poll();
 
+    // whatever is written to BLE UART appears in the Serial Monitor
     while (bleSerial.available() > 0) {
-      // Leggo i dati dalla ble serial
       Serial.write(bleSerial.read());
     }
   }
@@ -123,7 +115,13 @@ void loop() {
   if (currentMillis - previousMillis >= MILLISECONDS_SEND_PIC) {
     
     
-   if (modalita_usata == IMMAGINE_CON_MQTT){
+    if (modalita_usata == IMMAGINE_CON_WEBSOCKET &&  get_id_host_connesso() != -1 ) {
+      // Se uso i web sockets e c'e un client connesso -> mando la foto 
+      size_t size;
+      unsigned char* foto = take_picture(size);
+      mio_webSocket.sendBIN(get_id_host_connesso(), foto, size);  // -> ottimo se uso la esp32 per fare da AP
+      
+    } else if (modalita_usata == IMMAGINE_CON_MQTT){
       // Se uso mqtt, pubblico la foto sul topic
 
       Serial.print("Faccio foto...") ;
@@ -158,7 +156,8 @@ void loop() {
     previousMillis = currentMillis;
 
   }
-*/
+
   
 }
 
+*/

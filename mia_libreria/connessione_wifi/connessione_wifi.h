@@ -8,4 +8,6 @@
     #endif
 #endif
 
+void setup_wifi();
 void connessione_wifi();
+IPAddress esp_as_AP() ;
