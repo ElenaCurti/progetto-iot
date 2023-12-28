@@ -134,7 +134,7 @@ String convert_to_mqtt_string(unsigned char* array, size_t size){
 unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
     if (fotocamera == NULL) {
         Serial.print("Inizializzo camera...");
-        while (fotocamera == NULL){
+        while (fotocamera == NULL){ // TODO non bloccante
             Serial.print(".");
             fotocamera = new OV7670(OV7670::Mode::QQQVGA_RGB565, SIOD, SIOC, VSYNC, HREF, XCLK, PCLK, D0, D1, D2, D3, D4, D5, D6, D7);
         }

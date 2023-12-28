@@ -1,0 +1,34 @@
+
+app3M_fat9M_16MB.csv				NO troppo spazio
+app3M_fat9M_fact512k_16MB.csv			NO troppo spazio
+app3M_spiffs9M_fact512k_16MB.csv		NO troppo spazio
+bare_minimum_2MB.csv				NO troppo spazio
+
+boot_app0.bin					
+default.bin					
+default.csv					
+default_16MB.csv				
+default_8MB.csv					
+default_ffat.csv
+esp_sr_16.csv
+ffat.csv
+huge_app.csv
+large_fat_32MB.csv
+large_littlefs_32MB.csv
+large_spiffs_16MB.csv
+max_app_8MB.csv
+min_spiffs.csv
+minimal.csv
+no_ota.csv
+noota_3g.csv
+noota_3gffat.csv
+noota_ffat.csv
+rainmaker.csv
+tinyuf2-partitions-16MB-noota.csv
+tinyuf2-partitions-16MB.csv
+tinyuf2-partitions-4MB-noota.csv
+tinyuf2-partitions-4MB.csv
+tinyuf2-partitions-8MB-noota.csv
+tinyuf2-partitions-8MB.csv
+zigbee.csv
+zigbee_zczr.csv

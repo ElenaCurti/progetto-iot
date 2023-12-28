@@ -6,8 +6,9 @@
 // #include <WebSocketsServer.h>
 // #include "mio_mqtt.h"
 #include <MQTTClient.h>
-#include <HardwareBLESerial.h>
 #include "modalita_comunicazione.h"
+
+#include <HardwareBLESerial.h>
 
 
 
@@ -20,13 +21,14 @@ IPAddress ip_address_esp ;
 
 // Variabili per mqtt
 char* TOPIC_PUBLISH_IMMAGINE = "immagine";
-char* hexArray;
-size_t size_foto = 9600;
+const size_t size_foto = 9600;
+char hexArray[size_foto*2+1];
 WiFiClient net;
 MQTTClient mqtt_client(size_foto*2+100);
 
 // Variabili per BLE
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
+bool stato_ble = false;
 
 
 void messageReceived2(String &topic, String &payload) {
@@ -39,9 +41,14 @@ void messageReceived2(String &topic, String &payload) {
 void setup() {
   Serial.begin(115200); // TODO serial forse e' considerata quella del BLE ?
 
+  // // Bluetooth
+  // btStart();  Serial.println("Bluetooth On");
+  // SerialBT.begin("ESP32_Bluetooth"); //Bluetooth device name
+  // Serial.println("The device started, now you can pair it with bluetooth!");
+
   modalita_comunicazione modalita_usata = getModalitaComunicazioneUsata();
 
-  if (modalita_usata == IMMAGINE_CON_MQTT){
+  // if (modalita_usata == IMMAGINE_CON_MQTT){
     Serial.println("MQTT per mandare immagine.");
 
     connessione_wifi();
@@ -56,13 +63,28 @@ void setup() {
     // mqtt_client.setTimeout(7000);
 
     // mqtt_clientLoop_old(mqtt_client, false);
-    gestisciComunicazioneIdle(mqtt_client, bleSerial);
+    // SerialBT.begin("myName");
+    // if (!bleSerial.beginAndSetupBLE("Esp32prova2")) {
+      // Serial.println("failed to initialize HardwareBLESerial!");
+      // while (true) {
+      //   Serial.println("failed to initialize HardwareBLESerial!");
+      //   delay(1000);
+      // }
+    // }
 
     MILLISECONDS_SEND_PIC = 100;
 
     // Creo l'array che conterra' i bytes della foto 
-    while(hexArray == NULL)
-      hexArray = (char*) malloc(size_foto * 2 + 1);
+    // Serial.print("Inizializzo array foto: ");
+    // while(hexArray == NULL) {
+    //   Serial.print(".");
+    //   // hexArray = (char*) malloc(size_foto * 2 + 1);
+      
+    // }
+    // Serial.println("OK");
+    if (hexArray == NULL) 
+      Serial.println("errore hex array foto");
+
 
     // Inizializzo la camera facendo una foto
     size_t size;
@@ -70,39 +92,92 @@ void setup() {
 
    
     
-  } else if (modalita_usata == IMMAGINE_CON_BLE) {
+  // } else if (modalita_usata == IMMAGINE_CON_BLE) {
     MILLISECONDS_SEND_PIC = 30 * 1000;
 
-    if (!bleSerial.beginAndSetupBLE("Esp32prova")) {
-      while (true) {
-        Serial.println("failed to initialize HardwareBLESerial!");
-        delay(1000);
-      }
+    if (!bleSerial.beginAndSetupBLE("Esp32provaa")) {
+      Serial.println("failed to initialize HardwareBLESerial!");
+      return;
+    } else {
+      Serial.println(" HardwareBLESerial inizializzata correttamente.");
     }
-    Serial.println("BLE OK");
+    
+    // Serial.println(bleSerial);
 
-  } else 
-    Serial.println("---Modalita per comunicare immagine sconosciuta!---");
 
+  // } else 
+    // Serial.println("---Modalita per comunicare immagine sconosciuta!---");
+
+    gestisciComunicazioneIdle(mqtt_client, &bleSerial);
 
 }
 
 
 
-
+void Bluetooth_handle();
 
 unsigned int last_mqtt_loop_called = -1;
 void loop() {
 
   // Serial.print(WiFi.isConnected());
-  // Serial.print("\t");
+  // Serial.println("a");
   // Serial.println(WiFi.status() != WL_CONNECTED);
   
 
   // Modalita di comunicazione
   // mqtt_clientLoop_old(mqtt_client, true);
-  gestisciComunicazioneIdle(mqtt_client, bleSerial);
-  // delay(20);
+  gestisciComunicazioneIdle(mqtt_client, &bleSerial);
+
+  // Serial.print(";");
+  // Serial.print(bleSerial == NULL);
+  
+  return ;
+
+  bleSerial.poll();
+    // Serial.print("b");
+
+    if (stato_ble != bleSerial){
+        // bleSerial.connect()
+        Serial.print("Nuovo stato BLE: ");
+        Serial.println(bleSerial ? "Connesso" : "NON connesso");
+        stato_ble=bleSerial;
+    }
+
+
+    if (bleSerial && bleSerial.available()){
+        // Serial.print("a");
+
+        Serial.print("dati in arrivo: ");
+        String dati_arrivati = "";
+
+        while (bleSerial.available() > 0) {
+            // Leggo i dati dalla ble serial
+            // Serial.println("qui3");
+            dati_arrivati += (char) bleSerial.read();
+
+        }
+        Serial.println(dati_arrivati);
+
+        Serial.println("Mando ciao: ");
+        // FIXME quando wifi si scollega, la print del bluetooth non funziona. la ricezione pero' funziona ancora
+        bleSerial.println("ciao");    
+    }
+
+
+
+
+  
+
+  
+
+  // if (SerialBT.available()){
+
+    // Bluetooth_handle();
+
+  // }
+
+
+  delay(20);
   
 /*
   // Chiamo i loop di web socket o mqtt 
@@ -162,3 +237,23 @@ void loop() {
   
 }
 
+
+// void Bluetooth_handle()
+// {
+// //   char bluedata;
+// //   bluedata = SerialBT.parseInt();
+// //   Serial.println("VAL:");
+// //   Serial.println(bluedata);
+//   delay(20);
+//   Serial.print("-");
+//   if (SerialBT.available()) {
+//       String receivedData = SerialBT.readString();
+//       Serial.print("Received from PC: ");
+//       Serial.println(receivedData);
+
+//       String sendData = "mio messaggio";
+//       SerialBT.print("Sent from ESP32: ");
+//       SerialBT.println(sendData);
+//   }
+
+// }
