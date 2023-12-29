@@ -7,4 +7,6 @@ enum modalita_comunicazione {
 } ; 
 
 modalita_comunicazione getModalitaComunicazioneUsata();
-void gestisciComunicazioneIdle(MQTTClient &mqtt_client, HardwareBLESerial* bleSerial2);
+void gestisciComunicazioneIdle();
+void inviaMessaggio(String topic, String messaggio);
+void init_mqtt_ble();

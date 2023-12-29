@@ -1,4 +1,4 @@
-var HOST = "192.168.1.53"
+var HOST = "192.168.43.252"
 var PORT = 8000;
 var TOPIC_IN = "immagine";
 var userId = "elenaId-webapp-";
@@ -49,7 +49,7 @@ function onConnect(){
 function onConnectionLost(responseObject){
     print_message("ERROR: Connection is lost.");
     if(responseObject !=0){
-        print_message("ERROR:"+ responseObject.errorMessage );
+        print_message("ERROR:"+ responseObject.errorMessage );  // Quando il broker viene spento: AMQJS0008I Socket closed.
     }
 }
 
