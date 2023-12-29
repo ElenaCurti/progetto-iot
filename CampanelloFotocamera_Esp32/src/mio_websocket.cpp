@@ -86,7 +86,7 @@ void ws_setup(IPAddress ip_esp)
     mio_webSocket.begin();                 // start the websocket server
     mio_webSocket.onEvent(webSocketEvent); // if there's an incomming websocket message, go to function 'webSocketEvent'
     Serial.println("WebSocket server started.");
-
+    
     // Web server
     server.begin();
     Serial.println("Http web server started.");
@@ -96,6 +96,7 @@ void ws_loop()
 {
     // Web socket
     mio_webSocket.loop();
+    // Serial.print("w");
 
     // Web server
     WiFiClient client = server.available();

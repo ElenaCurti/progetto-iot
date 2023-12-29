@@ -2,7 +2,7 @@
 #include <connessione_wifi.h>
 #include "camera_ov7670.h"  // TODO vedi se conveniva usare questa: https://github.com/bitluni/ESP32CameraI2S
 #include <WiFi.h>
-#include <MQTTClient.h>
+#include <PubSubClient.h>
 #include "modalita_comunicazione.h"
 #include <HardwareBLESerial.h>
 
@@ -21,12 +21,12 @@ char* TOPIC_PUBLISH_IMMAGINE = "immagine";
 // Variabili per BLE
 
 
+
 void messageReceived2(String &topic, String &payload) {
   // NB: NON USARE mqtt_client QUI -> se devi usarlo, cambia una variabile globale
   Serial.println("incoming: " + topic + " - " + payload);
 
 }
-
 
 
 void setup() {
@@ -36,14 +36,12 @@ void setup() {
 
   // Inizializzo Wifi e MQTT 
   connessione_wifi(); // TODO questo va fatto non blocante
-  
-  
+    
   // Controllo MQTT e Bluetooth
   init_mqtt_ble();
   gestisciComunicazioneIdle();
 
   // Inizializzo la camera facendo una foto
-  // hexArray = (char*) malloc(size_foto * 2 + 1);
   size_t size;
   take_picture(size);
 
@@ -56,14 +54,13 @@ void Bluetooth_handle();
 
 unsigned int last_mqtt_loop_called = -1;
 void loop() {
-  // Serial.print("***");
   // Serial.print(xPortGetCoreID());
   // Serial.print("***");
+  
+  // return;
 
 
   gestisciComunicazioneIdle();
-  // delay(20);
-  // return;
 
   if (millis() - previousMillis >= MILLISECONDS_SEND_PIC) {
 
@@ -80,7 +77,8 @@ void loop() {
     unsigned int tempo_prec = millis();
     // string_to_send[2000] = '\0';
     inviaMessaggio(TOPIC_PUBLISH_IMMAGINE, string_to_send);
-    Serial.println("\tTempo impiegato: " + (String) (millis() - tempo_prec));
+    
+    Serial.println("\tTempo impiegato: " + (String) (millis() - tempo_prec) + " ms");
 
     previousMillis = millis();
 

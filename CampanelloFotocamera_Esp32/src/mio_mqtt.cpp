@@ -1,4 +1,4 @@
-#include "mio_mqtt.h"
+/*#include "mio_mqtt.h"
 #include <WiFi.h>
 #include <MQTTClient.h>
 #include <connessione_wifi.h>
@@ -73,3 +73,4 @@ void messageReceived(String &topic, String &payload) {
   Serial.println("incoming: " + topic + " - " + payload);
 
 }
+*/

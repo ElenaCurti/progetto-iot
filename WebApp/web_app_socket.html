@@ -1,0 +1,131 @@
+
+<!-- Author : Mudassar Tamboli -->
+<!DOCTYPE html>
+<html>
+<title> ESP32-OV7670 - Websocket Demo By Mudassar Tamboli </title>
+<script type="text/javascript">
+    var ws = null;  // Web socket
+    var xres = 80;  // Larghezza foto 
+    var yres = 60;  // Altezza foto
+    var ctx;        // Serve per la "stampa" della foto
+    var imgData;    // Serve per la stampa della foto
+    var gcanvasid = "canvas";   // id del canvas che conterra' la foto
+
+    function get_camera_ip() {
+        // TODO togli commento
+        // return ')" + ip + R"(';
+        return '192.168.4.1';
+    }
+
+    var camera_ip = get_camera_ip();    // Indirizzo ip dell'esp in cui c'e' la camera
+    var porta = 3001;                   
+    // TODO togli commento
+    //var porta = )" + (String) porta + R"(;    // Porta del webosckets 
+
+    // Funzione chiamata all'avvio della pagina web, serve per inizializzare le variabili e il web socket
+    function onloadinit() {
+        camera_ip = get_camera_ip();
+
+        canvas = document.getElementById("canvas");
+        canvas.width = xres;
+        canvas.height = yres;
+
+        ctx = canvas.getContext("2d");
+        imgData = ctx.createImageData(canvas.width, canvas.height);
+        for (var i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i + 0] = 0xCC;
+            imgData.data[i + 1] = 0xCC;
+            imgData.data[i + 2] = 0xCC;
+            imgData.data[i + 3] = 255;
+        }
+        ctx.putImageData(imgData, canvas.width, canvas.height);
+
+        initWebSocket();
+    }
+
+    // Inizializza il web socket
+    function initWebSocket() {
+        // console.log("window" + window);
+
+        if (!("WebSocket" in window)) {
+            alert("WebSocket NOT supported by your Browser!");
+            return ;
+        }
+
+        if (ws != null) {
+            ws.close();
+            document.getElementById("informazioni_utente").innerHTML += "<br>\nRinizializzo il socket...";
+        }
+
+        ws = new WebSocket('ws://' + camera_ip + ':' + porta +'/', ['arduino']);
+        if (ws == null) {
+            document.getElementById("informazioni_utente").innerHTML += "Failed to connect to camera [ " + camera_ip + " ]";
+            return;
+        }
+
+        ws.binaryType = 'arraybuffer';
+
+        // open websocket 
+        ws.onopen = function () {
+            document.getElementById("informazioni_utente").innerHTML += "<br>\nConnected to " + ws.url;
+            // Mando un messaggio "ready" per comunicare che il client e' pronto a ricevere la foto
+            console.log("ready");
+            ws.send("ready");
+        };
+
+        // receive message 
+        ws.onmessage = function (evt) {
+            var arraybuffer = evt.data;
+            console.log("messaggio");
+            // console.log(arraybuffer);
+            var bytearray = new Uint8Array(evt.data);
+            display(bytearray);
+            
+        }; //ws.onmessage
+
+        // close websocket
+        ws.onclose = function () {
+            document.getElementById("informazioni_utente").innerHTML += "<br>\nClosed socket";
+
+        }; //ws.onclose
+
+        // websocket error handling
+        ws.onerror = function (evt) {
+            document.getElementById("informazioni_utente").innerHTML += "<br>\nErrore in socket: " + evt.data;
+        };
+
+       
+    } // WebSocketCamera
+
+
+    // Funzione che "stampa" l'immagine nel canvas
+    function display(pixels) {
+        //alert('display'); 
+        ln = 0;
+        var i = 0;
+        for (y = 0; y < yres; y++) {
+            for (x = 0; x < xres; x++) {
+                i = (y * xres + x) << 1;
+                pixel16 = (0xffff & pixels[i]) | ((0xffff & pixels[i + 1]) << 8);
+                imgData.data[ln + 0] = ((((pixel16 >> 11) & 0x1F) * 527) + 23) >> 6;
+                imgData.data[ln + 1] = ((((pixel16 >> 5) & 0x3F) * 259) + 33) >> 6;
+                imgData.data[ln + 2] = (((pixel16 & 0x1F) * 527) + 23) >> 6;
+                imgData.data[ln + 3] = (0xFFFFFFFF) & 255;
+                ln += 4;
+            }
+        }
+        ctx.putImageData(imgData, 0, 0);
+    }
+
+
+</script>
+
+<body onload='onloadinit()'>
+
+    <center> <h1> ESP32-OV7670 Websocket Video Camera </h1> </center>
+    <canvas id="canvas"> </canvas>  
+    <div id="informazioni_utente"> Stato socket: </div>
+
+</body>
+
+</html>

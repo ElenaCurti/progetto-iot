@@ -1,5 +1,6 @@
+#include <WiFiClient.h>
 #include "modalita_comunicazione.h"
-#include <MQTTClient.h>
+#include <PubSubClient.h>
 #include <HardwareBLESerial.h>
 #include <connessione_wifi.h>
 
@@ -29,19 +30,33 @@ modalita_comunicazione getModalitaComunicazioneUsata(){
 }
 
 const size_t size_foto = 9600;
-WiFiClient net;
-MQTTClient mqtt_client(size_foto*2+100);
+// WiFiClient net;
+// MQTTClient mqtt_client(size_foto*2+100);
+WiFiClient espClient;
+PubSubClient mqtt_client(espClient);
 void messageReceived2(String &topic, String &payload) ;
+
+void callback(char* topic, byte* payload, unsigned int length) {
+
+}
 
 HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
+
 void init_mqtt_ble(){
     IPAddress ip_broker = IPAddress(192,168,43,252);    // TODO mettere broker come configurazione
+    // IPAddress ip_broker = IPAddress(192,168,43,57);    // TODO mettere broker come configurazione
 
-    mqtt_client.begin(ip_broker, net);
-    mqtt_client.onMessage(messageReceived2);
+    // MQTTClient
+    // mqtt_client.begin(ip_broker, net);
+    // mqtt_client.onMessage(messageReceived2);
     // mqtt_client.setKeepAlive(90);
     // mqtt_client.setCleanSession(false);
+
+    // PubSubClient
+    randomSeed(micros());
+    mqtt_client.setServer(ip_broker, 1883);
+    mqtt_client.setCallback(callback);
 
     // Inizialzzo Bluetooth
     if (!bleSerial.beginAndSetupBLE("Esp32provaa")) {
@@ -62,9 +77,9 @@ void gestisciComunicazioneIdle(){
         //  il Wifi
         if (millis() - last_wifi_reconnection_attempt >= MILLISECONDI_DISCONNESSIONE_WIFI_AMMESSA){
             Serial.println("Disconnetto e riconnetto Wifi...");
-            // WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
+            WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
             setup_wifi();
-            // WiFi.reconnect();
+            WiFi.reconnect();
 
             last_wifi_reconnection_attempt = millis();
         }
@@ -92,12 +107,17 @@ void gestisciComunicazioneIdle(){
                 Serial.println(mqtt_client.publish("in_topic", "ciao"));
                 mqtt_client.loop();
             } else {
-                Serial.print("failed, lastError=");
+                Serial.print("failed, rc=" + (String) mqtt_client.state());
+                /*Serial.print("failed, lastError=");
                 Serial.print(mqtt_client.lastError());
                 Serial.print("\t returnCode=");
-                Serial.print(mqtt_client.returnCode());
+                Serial.print(mqtt_client.returnCode());*/
                 Serial.println("\t try again in " + (String) MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT + " milliseconds");
+            
             }
+
+            
+
             last_mqtt_reconnection_attempt = millis();
         }
     }
@@ -156,14 +176,23 @@ lastError=-3   returnCode=6         ->
 
 
 void inviaMessaggio(String topic, String messaggio){
+  
+
+    // if (WiFi.status() == WL_CONNECTED && mqtt_client.connected()){
     if (mqtt_client.connected()){
         Serial.print("(MQTT) " );
-        Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str(), messaggio.length(), 0));
+        // Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str(), messaggio.length(), 0));
+        mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false);
+        mqtt_client.print(messaggio.c_str());
+        Serial.print(mqtt_client.endPublish());
     } else if (bleSerial) {
         Serial.print("(BLE) " );
         String msg = "["+topic+"] " + messaggio ;
         Serial.print(bleSerial.println(msg.c_str())); 
-    } else 
+    }
+    else 
         Serial.print("disconnesso");
     
 }
+
+

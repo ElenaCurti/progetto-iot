@@ -1,4 +1,4 @@
-#include <MQTTClient.h>
+
 #include <HardwareBLESerial.h>
 
 enum modalita_comunicazione {

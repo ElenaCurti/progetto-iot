@@ -28,15 +28,15 @@ void setup_wifi(){
         #ifdef WIFI_CASA
             #include "credenziali_wifi_casa.h"
         #else
-            const char* ssid = "Wifi Ele";
-            const char* password = "ElenaCurti00";
+            const char* ssid = "Wifi Ele2";
+            const char* password = "ElenaaCurti00";
         #endif
     #endif
 
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
-    WiFi.setAutoReconnect(true);    // to reconnect to Wi-Fi after a connection is lost
-    WiFi.persistent(true);          // to automatically reconnect to the previously connected access point
+    // WiFi.setAutoReconnect(true);    // to reconnect to Wi-Fi after a connection is lost
+    // WiFi.persistent(true);          // to automatically reconnect to the previously connected access point
 }
 
 void connessione_wifi(){

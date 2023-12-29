@@ -1,4 +1,4 @@
-https://github.com/mudassar-tamboli/ESP32-OV7670-WebSocket-Camera.git
 uberi/HardwareBLESerial@^1.0.0
-hwspeedy/arduino-mqtt@^2.5.1
 links2004/WebSockets@^2.4.1
+https://github.com/mudassar-tamboli/ESP32-OV7670-WebSocket-Camera.git
+knolleary/PubSubClient@^2.8
