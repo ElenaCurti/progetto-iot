@@ -18,7 +18,7 @@ IPAddress esp_as_AP() {
 
 void setup_wifi(){
     // #define WIFI_PROF
-    // #define WIFI_CASA
+    #define WIFI_CASA
 
 
     #ifdef WIFI_PROF
