@@ -1,0 +1,9 @@
+{
+    "tag_autorizzati": [
+        "122.48.29.217",
+        "209.53.34.217"
+    ],
+    "num_tentativi_errati": [3, 5], 
+    "check_tag_localmente": true,
+    "deep_sleep": false
+}

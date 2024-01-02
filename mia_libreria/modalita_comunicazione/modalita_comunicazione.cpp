@@ -4,6 +4,7 @@
 #include "BluetoothSerial.h"
 #include <connessione_wifi.h>
 
+// TODO cambia tutto in CamelCase o snake
 
 unsigned long last_wifi_reconnection_attempt=-1;
 const int MILLISECONDI_DISCONNESSIONE_WIFI_AMMESSA = 5*1000;
@@ -31,17 +32,23 @@ BluetoothSerial SerialBT;
 // MQTTClient mqtt_client(size_foto*2+100);
 WiFiClient espClient;
 PubSubClient mqtt_client(espClient);
+String* lista_topic_subscription_g;
+int num_topic_subscription_g;
 void messageReceived2(String &topic, String &payload) ;
 
-void callback(char* topic, byte* payload, unsigned int length) {
-
-}
 
 
+void messaggio_arrivato(char* topic, byte* payload, unsigned int length) ;
 
-void mqtt_ble_setup(String device_name){
-    
+
+
+void mqtt_ble_setup(String device_name, const String lista_topic_subscription[], int num_topic_subscription){
+    // Salvo le variabili globali
     device_name_g = device_name;
+    num_topic_subscription_g = num_topic_subscription;
+    lista_topic_subscription_g = new String[num_topic_subscription];
+    for (int i = 0; i < num_topic_subscription; i++) 
+        lista_topic_subscription_g[i] = lista_topic_subscription[i];
 
     // Inizializzo Wifi e MQTT
     if (WiFi.status() != WL_CONNECTED) 
@@ -49,9 +56,8 @@ void mqtt_ble_setup(String device_name){
 
     IPAddress ip_broker = IPAddress(192,168,1,23);    // TODO mettere broker come configurazione
 
-    randomSeed(micros());
     mqtt_client.setServer(ip_broker, 1883);
-    mqtt_client.setCallback(callback);
+    mqtt_client.setCallback(messaggio_arrivato);
 
     // Inizialzzo Bluetooth
     // SerialBT.begin(device_name_g); //Bluetooth device name
@@ -62,7 +68,7 @@ void mqtt_ble_setup(String device_name){
 
 void gestisciComunicazioneIdle(){
 
-    Serial.print("gc ");
+    // Serial.print("gc ");
     
     if (WiFi.status() != WL_CONNECTED) {
         //  il Wifi
@@ -92,11 +98,10 @@ void gestisciComunicazioneIdle(){
             Serial.print("Wifi OK. Attempting MQTT re-connection as " + clientId + " ...");
             if (mqtt_client.connect(clientId.c_str())) {
                 Serial.println("reconnected as " + clientId );
-                // TODO re-subscribe
-                mqtt_client.subscribe("out_topic");
-                Serial.print("Pub: " );
-                Serial.println(mqtt_client.publish("in_topic", "ciao"));
-                // mqtt_client.loop();
+
+                for (int i=0; i<num_topic_subscription_g; i++)
+                    mqtt_client.subscribe(lista_topic_subscription_g[i].c_str());
+
             } else {
                 Serial.print("failed, rc=" + (String) mqtt_client.state());
                 /*Serial.print("failed, lastError=");
@@ -114,7 +119,7 @@ void gestisciComunicazioneIdle(){
     }
 
 
-    Serial.print("loop");
+    // Serial.print("loop");
     mqtt_client.loop();
 
 
