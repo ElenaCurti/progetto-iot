@@ -1,8 +1,9 @@
-#include <WiFiClient.h>
+/*#include <WiFiClient.h>
 #include "modalita_comunicazione.h"
 #include <PubSubClient.h>
 #include <HardwareBLESerial.h>
 #include <connessione_wifi.h>
+// TODO questo e' da togliere
 
 modalita_comunicazione modalita_usata = IMMAGINE_CON_MQTT;
 
@@ -44,7 +45,7 @@ HardwareBLESerial &bleSerial = HardwareBLESerial::getInstance();
 
 
 void init_mqtt_ble(){
-    IPAddress ip_broker = IPAddress(192,168,43,252);    // TODO mettere broker come configurazione
+    IPAddress ip_broker = IPAddress(192,168,1,23);    // TODO mettere broker come configurazione
     // IPAddress ip_broker = IPAddress(192,168,43,57);    // TODO mettere broker come configurazione
 
     // MQTTClient
@@ -111,7 +112,7 @@ void gestisciComunicazioneIdle(){
                 /*Serial.print("failed, lastError=");
                 Serial.print(mqtt_client.lastError());
                 Serial.print("\t returnCode=");
-                Serial.print(mqtt_client.returnCode());*/
+                Serial.print(mqtt_client.returnCode());* /
                 Serial.println("\t try again in " + (String) MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT + " milliseconds");
             
             }
@@ -127,7 +128,7 @@ void gestisciComunicazioneIdle(){
 lastError=-3    returnCode=0        -> non stampati da mosquitto
 lastError=-9   returnCode=6         -> esp chiude la connessione
 lastError=-3   returnCode=6         ->
-*/
+* /
 
 
 //   // Write data to Bluetooth Serial
@@ -196,3 +197,4 @@ void inviaMessaggio(String topic, String messaggio){
 }
 
 
+*/

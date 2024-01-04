@@ -3,7 +3,8 @@
 #include "camera_ov7670.h"  // TODO vedi se conveniva usare questa: https://github.com/bitluni/ESP32CameraI2S
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include "modalita_comunicazione.h"
+#include <modalita_comunicazione.h>
+
 #include <HardwareBLESerial.h>
 
 // Variabili per fare foto ogni MILLISECONDS_SEND_PIC millisecondi
@@ -14,6 +15,10 @@ long MILLISECONDS_SEND_PIC = 50; // TODO Configurazione
 IPAddress ip_address_esp ;
 
 // Variabili per mqtt
+const int NUM_SUB = 2;
+const char* TOPIC_CONFIGURAZIONE = "door/esp_cam/config";
+const char* TOPIC_SEND_IMG = "door/esp_cam/send_img";
+
 char* TOPIC_PUBLISH_IMMAGINE = "immagine";
 // char* hexArray;
 
@@ -38,7 +43,8 @@ void setup() {
   connessione_wifi(); // TODO questo va fatto non blocante
     
   // Controllo MQTT e Bluetooth
-  init_mqtt_ble();
+  const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_SEND_IMG};
+  mqtt_ble_setup("cam", elenco_subscription, NUM_SUB);
   gestisciComunicazioneIdle();
 
   // Inizializzo la camera facendo una foto
@@ -145,4 +151,12 @@ void loop() {
   }
 */
   
+}
+
+void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
+  String payload_str = "" ;
+  for (size_t i = 0; i < length; i++)  {
+    payload_str += (char) payload[i];
+  }
+  Serial.println("[" + (String) topic + "] " + payload_str);
 }

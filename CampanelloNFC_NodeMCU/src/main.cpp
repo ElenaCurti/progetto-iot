@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "nfc_nodemcu.h"
 #include <modalita_comunicazione.h>
-#include "configurazione_json.h"
+#include "configurazione_board.h"
 
 // Lista dei vari topic 
 // TODO se broker remoto: aggiungi un livello root per filtrare i "miei" messaggi
@@ -15,9 +15,9 @@ const char* TOPIC_TAG_STRISCIATO = "door/esp_nfc/tag_swiped";
 const char* TOPIC_INTRUSO = "door/esp_nfc/intruder"; 
 const char* TOPIC_ERRORE = "door/esp_nfc/errors"; 
 
-// Lista dei parametri configurabili
+// Lista dei parametri configurabili, inizialmente settati con valori di default
 int num_tag_autorizzati = 1 ;
-String* tag_autorizzati = {new String("209.53.34.217")} ; // Solo tag nero autorizzato
+String* tag_autorizzati = {new String("209.53.34.217")} ; // Inizialmente solo tag nero autorizzato
 int config_num_tentativi_errati_permessi[2] = {3,5};
 bool check_tag_locally = true;
 bool deep_sleep = false;
@@ -28,10 +28,16 @@ bool stato_campanello = false;              // True se campanello premuto; false
 bool old_stato_campanello_premuto = false;  // Come stato_campanello, ma per lo stato "precedente"
 void check_campanello_premuto(void* pvParameters);
 
+// Variabili/funzioni usati per il controllo del lettore nfc
 bool isTagAuthorized(const String& tag);
 int num_tentativi_errati_fatti = 0;
 unsigned long ultimo_tentativo_errato = -1 ;
 const int SECONDI_BLOCCO_READER = 30;
+
+
+// Simulatore apertura porta
+#define PIN_LED_VERDE 32
+void apertura_porta_led_verde();
 
 void setup() {
   Serial.begin(115200);
@@ -49,6 +55,7 @@ void setup() {
   xTaskCreatePinnedToCore(check_campanello_premuto,"check_campanello_premuto",1000,NULL,0,NULL,0);
 
   // Setup "porta" (led)
+  pinMode(PIN_LED_VERDE, OUTPUT);
 
 }
 
@@ -97,12 +104,12 @@ void loop() {
     String tag_letto = readNFC() ;
     if (!tag_letto.equals("")) {
       Serial.print("Tag letto: " + tag_letto + "\tRisultato dell invio: ");
-      inviaMessaggio(TOPIC_TAG_STRISCIATO, tag_letto);
+      inviaMessaggio(TOPIC_TAG_STRISCIATO, tag_letto);  // TODO aggiungi tipo tag_letto + "e' entrato"/ non e' entrato
       Serial.println("");
 
       if (check_tag_locally){
         if (isTagAuthorized(tag_letto)) {
-          Serial.println("Autorizzato");
+          apertura_porta_led_verde();
           num_tentativi_errati_fatti = 0;
         } else {
           tentativoErrato(tag_letto); 
@@ -116,7 +123,7 @@ void loop() {
   }
   // Lettura del click del campanello
   if (stato_campanello){
-      Serial.print("Campanello premuto. Invio: ");
+      Serial.println("Campanello premuto. Invio: ");
       inviaMessaggio(TOPIC_BUTTON_PREMUTO, "1");
       stato_campanello = false;      
   }
@@ -126,6 +133,8 @@ void loop() {
   delay(20);
 
 }
+
+
 
 void check_campanello_premuto(void* pvParameters){
   while (1) {
@@ -137,6 +146,15 @@ void check_campanello_premuto(void* pvParameters){
 
     delay(20);
   }
+}
+
+void apertura_porta_led_verde(){
+    Serial.println("Apro porta (led verde)");
+
+    digitalWrite(PIN_LED_VERDE, HIGH);
+    delay(2000);
+    digitalWrite(PIN_LED_VERDE, LOW);
+
 }
 
 
@@ -155,10 +173,12 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
   for (size_t i = 0; i < length; i++)  {
     payload_str += (char) payload[i];
   }
-  // Serial.println("[" + (String) topic + "] " + payload_str);
+  Serial.println("[" + (String) topic + "] " + payload_str);
+  
+  // Controllo se il messaggio e' una configurazione
   
   if(((String) TOPIC_CONFIGURAZIONE).equals((String) topic)){
-    String err = deserializeJsonConfiguration(payload_str, tag_autorizzati,num_tag_autorizzati, config_num_tentativi_errati_permessi, check_tag_locally, deep_sleep) ;
+    String err = configurazioneBoardJSON(payload_str, tag_autorizzati,num_tag_autorizzati, config_num_tentativi_errati_permessi, check_tag_locally, deep_sleep) ;
     if (!err.equals(""))
       inviaMessaggio(TOPIC_ERRORE, err.c_str());
   }
@@ -167,6 +187,15 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
     if (payload_str.equals("1")){
       num_tentativi_errati_fatti = 0;
       Serial.println("Sblocco reader nfc");
+    } else {
+      num_tentativi_errati_fatti = config_num_tentativi_errati_permessi[1]-1;
+      tentativoErrato("Lettore bloccato manualmente");
+    }
+  }
+
+  if(((String) TOPIC_STATO_PORTA).equals((String) topic)){
+    if (payload_str.equals("1")){
+      apertura_porta_led_verde();
     }
   }
   

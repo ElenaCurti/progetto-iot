@@ -1,4 +1,4 @@
-var HOST = "192.168.1.8"
+var HOST = "192.168.1.23"
 var PORT = 8000;
 var TOPIC_IN = "immagine";
 var userId = "elenaId-webapp-";

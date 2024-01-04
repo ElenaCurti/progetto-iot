@@ -1,4 +1,4 @@
-
+/*
 #include <HardwareBLESerial.h>
 
 enum modalita_comunicazione {
@@ -9,4 +9,4 @@ enum modalita_comunicazione {
 modalita_comunicazione getModalitaComunicazioneUsata();
 void gestisciComunicazioneIdle();
 void inviaMessaggio(String topic, String messaggio);
-void init_mqtt_ble();
+void init_mqtt_ble();*/

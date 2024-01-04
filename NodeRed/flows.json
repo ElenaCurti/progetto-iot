@@ -1,0 +1,1068 @@
+[
+    {
+        "id": "05691ee6bbca7daa",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a8148bb70c87ecf6",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f1393fe2d563ac35",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c9902645a313fd3e",
+        "type": "tab",
+        "label": "NFC",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "33fd7a8e03ec2e16",
+        "type": "tab",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3c590ebc25e0b5cc",
+        "type": "mqtt-broker",
+        "name": "WifiCasa-PC",
+        "broker": "192.168.1.23",
+        "port": "1883",
+        "clientid": "elenaId-nodered",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "3de8dc68ea06568e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqtt.cool",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "adc21c5cb326c3bb",
+        "type": "ui_tab",
+        "name": "Home2",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "1882cf541cd0b971",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "fc95946aadbdf80b",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "adc21c5cb326c3bb",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "6778e3a8648143cc",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "2121c6fb1f4e39df",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "6778e3a8648143cc",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7c00691034cd17f7",
+        "type": "coap-server",
+        "name": "192.168.43.252",
+        "port": "5683",
+        "ipv6": false
+    },
+    {
+        "id": "e1699ba36278d6ba",
+        "type": "mqtt in",
+        "z": "05691ee6bbca7daa",
+        "name": "",
+        "topic": "values/curti",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "3de8dc68ea06568e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "6af92a413bc14b65",
+                "113c57af2c99a976"
+            ]
+        ]
+    },
+    {
+        "id": "6af92a413bc14b65",
+        "type": "debug",
+        "z": "05691ee6bbca7daa",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "a48e0366bb971c01",
+        "type": "ui_gauge",
+        "z": "05691ee6bbca7daa",
+        "name": "",
+        "group": "fc95946aadbdf80b",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "temperatura",
+        "label": "units",
+        "format": "{{value}}",
+        "min": "5",
+        "max": "30",
+        "colors": [
+            "#0015b3",
+            "#00e650",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 750,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "113c57af2c99a976",
+        "type": "json",
+        "z": "05691ee6bbca7daa",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "0f6b968b18194199"
+            ]
+        ]
+    },
+    {
+        "id": "5dcf5ad40983d381",
+        "type": "debug",
+        "z": "05691ee6bbca7daa",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "0f6b968b18194199",
+        "type": "change",
+        "z": "05691ee6bbca7daa",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "msg.payload.value",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 320,
+        "wires": [
+            [
+                "5dcf5ad40983d381",
+                "a48e0366bb971c01",
+                "01c62dfd80836dbf",
+                "3874f8846db1e345"
+            ]
+        ]
+    },
+    {
+        "id": "01c62dfd80836dbf",
+        "type": "ui_switch",
+        "z": "05691ee6bbca7daa",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "fc95946aadbdf80b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 730,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3874f8846db1e345",
+        "type": "ui_button",
+        "z": "05691ee6bbca7daa",
+        "name": "",
+        "group": "2121c6fb1f4e39df",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "button",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 730,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "509fd22f0b58a013",
+        "type": "inject",
+        "z": "a8148bb70c87ecf6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "manda_temp",
+        "payloadType": "str",
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "302af096744b1c86",
+                "efd9c6e677051472"
+            ]
+        ]
+    },
+    {
+        "id": "302af096744b1c86",
+        "type": "coap request",
+        "z": "a8148bb70c87ecf6",
+        "d": true,
+        "method": "GET",
+        "confirmable": true,
+        "observe": false,
+        "multicast": false,
+        "multicastTimeout": 20000,
+        "url": "coap://192.168.43.27/temp/",
+        "content-format": "text/plain",
+        "raw-buffer": false,
+        "name": "",
+        "x": 350,
+        "y": 120,
+        "wires": [
+            [
+                "3dbbb7a337088171"
+            ]
+        ]
+    },
+    {
+        "id": "3dbbb7a337088171",
+        "type": "debug",
+        "z": "a8148bb70c87ecf6",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "efd9c6e677051472",
+        "type": "debug",
+        "z": "a8148bb70c87ecf6",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "2a156822b13ead8c",
+        "type": "bluetooth",
+        "z": "f1393fe2d563ac35",
+        "name": "Miobluetoot",
+        "btaddress": "24:62:AB:F9:21:2A",
+        "btname": "ESP32test",
+        "x": 490,
+        "y": 140,
+        "wires": [
+            [
+                "370b05c65d4c0987"
+            ]
+        ]
+    },
+    {
+        "id": "5590c0ae89cfdf4f",
+        "type": "inject",
+        "z": "f1393fe2d563ac35",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "address",
+        "payload": "24:62:AB:F9:21:2A",
+        "payloadType": "str",
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "2a156822b13ead8c",
+                "e23ff25d5ae29c98"
+            ]
+        ]
+    },
+    {
+        "id": "370b05c65d4c0987",
+        "type": "debug",
+        "z": "f1393fe2d563ac35",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "eb167498ca0cfad8",
+        "type": "inject",
+        "z": "f1393fe2d563ac35",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "7",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "Hello",
+        "payloadType": "str",
+        "x": 250,
+        "y": 340,
+        "wires": [
+            [
+                "e23ff25d5ae29c98"
+            ]
+        ]
+    },
+    {
+        "id": "e23ff25d5ae29c98",
+        "type": "bluetooth",
+        "z": "f1393fe2d563ac35",
+        "name": "Miobluetoot",
+        "btaddress": "24:62:AB:F9:21:2A",
+        "btname": "ESP32test",
+        "x": 490,
+        "y": 340,
+        "wires": [
+            [
+                "2827de7c98106c5a"
+            ]
+        ]
+    },
+    {
+        "id": "2827de7c98106c5a",
+        "type": "debug",
+        "z": "f1393fe2d563ac35",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "5a472adc43c03f77",
+        "type": "inject",
+        "z": "c9902645a313fd3e",
+        "name": "configurazione_esempio",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{     \"tag_autorizzati\": [         \"122.48.29.217\",  \"209.53.34.217\"     ],     \"num_tentativi_errati\": [3, 5],      \"check_tag_localmente\": true,     \"deep_sleep\": false }",
+        "payloadType": "json",
+        "x": 430,
+        "y": 60,
+        "wires": [
+            [
+                "ac02d3e4d87a9ca3"
+            ]
+        ]
+    },
+    {
+        "id": "a43683d67d18f4b3",
+        "type": "inject",
+        "z": "c9902645a313fd3e",
+        "name": "Apri Porta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "str",
+        "x": 460,
+        "y": 600,
+        "wires": [
+            [
+                "b5d22d8caff239ae"
+            ]
+        ]
+    },
+    {
+        "id": "b5d22d8caff239ae",
+        "type": "mqtt out",
+        "z": "c9902645a313fd3e",
+        "name": "Apri Porta",
+        "topic": "door/esp_nfc/led",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "3c590ebc25e0b5cc",
+        "x": 680,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "48e416bf7e5de7f6",
+        "type": "inject",
+        "z": "c9902645a313fd3e",
+        "name": "Sblocca NFC Reader",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "str",
+        "x": 420,
+        "y": 320,
+        "wires": [
+            [
+                "44d409132046bdee"
+            ]
+        ]
+    },
+    {
+        "id": "44d409132046bdee",
+        "type": "mqtt out",
+        "z": "c9902645a313fd3e",
+        "name": "Sblocca NFC Reader",
+        "topic": "door/esp_nfc/nfc_reader_state",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "3c590ebc25e0b5cc",
+        "x": 740,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "9eb123c62a9aa395",
+        "type": "mqtt in",
+        "z": "c9902645a313fd3e",
+        "name": "Intruso",
+        "topic": "door/esp_nfc/intruder",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "3c590ebc25e0b5cc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 390,
+        "y": 400,
+        "wires": [
+            [
+                "bb443d353e3cfd4a"
+            ]
+        ]
+    },
+    {
+        "id": "09bad171139ef01d",
+        "type": "debug",
+        "z": "c9902645a313fd3e",
+        "name": "Intruso",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "7d7a1cfd0c3c6117",
+        "type": "inject",
+        "z": "c9902645a313fd3e",
+        "name": "blocca_tag_bianco",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{     \"tag_autorizzati\": [           \"209.53.34.217\"     ]}",
+        "payloadType": "json",
+        "x": 430,
+        "y": 120,
+        "wires": [
+            [
+                "ac02d3e4d87a9ca3"
+            ]
+        ]
+    },
+    {
+        "id": "ac02d3e4d87a9ca3",
+        "type": "mqtt out",
+        "z": "c9902645a313fd3e",
+        "name": "door/esp_nfc/config",
+        "topic": "door/esp_nfc/config",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "3c590ebc25e0b5cc",
+        "x": 750,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "bb443d353e3cfd4a",
+        "type": "function",
+        "z": "c9902645a313fd3e",
+        "name": "\"Intruso:\" + tag",
+        "func": "msg.payload = \"Intruso rilevato: \" + msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 400,
+        "wires": [
+            [
+                "09bad171139ef01d"
+            ]
+        ]
+    },
+    {
+        "id": "a27db25eac954e51",
+        "type": "mqtt in",
+        "z": "c9902645a313fd3e",
+        "name": "Campanello Suonato",
+        "topic": "door/esp_nfc/button",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "3c590ebc25e0b5cc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 340,
+        "y": 740,
+        "wires": [
+            [
+                "67568f2ec1a4686b"
+            ]
+        ]
+    },
+    {
+        "id": "657a6d6f946de40d",
+        "type": "debug",
+        "z": "c9902645a313fd3e",
+        "name": "Campanello suonato",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "67568f2ec1a4686b",
+        "type": "function",
+        "z": "c9902645a313fd3e",
+        "name": "\"Campanello suonato!\" else null",
+        "func": "if (msg.payload==\"1\")\n    msg.payload = \"Campanello suonato!\";\n    else \n        return null;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 740,
+        "wires": [
+            [
+                "657a6d6f946de40d"
+            ]
+        ]
+    },
+    {
+        "id": "e29734157c1dca93",
+        "type": "mqtt in",
+        "z": "c9902645a313fd3e",
+        "name": "Tag strisciato",
+        "topic": "door/esp_nfc/tag_swiped",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "3c590ebc25e0b5cc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 460,
+        "wires": [
+            [
+                "5a4dd3d6a0af953d"
+            ]
+        ]
+    },
+    {
+        "id": "5a4dd3d6a0af953d",
+        "type": "function",
+        "z": "c9902645a313fd3e",
+        "name": "\"Tag letto: \" + tag",
+        "func": "msg.payload = \"Tag letto: \" + msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 460,
+        "wires": [
+            [
+                "611b98f56a1c2e2b"
+            ]
+        ]
+    },
+    {
+        "id": "611b98f56a1c2e2b",
+        "type": "debug",
+        "z": "c9902645a313fd3e",
+        "name": "Tag letto",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "8e591aea596516f4",
+        "type": "mqtt in",
+        "z": "c9902645a313fd3e",
+        "name": "Errori",
+        "topic": "door/esp_nfc/errors",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "3c590ebc25e0b5cc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 310,
+        "y": 880,
+        "wires": [
+            [
+                "24ad4ff4e16bf8ce"
+            ]
+        ]
+    },
+    {
+        "id": "7a5a2f3255b923dc",
+        "type": "debug",
+        "z": "c9902645a313fd3e",
+        "name": "Errore",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "24ad4ff4e16bf8ce",
+        "type": "function",
+        "z": "c9902645a313fd3e",
+        "name": "\"---ERRORE---\" + errore",
+        "func": "msg.payload = \"---ERRORE---\\n\" + msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 880,
+        "wires": [
+            [
+                "7a5a2f3255b923dc"
+            ]
+        ]
+    },
+    {
+        "id": "6615c31d852e0fec",
+        "type": "inject",
+        "z": "c9902645a313fd3e",
+        "name": "configurazione errata",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "aa",
+        "payloadType": "str",
+        "x": 400,
+        "y": 200,
+        "wires": [
+            [
+                "ac02d3e4d87a9ca3"
+            ]
+        ]
+    }
+]

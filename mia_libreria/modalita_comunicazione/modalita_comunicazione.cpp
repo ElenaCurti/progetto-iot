@@ -74,9 +74,9 @@ void gestisciComunicazioneIdle(){
         //  il Wifi
         if (millis() - last_wifi_reconnection_attempt >= MILLISECONDI_DISCONNESSIONE_WIFI_AMMESSA){
             Serial.println("Disconnetto e riconnetto Wifi...");
-            WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
+            // WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
             setup_wifi();
-            WiFi.reconnect();
+            // WiFi.reconnect();
 
             last_wifi_reconnection_attempt = millis();
         }
@@ -134,6 +134,8 @@ void inviaMessaggio(String topic, String messaggio){
         Serial.print("(MQTT) " );
         // Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str(), messaggio.length(), 0));
         if (messaggio.length() > 1000) {
+            Serial.print("(long mess)");
+
             mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false);
             mqtt_client.print(messaggio.c_str());
             Serial.print(mqtt_client.endPublish());
