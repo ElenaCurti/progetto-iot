@@ -17,10 +17,8 @@ IPAddress esp_as_AP() {
 
 
 void setup_wifi(){
-    // #define WIFI_PROF
-    #define WIFI_CASA
 
-
+    // Definiti in connessione_wifi.h
     #ifdef WIFI_PROF
         const char* ssid = "MORE-IOT";
         const char* password = "MORE-IOT-PWD";

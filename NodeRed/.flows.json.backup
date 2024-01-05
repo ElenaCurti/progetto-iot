@@ -666,6 +666,21 @@
         "wires": []
     },
     {
+        "id": "c622fa0a64d48b56",
+        "type": "bluetooth",
+        "z": "8c18e233c7d90889",
+        "name": "",
+        "btaddress": "{{msg.payload}}",
+        "btname": "Laptop",
+        "x": 480,
+        "y": 1340,
+        "wires": [
+            [
+                "1761fd313f9c3a2b"
+            ]
+        ]
+    },
+    {
         "id": "27e11e753c40d371",
         "type": "inject",
         "z": "8c18e233c7d90889",
@@ -689,7 +704,9 @@
         "x": 200,
         "y": 1340,
         "wires": [
-            []
+            [
+                "c622fa0a64d48b56"
+            ]
         ]
     },
     {

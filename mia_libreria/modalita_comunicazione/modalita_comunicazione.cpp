@@ -32,6 +32,7 @@ BluetoothSerial SerialBT;
 // MQTTClient mqtt_client(size_foto*2+100);
 WiFiClient espClient;
 PubSubClient mqtt_client(espClient);
+String topic_will_message_g ;
 String* lista_topic_subscription_g;
 int num_topic_subscription_g;
 void messageReceived2(String &topic, String &payload) ;
@@ -42,22 +43,28 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) ;
 
 
 
-void mqtt_ble_setup(String device_name, const String lista_topic_subscription[], int num_topic_subscription){
+void mqtt_ble_setup(String device_name, const String lista_topic_subscription[], int num_topic_subscription, const String topic_will_message){
     // Salvo le variabili globali
     device_name_g = device_name;
     num_topic_subscription_g = num_topic_subscription;
     lista_topic_subscription_g = new String[num_topic_subscription];
     for (int i = 0; i < num_topic_subscription; i++) 
         lista_topic_subscription_g[i] = lista_topic_subscription[i];
+    topic_will_message_g = topic_will_message;
 
     // Inizializzo Wifi e MQTT
     if (WiFi.status() != WL_CONNECTED) 
         connessione_wifi();
 
+    #ifdef WIFI_CASA
     IPAddress ip_broker = IPAddress(192,168,1,23);    // TODO mettere broker come configurazione
+    #else
+    IPAddress ip_broker = IPAddress(192,168,43,252);    // TODO mettere broker come configurazione
+    #endif
 
     mqtt_client.setServer(ip_broker, 1883);
     mqtt_client.setCallback(messaggio_arrivato);
+    
 
     // Inizialzzo Bluetooth
     // SerialBT.begin(device_name_g); //Bluetooth device name
@@ -74,7 +81,7 @@ void gestisciComunicazioneIdle(){
         //  il Wifi
         if (millis() - last_wifi_reconnection_attempt >= MILLISECONDI_DISCONNESSIONE_WIFI_AMMESSA){
             Serial.println("Disconnetto e riconnetto Wifi...");
-            // WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
+            WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
             setup_wifi();
             // WiFi.reconnect();
 
@@ -96,11 +103,14 @@ void gestisciComunicazioneIdle(){
         if (millis() - last_mqtt_reconnection_attempt >= MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT){
             String clientId =  "elenaId-" +  device_name_g + String(random(0xffff), HEX); // TODO forse togli elenaId
             Serial.print("Wifi OK. Attempting MQTT re-connection as " + clientId + " ...");
-            if (mqtt_client.connect(clientId.c_str())) {
+
+            // Provo a riconnettere il client e specifico il will message da mandare in caso di disconnessione
+            if (mqtt_client.connect(clientId.c_str(), "", "", topic_will_message_g.c_str(), 2, true, "0")) {
                 Serial.println("reconnected as " + clientId );
 
                 for (int i=0; i<num_topic_subscription_g; i++)
                     mqtt_client.subscribe(lista_topic_subscription_g[i].c_str());
+                mqtt_client.publish(topic_will_message_g.c_str(), "1", true);
 
             } else {
                 Serial.print("failed, rc=" + (String) mqtt_client.state());
@@ -136,8 +146,22 @@ void inviaMessaggio(String topic, String messaggio){
         if (messaggio.length() > 1000) {
             Serial.print("(long mess)");
 
-            mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false);
-            mqtt_client.print(messaggio.c_str());
+            Serial.print(mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false));
+            Serial.print("a ");
+
+            // "Splitto" le write del messaggio, per aiutare la pubblicazione. Il messaggio inviato sara' comunque unico
+            int length = messaggio.length();
+            int chunkSize = 100;
+
+            for (int i = 0; i < length; i += chunkSize) {
+
+                String chunk = messaggio.substring(i, min(i + chunkSize, length));
+                // Serial.print((String) i + " ");
+                mqtt_client.write((uint8_t *)chunk.c_str(), chunk.length());
+                delay(10); 
+            }
+            // Serial.print(mqtt_client.write((uint8_t *)messaggio.c_str(), messaggio.length()));
+            Serial.print("b");
             Serial.print(mqtt_client.endPublish());
         } else 
             Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str()));

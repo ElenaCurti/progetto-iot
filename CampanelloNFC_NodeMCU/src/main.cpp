@@ -10,6 +10,7 @@ const char* TOPIC_CONFIGURAZIONE = "door/esp_nfc/config";
 const char* TOPIC_STATO_PORTA = "door/esp_nfc/led";
 const char* TOPIC_STATO_LETTORE_NFC = "door/esp_nfc/nfc_reader_state";
 
+const char* TOPIC_WILL_MESSAGE = "door/esp_nfc/state";
 const char* TOPIC_BUTTON_PREMUTO = "door/esp_nfc/button" ;
 const char* TOPIC_TAG_STRISCIATO = "door/esp_nfc/tag_swiped";
 const char* TOPIC_INTRUSO = "door/esp_nfc/intruder"; 
@@ -48,7 +49,7 @@ void setup() {
 
   // Setup comunicazione
   const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_STATO_PORTA, TOPIC_STATO_LETTORE_NFC};
-  mqtt_ble_setup("nfc", elenco_subscription, NUM_SUB);
+  mqtt_ble_setup("nfc", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
 
   // Setup campanello + Creo un task per la lettura del button del campanello, per evitare ritardi
   pinMode(PIN_CAMPANELLO, INPUT);
@@ -137,6 +138,7 @@ void loop() {
 
 
 void check_campanello_premuto(void* pvParameters){
+  old_stato_campanello_premuto = true;
   while (1) {
     if (digitalRead(PIN_CAMPANELLO) == HIGH && !old_stato_campanello_premuto){
         // Serial.println("[Loop 2] Campanello premuto");

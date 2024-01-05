@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <connessione_wifi.h>
 #include "camera_ov7670.h"  // TODO vedi se conveniva usare questa: https://github.com/bitluni/ESP32CameraI2S
-#include <WiFi.h>
+// #include <WiFi.h>
 #include <PubSubClient.h>
 #include <modalita_comunicazione.h>
 
@@ -19,7 +19,8 @@ const int NUM_SUB = 2;
 const char* TOPIC_CONFIGURAZIONE = "door/esp_cam/config";
 const char* TOPIC_SEND_IMG = "door/esp_cam/send_img";
 
-char* TOPIC_PUBLISH_IMMAGINE = "immagine";
+const char* TOPIC_WILL_MESSAGE = "door/esp_cam/state";
+const char* TOPIC_PUBLISH_IMMAGINE = "immagine";
 // char* hexArray;
 
 
@@ -44,7 +45,7 @@ void setup() {
     
   // Controllo MQTT e Bluetooth
   const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_SEND_IMG};
-  mqtt_ble_setup("cam", elenco_subscription, NUM_SUB);
+  mqtt_ble_setup("cam", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
   gestisciComunicazioneIdle();
 
   // Inizializzo la camera facendo una foto
