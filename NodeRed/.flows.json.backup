@@ -35,7 +35,7 @@
         "id": "3c590ebc25e0b5cc",
         "type": "mqtt-broker",
         "name": "BrokerUsato",
-        "broker": "192.168.43.252",
+        "broker": "192.168.1.23",
         "port": "1883",
         "clientid": "elenaId-nodered",
         "autoConnect": true,
@@ -61,14 +61,6 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
-    },
-    {
-        "id": "adc21c5cb326c3bb",
-        "type": "ui_tab",
-        "name": "Home2",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
     },
     {
         "id": "1882cf541cd0b971",
@@ -215,6 +207,16 @@
         "width": "6",
         "collapse": false,
         "className": ""
+    },
+    {
+        "id": "9f184ff151f6c1ba",
+        "type": "ui_spacer",
+        "z": "8c18e233c7d90889",
+        "name": "spacer",
+        "group": "86f322ebf8049f50",
+        "order": 7,
+        "width": 1,
+        "height": 1
     },
     {
         "id": "478a5f37ec18385d",
@@ -401,7 +403,8 @@
             "b458d83fe470509a",
             "ebd45a88251b59c4",
             "d5fbf340676057d0",
-            "90f26a43dd43037d"
+            "90f26a43dd43037d",
+            "cd3c846e4e60ed19"
         ],
         "x": 235,
         "y": 880,
@@ -666,21 +669,6 @@
         "wires": []
     },
     {
-        "id": "c622fa0a64d48b56",
-        "type": "bluetooth",
-        "z": "8c18e233c7d90889",
-        "name": "",
-        "btaddress": "{{msg.payload}}",
-        "btname": "Laptop",
-        "x": 480,
-        "y": 1340,
-        "wires": [
-            [
-                "1761fd313f9c3a2b"
-            ]
-        ]
-    },
-    {
         "id": "27e11e753c40d371",
         "type": "inject",
         "z": "8c18e233c7d90889",
@@ -704,9 +692,7 @@
         "x": 200,
         "y": 1340,
         "wires": [
-            [
-                "c622fa0a64d48b56"
-            ]
+            []
         ]
     },
     {
@@ -1070,8 +1056,8 @@
         "topic": "door/esp_nfc/led",
         "payload": "1",
         "payloadType": "str",
-        "x": 540,
-        "y": 120,
+        "x": 660,
+        "y": 100,
         "wires": [
             [
                 "b458d83fe470509a"
@@ -1084,9 +1070,9 @@
         "z": "3215fe15d9aa44e7",
         "name": "Apri porta ",
         "group": "86f322ebf8049f50",
-        "order": 0,
-        "width": 0,
-        "height": 0,
+        "order": 3,
+        "width": "4",
+        "height": "1",
         "passthru": false,
         "label": "Apri porta ",
         "tooltip": "",
@@ -1098,8 +1084,8 @@
         "payloadType": "str",
         "topic": "door/esp_nfc/led",
         "topicType": "str",
-        "x": 540,
-        "y": 60,
+        "x": 660,
+        "y": 40,
         "wires": [
             [
                 "b458d83fe470509a"
@@ -1119,8 +1105,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 920,
-        "y": 380,
+        "x": 980,
+        "y": 640,
         "wires": []
     },
     {
@@ -1135,8 +1121,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 630,
-        "y": 380,
+        "x": 690,
+        "y": 640,
         "wires": [
             [
                 "162b9ae52d7e8e72",
@@ -1149,12 +1135,13 @@
         "id": "22f1018eb784b46f",
         "type": "ui_audio",
         "z": "3215fe15d9aa44e7",
+        "d": true,
         "name": "Campanello ",
         "group": "86f322ebf8049f50",
         "voice": "Microsoft Cosimo - Italian (Italy)",
         "always": false,
-        "x": 1070,
-        "y": 460,
+        "x": 1130,
+        "y": 720,
         "wires": []
     },
     {
@@ -1172,8 +1159,8 @@
         "className": "",
         "topic": " Campanello suonato!",
         "name": "Campanello suonato!",
-        "x": 920,
-        "y": 320,
+        "x": 980,
+        "y": 580,
         "wires": [],
         "info": "<p> ciao </p>"
     },
@@ -1189,8 +1176,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 460,
+        "x": 960,
+        "y": 720,
         "wires": [
             [
                 "22f1018eb784b46f"
@@ -1210,8 +1197,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1030,
-        "y": 780,
+        "x": 1010,
+        "y": 900,
         "wires": []
     },
     {
@@ -1223,8 +1210,8 @@
         "links": [
             "e87b3b74df0bf879"
         ],
-        "x": 705,
-        "y": 100,
+        "x": 825,
+        "y": 80,
         "wires": []
     },
     {
@@ -1235,8 +1222,8 @@
         "links": [
             "9c638ad8aa6b7d20"
         ],
-        "x": 405,
-        "y": 380,
+        "x": 465,
+        "y": 640,
         "wires": [
             [
                 "95cd540de2b12196"
@@ -1251,8 +1238,8 @@
         "links": [
             "fec084381cfe638b"
         ],
-        "x": 655,
-        "y": 760,
+        "x": 635,
+        "y": 880,
         "wires": [
             [
                 "6260282ed6e535a0",
@@ -1265,7 +1252,7 @@
         "type": "ui_text",
         "z": "3215fe15d9aa44e7",
         "group": "86f322ebf8049f50",
-        "order": 3,
+        "order": 8,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1277,8 +1264,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1050,
-        "y": 880,
+        "x": 1030,
+        "y": 1000,
         "wires": []
     },
     {
@@ -1287,17 +1274,17 @@
         "z": "3215fe15d9aa44e7",
         "group": "86f322ebf8049f50",
         "name": "Mostra foto",
-        "order": 0,
+        "order": 2,
         "width": "6",
         "height": "6",
-        "format": "<canvas id=\"canvas\" style=\"border:solid;\"> </canvas>\n<!-- <div id=\"messages\"></div> -->\n\n<script>\n    var first = 0;  // Usato per inizializzare il canvas\n\n    var xres = 80; // Larghezza foto\n    var yres = 60; // Altezza foto\n    var ctx; // Serve per la \"stampa\" della foto\n    var imgData; // Serve per la stampa della foto\n    var gcanvasid = \"canvas\"; // id del canvas che conterra' la foto\n\n    function hexStringToUint8Array(hexString) {\n        // Remove any non-hex characters (like spaces or newline characters)\n        hexString = String(hexString);\n        hexString = hexString.replace(/[^0-9a-fA-F]/g, '');\n\n        // Split the string into pairs of two\n        const pairs = hexString.match(/.{1,2}/g);\n\n        // Convert each pair to a byte value\n        const byteArray = pairs.map((pair) => parseInt(pair, 16));\n\n        // Create a Uint8Array from the byte values\n        return new Uint8Array(byteArray);\n    }\n\n    function init_canvas() {\n\n        canvas = document.getElementById(\"canvas\");\n        canvas.width = xres;\n        canvas.height = yres;\n\n        ctx = canvas.getContext(\"2d\");\n        imgData = ctx.createImageData(canvas.width, canvas.height);\n\n        for (var i = 0; i < imgData.data.length; i +=4) {\n            imgData.data[i + 0] = 0xCC;\n            imgData.data[i + 1] = 0xCC;\n            imgData.data[i + 2] = 0xCC;\n            imgData.data[i + 3] = 255;\n        }\n        ctx.putImageData(imgData, canvas.width, canvas.height);\n        ctx.globalAlpha = 0.5;\n\n    }\n\n\n    // Funzione che \"stampa\" l'immagine nel canvas\n    function display(pixels) {\n        //alert('display'); \n        ln = 0;\n        var i = 0;\n        for (y = 0; y < yres; y++) {\n            for (x = 0; x < xres; x++) {\n                i = (y * xres + x) << 1;\n                pixel16 = (0xffff & pixels[i]) | ((0xffff & pixels[i + 1]) << 8);\n                imgData.data[ln + 0] = ((((pixel16 >> 11) & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 1] = ((((pixel16 >> 5) & 0x3F) * 259) + 33) >> 6;\n                imgData.data[ln + 2] = (((pixel16 & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 3] = (0xFFFFFFFF) & 255;\n                ln += 4;\n            }\n        }\n        \n        ctx.putImageData(imgData, 0, 0);\n    }\n\n\n    (function(scope) {\n        scope.$watch('msg.payload', function(msg) { // $watch fires each time the node is triggered in the flow\n        \n        // NUOVO MESSAGGIO ARRIVATO IN \"INPUT\": msg\n        if (first == 0) {\n            console.log(\"first\");\n            init_canvas() ;\n            first = 1;        \n        }\n        \n        pixel = hexStringToUint8Array(msg);\n        display(pixel);\n            \n    });\n\n\n\n})(scope);\n</script>",
+        "format": "<canvas id=\"canvas\" style=\"border:solid;\"> </canvas>\n<!-- <div id=\"messages\"></div> -->\n<script>\n    var first = 0;  // Usato per inizializzare il canvas\n\n    var xres = 80; // Larghezza foto\n    var yres = 60; // Altezza foto\n    var ctx; // Serve per la \"stampa\" della foto\n    var imgData; // Serve per la stampa della foto\n    var gcanvasid = \"canvas\"; // id del canvas che conterra' la foto\n\n    function hexStringToUint8Array(hexString) {\n        // Remove any non-hex characters (like spaces or newline characters)\n        hexString = String(hexString);\n        hexString = hexString.replace(/[^0-9a-fA-F]/g, '');\n\n        // Split the string into pairs of two\n        const pairs = hexString.match(/.{1,2}/g);\n\n        // Convert each pair to a byte value\n        const byteArray = pairs.map((pair) => parseInt(pair, 16));\n\n        // Create a Uint8Array from the byte values\n        return new Uint8Array(byteArray);\n    }\n\n    function init_canvas() {\n\n        canvas = document.getElementById(\"canvas\");\n        canvas.width = xres;\n        canvas.height = yres;\n\n        ctx = canvas.getContext(\"2d\");\n        imgData = ctx.createImageData(canvas.width, canvas.height);\n\n        for (var i = 0; i < imgData.data.length; i +=4) {\n            imgData.data[i + 0] = 0xCC;\n            imgData.data[i + 1] = 0xCC;\n            imgData.data[i + 2] = 0xCC;\n            imgData.data[i + 3] = 255;\n        }\n        ctx.putImageData(imgData, canvas.width, canvas.height);\n        ctx.globalAlpha = 0.5;\n\n    }\n\n\n    // Funzione che \"stampa\" l'immagine nel canvas\n    function display(pixels) {\n        //alert('display'); \n        ln = 0;\n        var i = 0;\n        for (y = 0; y < yres; y++) {\n            for (x = 0; x < xres; x++) {\n                i = (y * xres + x) << 1;\n                pixel16 = (0xffff & pixels[i]) | ((0xffff & pixels[i + 1]) << 8);\n                imgData.data[ln + 0] = ((((pixel16 >> 11) & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 1] = ((((pixel16 >> 5) & 0x3F) * 259) + 33) >> 6;\n                imgData.data[ln + 2] = (((pixel16 & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 3] = (0xFFFFFFFF) & 255;\n                ln += 4;\n            }\n        }\n        \n        ctx.putImageData(imgData, 0, 0);\n    }\n\n\n    (function(scope) {\n        scope.$watch('msg.payload', function(msg) { // $watch fires each time the node is triggered in the flow\n        \n        // NUOVO MESSAGGIO ARRIVATO IN \"INPUT\": msg\n        if (first == 0) {\n            console.log(\"first\");\n            init_canvas() ;\n            first = 1;        \n        }\n        \n        pixel = hexStringToUint8Array(msg);\n        display(pixel);\n            \n    });\n\n\n\n})(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 830,
-        "y": 720,
+        "x": 810,
+        "y": 840,
         "wires": [
             []
         ]
@@ -1314,8 +1301,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
-        "y": 800,
+        "x": 800,
+        "y": 920,
         "wires": [
             [
                 "fb56339fa80b86e8",
@@ -1344,12 +1331,213 @@
         "topic": "",
         "payload": "",
         "payloadType": "str",
-        "x": 610,
-        "y": 900,
+        "x": 590,
+        "y": 1020,
         "wires": [
             [
                 "fb56339fa80b86e8"
             ]
+        ]
+    },
+    {
+        "id": "26e1c77cd8b28d7e",
+        "type": "ui_button",
+        "z": "3215fe15d9aa44e7",
+        "name": "",
+        "group": "86f322ebf8049f50",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Mostra camera",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "str",
+        "topic": "door/esp_nfc/button",
+        "topicType": "str",
+        "x": 440,
+        "y": 200,
+        "wires": [
+            [
+                "cd3c846e4e60ed19",
+                "a4efcea0422cd03f"
+            ]
+        ]
+    },
+    {
+        "id": "cd3c846e4e60ed19",
+        "type": "link out",
+        "z": "3215fe15d9aa44e7",
+        "name": "Manda messaggio",
+        "mode": "link",
+        "links": [
+            "e87b3b74df0bf879"
+        ],
+        "x": 1205,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "a4efcea0422cd03f",
+        "type": "trigger",
+        "z": "3215fe15d9aa44e7",
+        "name": "",
+        "op1": "1",
+        "op2": "1",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "-500",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "ms",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 800,
+        "y": 300,
+        "wires": [
+            [
+                "cd3c846e4e60ed19"
+            ]
+        ]
+    },
+    {
+        "id": "b83ab328e12a2023",
+        "type": "inject",
+        "z": "3215fe15d9aa44e7",
+        "name": "Mostra camera",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 460,
+        "y": 240,
+        "wires": [
+            [
+                "a4efcea0422cd03f"
+            ]
+        ]
+    },
+    {
+        "id": "44059d5d81366afe",
+        "type": "inject",
+        "z": "3215fe15d9aa44e7",
+        "name": "Reset",
+        "props": [
+            {
+                "p": "reset",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 430,
+        "y": 380,
+        "wires": [
+            [
+                "a4efcea0422cd03f"
+            ]
+        ]
+    },
+    {
+        "id": "db8c105f0223898f",
+        "type": "ui_button",
+        "z": "3215fe15d9aa44e7",
+        "name": "",
+        "group": "86f322ebf8049f50",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Stop camera",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 450,
+        "y": 440,
+        "wires": [
+            [
+                "0bc6bc2167b82c4a"
+            ]
+        ]
+    },
+    {
+        "id": "0bc6bc2167b82c4a",
+        "type": "function",
+        "z": "3215fe15d9aa44e7",
+        "name": "function 3",
+        "func": "msg.reset = true;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 440,
+        "wires": [
+            [
+                "a4efcea0422cd03f"
+            ]
+        ]
+    },
+    {
+        "id": "75bdbc381194053f",
+        "type": "ui_switch",
+        "z": "3215fe15d9aa44e7",
+        "name": "",
+        "label": "Mostra video",
+        "tooltip": "",
+        "group": "86f322ebf8049f50",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 490,
+        "y": 160,
+        "wires": [
+            []
         ]
     },
     {

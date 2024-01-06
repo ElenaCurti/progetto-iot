@@ -1,4 +1,4 @@
-#include <WebSockets.h>
+/*#include <WebSockets.h>
 #include <WebSocketsServer.h>
 #include "pagina_web.h"
 
@@ -136,3 +136,4 @@ void ws_loop()
         client.stop();
     }
 }
+*/

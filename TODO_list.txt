@@ -1,0 +1,56 @@
+./CampanelloFotocamera_Esp32/src/main.cpp:3:#include "camera_ov7670.h"  // TODO vedi se conveniva usare questa: https://github.com/bitluni/ESP32CameraI2S
+
+./CampanelloFotocamera_Esp32/.pio/libdeps/esp32dev/WebSockets/src/WebSocketsServer.cpp:933:    // TODO how to close server?
+./CampanelloFotocamera_Esp32/pagina_web.html:15:        // TODO togli commento
+./CampanelloFotocamera_Esp32/pagina_web.html:22:    // TODO togli commento
+./CampanelloFotocamera_Esp32/src/camera_ov7670.cpp:137:        while (fotocamera == NULL){ // TODO non bloccante
+./CampanelloFotocamera_Esp32/src/main.cpp:12:long MILLISECONDS_SEND_PIC = 50; // TODO Configurazione
+./CampanelloFotocamera_Esp32/src/main.cpp:39:  Serial.begin(115200); // TODO serial forse e' considerata quella del BLE ?
+./CampanelloFotocamera_Esp32/src/main.cpp:44:  connessione_wifi(); // TODO questo va fatto non blocante
+./CampanelloFotocamera_Esp32/src/main_old.cpp:2:#include "camera_ov7670.h"  // TODO vedi se conveniva usare questa: https://github.com/bitluni/ESP32CameraI2S
+./CampanelloFotocamera_Esp32/src/main_old.cpp:56:    IPAddress ip_broker = IPAddress(192,168,1,53);    // TODO mettere broker come configurazione
+./CampanelloFotocamera_Esp32/src/mio_mqtt.cpp:35:  const int SECONDI_DISCONNESSIONE_MQTT_AMMESSA = 2, SECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT=3; // TODO rimuovimi
+./CampanelloFotocamera_Esp32/src/mio_mqtt.cpp:52:      // Once connected, resubscribe // TODO
+./CampanelloFotocamera_Esp32/src/modalita_comunicazione_old.cpp:6:// TODO questo e' da togliere
+./CampanelloFotocamera_Esp32/src/modalita_comunicazione_old.cpp:48:    IPAddress ip_broker = IPAddress(192,168,1,23);    // TODO mettere broker come configurazione
+./CampanelloFotocamera_Esp32/src/modalita_comunicazione_old.cpp:49:    // IPAddress ip_broker = IPAddress(192,168,43,57);    // TODO mettere broker come configurazione
+./CampanelloFotocamera_Esp32/src/modalita_comunicazione_old.cpp:81:            WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
+./CampanelloFotocamera_Esp32/src/modalita_comunicazione_old.cpp:97:        // TODO eventualmente vai in deep sleep
+./CampanelloFotocamera_Esp32/src/modalita_comunicazione_old.cpp:105:                // TODO re-subscribe
+./CampanelloFotocamera_Esp32/src/pagina_web.cpp:18:        // TODO togli commento
+./CampanelloNFC_NodeMCU/.pio/build/nodemcu-32s/firmware.map:2869: .literal._ZNK6String8toDoubleEv
+./CampanelloNFC_NodeMCU/.pio/build/nodemcu-32s/firmware.map:3000: .text._ZNK6String8toDoubleEv
+./CampanelloNFC_NodeMCU/.pio/build/nodemcu-32s/firmware.map:123524:String::toDouble() const                          .pio\build\nodemcu-32s\libFrameworkArduino.a(WString.cpp.o)
+./CampanelloNFC_NodeMCU/.pio/libdeps/nodemcu-32s/ArduinoJson/src/ArduinoJson/MsgPack/MsgPackDeserializer.hpp:41:    uint8_t code = 0;  // TODO: why do we need to initialize this variable?
+./CampanelloNFC_NodeMCU/.pio/libdeps/nodemcu-32s/ArduinoJson/src/ArduinoJson/Variant/VariantCompare.hpp:25:  T rhs;  // TODO: store adapted string?
+./CampanelloNFC_NodeMCU/src/configurazione_board.cpp:29:    // TODO check con array vuoto
+./CampanelloNFC_NodeMCU/src/configurazione_board.cpp:54:    // TODO eventualemente metterlo nella forma:
+./CampanelloNFC_NodeMCU/src/main.cpp:7:// TODO se broker remoto: aggiungi un livello root per filtrare i "miei" messaggi
+./CampanelloNFC_NodeMCU/src/main.cpp:108:      inviaMessaggio(TOPIC_TAG_STRISCIATO, tag_letto);  // TODO aggiungi tipo tag_letto + "e' entrato"/ non e' entrato
+./CampanelloNFC_NodeMCU/src/nfc_nodemcu.cpp:30:    // TODO aggiungi tipo max 5 sec di ricerca
+./Interno_NodeMCU/.pio/build/nodemcu-32s/firmware.map:2929: .literal._ZNK6String8toDoubleEv
+./Interno_NodeMCU/.pio/build/nodemcu-32s/firmware.map:3084: .text._ZNK6String8toDoubleEv
+./Interno_NodeMCU/.pio/build/nodemcu-32s/firmware.map:108461:String::toDouble() const                          .pio\build\nodemcu-32s\libFrameworkArduino.a(WString.cpp.o)
+./mia_libreria/connessione_wifi/connessione_wifi.cpp:41:    // TODO se la esp non si connette (es. entro 5 sec) -> prova a fare restart dell'esp
+./mia_libreria/connessione_wifi/connessione_wifi.cpp:42:    // TODO fai uno script su pc per connettersi sempre allo stesso wifi e per resettare mosquitto ogni volta che si cambia wifi
+./mia_libreria/mio_mqtt/mio_mqtt.cpp:65:        // TODO es. se per 6 volte fallisce, reset esp
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:7:// TODO cambia tutto in CamelCase o snake
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:60:    IPAddress ip_broker = IPAddress(192,168,1,23);    // TODO mettere broker come configurazione
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:62:    IPAddress ip_broker = IPAddress(192,168,43,252);    // TODO mettere broker come configurazione
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:84:            WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:100:        // TODO eventualmente vai in deep sleep
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:104:            String clientId =  "elenaId-" +  device_name_g + String(random(0xffff), HEX); // TODO forse togli elenaId
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:136:    // TODO -> se BLE rotto, risolvi
+./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:169:    } /*else if (true) {  // TODO metti condizione del tipo "se dispositivo connesso"
+
+
+
+./WebApp/my_mqtt.js:29:        // TODO implementa username e password
+./WebApp/my_mqtt.js:74:    msg = "apri "+id_button_premuto ; // TODO da decidere
+./WebApp/web_app_file_unico.html:59:        // TODO implementa username e password
+./WebApp/web_app_file_unico.html:104:    msg = "apri "+id_button_premuto ; // TODO da decidere
+./WebApp/web_app_socket.html:15:        // TODO togli commento
+./WebApp/web_app_socket.html:22:    // TODO togli commento
+
+
+Gestisci meglio gli include

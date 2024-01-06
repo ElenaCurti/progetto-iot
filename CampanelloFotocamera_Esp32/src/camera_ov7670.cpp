@@ -141,9 +141,12 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
         Serial.println("OK");
     }
 
-    int blk_count = fotocamera->yres/I2SCamera::blockSlice;//30, 60, 120
+
     String foto = "";
     unsigned char* to_ret = NULL;
+
+    /* // Libreria con Web sockets -> messa in cartella prova solo per non linkarla
+    int blk_count = fotocamera->yres/I2SCamera::blockSlice;//30, 60, 120
     
     for (int i=0; i<blk_count; i++) {
 
@@ -171,7 +174,16 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
         // webSocket.sendBIN(0, camera->frame, camera->xres * I2SCamera::blockSlice * 2);
         fotocamera->startBlock += I2SCamera::blockSlice;
         fotocamera->endBlock   += I2SCamera::blockSlice;
-    }
+    }*/
+
+    // Libreria ESP32_I2S_Camera
+    fotocamera->oneFrame();
+    size = fotocamera->xres * fotocamera->yres * 2;
+    Serial.println("Size: " + (String) size);
+    size = 9600;
+    to_ret = fotocamera->frame;
+
+
     return to_ret;
     // return foto;
       

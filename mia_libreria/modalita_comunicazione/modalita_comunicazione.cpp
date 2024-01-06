@@ -1,7 +1,7 @@
 #include <WiFiClient.h>
 #include "modalita_comunicazione.h"
 #include <PubSubClient.h>
-#include "BluetoothSerial.h"
+// #include "BluetoothSerial.h"
 #include <connessione_wifi.h>
 
 // TODO cambia tutto in CamelCase o snake
@@ -25,7 +25,7 @@ const int MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT = 2*1000;
 bool stato_ble2 = false;
 
 String device_name_g ="";
-BluetoothSerial SerialBT;
+// BluetoothSerial SerialBT;
 
 // const size_t size_foto = 9600;
 // WiFiClient net;
@@ -64,7 +64,11 @@ void mqtt_ble_setup(String device_name, const String lista_topic_subscription[],
 
     mqtt_client.setServer(ip_broker, 1883);
     mqtt_client.setCallback(messaggio_arrivato);
-    
+    /*if (device_name.equals("cam")){
+        mqtt_client.setBufferSize(9700);
+        mqtt_client.setKeepAlive(20);
+        // mqtt_client.setSocketTimeout(60);
+    }*/
 
     // Inizialzzo Bluetooth
     // SerialBT.begin(device_name_g); //Bluetooth device name
@@ -99,18 +103,19 @@ void gestisciComunicazioneIdle(){
         // return;
         // TODO eventualmente vai in deep sleep
     } else if (WiFi.status() == WL_CONNECTED){
+        
         // client non comunica con MQTT, ma e' connesso al Wifi -> se sono passati piu' di SECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT, ritento la connessione
         if (millis() - last_mqtt_reconnection_attempt >= MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT){
             String clientId =  "elenaId-" +  device_name_g + String(random(0xffff), HEX); // TODO forse togli elenaId
             Serial.print("Wifi OK. Attempting MQTT re-connection as " + clientId + " ...");
-
+            
             // Provo a riconnettere il client e specifico il will message da mandare in caso di disconnessione
             if (mqtt_client.connect(clientId.c_str(), "", "", topic_will_message_g.c_str(), 2, true, "0")) {
                 Serial.println("reconnected as " + clientId );
 
                 for (int i=0; i<num_topic_subscription_g; i++)
                     mqtt_client.subscribe(lista_topic_subscription_g[i].c_str());
-                mqtt_client.publish(topic_will_message_g.c_str(), "1", true);
+                mqtt_client.publish(topic_will_message_g.c_str(), "1", true);   // TODO sistema
 
             } else {
                 Serial.print("failed, rc=" + (String) mqtt_client.state());
@@ -129,13 +134,48 @@ void gestisciComunicazioneIdle(){
     }
 
 
-    // Serial.print("loop");
+    // Serial.print("l ");
     mqtt_client.loop();
 
 
     // TODO -> se BLE rotto, risolvi
 }
 
+const int BIG_MESSAGE_SIZE_CHUNK_BYTE = 2400;
+void mqttBigMessaggio(String topic, String messaggio){
+    Serial.print("(long mess)");
+
+    Serial.print(mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false));
+    Serial.print("a ");
+
+    // "Splitto" le write del messaggio, per aiutare la pubblicazione. Il messaggio inviato sara' comunque unico
+    int length = messaggio.length();
+    int chunkSize = BIG_MESSAGE_SIZE_CHUNK_BYTE;
+
+    for (int i = 0; i < length; i += chunkSize) {
+
+        Serial.print(" "+(String) i);
+        String chunk = messaggio.substring(i, min(i + chunkSize, length));
+        Serial.print("i");
+        if (!mqtt_client.connected()){
+            Serial.print("ERR: disconnesso durante la pubb ");
+            Serial.print(mqtt_client.endPublish());
+            return;
+
+        }
+        mqtt_client.write((uint8_t *)chunk.c_str(), chunk.length());
+        Serial.print("f");
+        mqtt_client.loop();
+        delay(10); 
+    }
+    // Serial.print(mqtt_client.write((uint8_t *)messaggio.c_str(), messaggio.length()));
+    Serial.print("b");
+    Serial.print(mqtt_client.endPublish());
+}
+
+bool mqtt_is_connected(){
+    return mqtt_client.connected();
+}
 
 void inviaMessaggio(String topic, String messaggio){
     
@@ -143,26 +183,10 @@ void inviaMessaggio(String topic, String messaggio){
     if (mqtt_client.connected()){
         Serial.print("(MQTT) " );
         // Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str(), messaggio.length(), 0));
+
         if (messaggio.length() > 1000) {
-            Serial.print("(long mess)");
-
-            Serial.print(mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false));
-            Serial.print("a ");
-
-            // "Splitto" le write del messaggio, per aiutare la pubblicazione. Il messaggio inviato sara' comunque unico
-            int length = messaggio.length();
-            int chunkSize = 100;
-
-            for (int i = 0; i < length; i += chunkSize) {
-
-                String chunk = messaggio.substring(i, min(i + chunkSize, length));
-                // Serial.print((String) i + " ");
-                mqtt_client.write((uint8_t *)chunk.c_str(), chunk.length());
-                delay(10); 
-            }
-            // Serial.print(mqtt_client.write((uint8_t *)messaggio.c_str(), messaggio.length()));
-            Serial.print("b");
-            Serial.print(mqtt_client.endPublish());
+            mqttBigMessaggio(topic, messaggio);
+            
         } else 
             Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str()));
 

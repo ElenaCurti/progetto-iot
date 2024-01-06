@@ -9,7 +9,7 @@
 #endif
 
 // #define WIFI_PROF
-// #define WIFI_CASA
+#define WIFI_CASA
 
 void setup_wifi();
 void connessione_wifi();
