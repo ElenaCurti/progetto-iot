@@ -2,14 +2,44 @@
 #include "XClk.h"
 #include "Log.h"
 
-OV7670::OV7670(Mode m, const int SIOD, const int SIOC, const int VSYNC, const int HREF, const int XCLK, const int PCLK, const int D0, const int D1, const int D2, const int D3, const int D4, const int D5, const int D6, const int D7)
+OV7670::OV7670(bool &risultato, Mode m, const int SIOD, const int SIOC, const int VSYNC, const int HREF, const int XCLK, const int PCLK, const int D0, const int D1, const int D2, const int D3, const int D4, const int D5, const int D6, const int D7)
   :i2c(SIOD, SIOC)
 {
+ 
+  DEBUG_PRINT("Clock...");  
   ClockEnable(XCLK, 20000000); //base is 80MHz
   
   DEBUG_PRINT("Waiting for VSYNC...");  
   pinMode(VSYNC, INPUT);
+  DEBUG_PRINT("1");  
+  
+  
+  /*if (digitalRead(VSYNC)){
+    DEBUG_PRINT("True");  
+    risultato = true;
+  } else{ 
+    DEBUG_PRINT("False");  
+    risultato = false;
+    return;
+  }*/
+
+  risultato = true;
+  /*const int SECONDI_ATTESA_CAMERA  = 5;
+  unsigned long primo_tentativo_allocazione = millis();
+  bool fotocamera_ok = digitalRead(VSYNC);
+  while (!fotocamera_ok && millis() - primo_tentativo_allocazione <= SECONDI_ATTESA_CAMERA*1000){
+    Serial.print(".");
+    fotocamera_ok = digitalRead(VSYNC);
+  }
+  if (!fotocamera_ok){
+    risultato = false;
+    return;
+  } else 
+    risultato = true;*/
+  
   while(!digitalRead(VSYNC));
+  DEBUG_PRINT("2");  
+  
   while(digitalRead(VSYNC));
   DEBUG_PRINTLN(" done");
 

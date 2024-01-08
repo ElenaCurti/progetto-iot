@@ -1,58 +1,34 @@
 #include <Arduino.h>
 #include <connessione_wifi.h>
 #include "camera_ov7670.h"  
-// #include <WiFi.h>
-// #include "OV7670.h"
-
 #include <PubSubClient.h>
 #include <modalita_comunicazione.h>
 
-// Variabili per fare foto ogni MILLISECONDS_SEND_PIC millisecondi
-unsigned long previousMillis = 0;
-long MILLISECONDS_SEND_PIC = 5*1000; // TODO Configurazione
-
-// Variabili per il websocket
-IPAddress ip_address_esp ;
-
 // Variabili per mqtt
-const int NUM_SUB = 2;
-const char* TOPIC_CONFIGURAZIONE = "door/esp_cam/config";
+const int NUM_SUB = 6;
+const char* TOPIC_FREQUENZA_INVIO_IMMAGINI = "door/esp_cam/config/freq_send_img";
+const char* TOPIC_DEEP_SLEEP = "door/esp_cam/config/deep_sleep";
+const char* TOPIC_TIMEOUT_INVIO_IMMAGINI = "door/esp_cam/timeout_send_img";
 const char* TOPIC_CAMPANELLO_PREMUTO = "door/esp_nfc/button" ;
+const char* TOPIC_RESET_ESP = "door/esp_cam/reset";
+const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "door/esp_cam/request_send_img";
 
-
-const char* TOPIC_WILL_MESSAGE = "door/esp_cam/state";
-const char* TOPIC_PUBLISH_IMMAGINE = "immagine";  // TODO cambia topic
+const char* TOPIC_WILL_MESSAGE = "door/esp_cam/state";  // TODO migliora con orario
+const char* TOPIC_PUBLISH_IMMAGINE = "door/esp_cam/image"; 
 // char* hexArray;
-
 
 // Variabili per BLE
 
 
+// Variabili per video in streaming
+unsigned long primaImmagineMandata = -1;
+unsigned long previousMillisStreamingVideo = 0;
+bool streaming_video_in_corso = false;
 
-void messageReceived2(String &topic, String &payload) {
-  // NB: NON USARE mqtt_client QUI -> se devi usarlo, cambia una variabile globale
-  Serial.println("incoming: " + topic + " - " + payload);
-}
-
-// PROVA:
-// const int SIOD = 21; //SDA
-// const int SIOC = 22; //SCL
-
-// const int VSYNC = 34;
-// const int HREF = 35;
-
-// const int XCLK = 32;
-// const int PCLK = 33;
-
-// const int D0 = 27;
-// const int D1 = 17;
-// const int D2 = 16;
-// const int D3 = 15;
-// const int D4 = 14;
-// const int D5 = 13;
-// const int D6 = 12;
-// const int D7 = 4;
-// OV7670 *camera2;
+// Configurazioni
+long frequenza_invio_immagini = -1;  
+long timeout_invio_immagini = 30*1000;  //Dopo 30 sec da quando e' stato premuto il campanello smetto di inviare il video ; -1 per continuare "per sempre" 
+bool deep_sleep = false;  // TODO
 
 
 void setup() {
@@ -62,46 +38,30 @@ void setup() {
 
   Serial.println("--- Fotocamera --- ");
   
-  
-  // Inizializzo Wifi e MQTT 
-  connessione_wifi(); // TODO questo va fatto non blocante
     
   // Controllo MQTT e Bluetooth
-  const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_CAMPANELLO_PREMUTO};
+  const String elenco_subscription[NUM_SUB] = {TOPIC_FREQUENZA_INVIO_IMMAGINI,TOPIC_DEEP_SLEEP,TOPIC_CAMPANELLO_PREMUTO, TOPIC_RESET_ESP, TOPIC_RICHIESTA_INVIO_IMMAGINI, TOPIC_TIMEOUT_INVIO_IMMAGINI};
   mqtt_ble_setup("cam", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
   gestisciComunicazioneIdle();
-
-  
-  // Inizializzo la camera facendo una foto
-  // if (camera2 == NULL) {
-  //     Serial.print("Inizializzo camera...");
-  //     while (camera2 == NULL){ // TODO non bloccante
-  //         Serial.print(".");
-  //         camera2 = new OV7670(OV7670::Mode::QQQVGA_RGB565, SIOD, SIOC, VSYNC, HREF, XCLK, PCLK, D0, D1, D2, D3, D4, D5, D6, D7);
-  //     }
-  //     Serial.println("OK");
-  // }
 
   
 }
 
 void take_pic_and_send(){
   Serial.print("Faccio foto...") ;
-   /*Serial.print(mqtt_is_connected());
-  camera2->oneFrame();
-  Serial.print(mqtt_is_connected());
-
-  
-  unsigned char* foto =camera2->frame;// take_picture(size);
-  size_t size = camera2->xres * camera2->yres * 2;*/ 
-
   size_t size;
   unsigned char* foto = take_picture(size);
-  Serial.print("ok\t") ;
+  if (size == -1){
+    Serial.println((char*)foto);
+    inviaMessaggio(TOPIC_PUBLISH_IMMAGINE, (char*) foto);
+    
+    return;
+  }
+  // Serial.print("ok\t") ;
   
   // Serial.print("Converto...") ;
   String string_to_send = convert_to_mqtt_string(foto, size);
-  // Serial.print("ok\t") ;
+  Serial.print("ok\t") ;
 
   Serial.print("Invio...Risulato: ") ;
   unsigned int tempo_prec = millis();
@@ -115,82 +75,25 @@ void Bluetooth_handle();
 
 unsigned int last_mqtt_loop_called = -1;
 void loop() {
-  // Serial.print(xPortGetCoreID());
-  // Serial.print("***");
   
-  // return;
-
-
   gestisciComunicazioneIdle();
 
-  /*if (millis() - previousMillis >= MILLISECONDS_SEND_PIC) {
-
-    
-    previousMillis = millis();
-
-  } */ 
+  // Se devo trasmettere il video in streaming, non e' scaduto il timeout e sono 
+  // passati frequenza_invio_immagini millisec dall'ultimo invio dell'immaigne, allroa ne mando un'altra
+  if (streaming_video_in_corso) {
+    if (timeout_invio_immagini != -1 && millis() - primaImmagineMandata >= timeout_invio_immagini*1000){
+      Serial.println("Timeout scaduto");
+      streaming_video_in_corso = false;
+    }
+  
+    if (streaming_video_in_corso &&  millis() - previousMillisStreamingVideo >= frequenza_invio_immagini) {
+      take_pic_and_send();
+      previousMillisStreamingVideo = millis();
+    } 
+  }
 
   delay(20);
 
-
-  
-  
-/*
-  // Chiamo i loop di web socket o mqtt 
-  if (modalita_usata == IMMAGINE_CON_MQTT){
-    mqtt_clientLoop(mqtt_client);
-    last_mqtt_loop_called = millis();
-  } else if (modalita_usata == IMMAGINE_CON_BLE){
-    bleSerial.poll();
-
-    while (bleSerial.available() > 0) {
-      // Leggo i dati dalla ble serial
-      Serial.write(bleSerial.read());
-    }
-  }
-  
-  // Controllo se e' ora di mandare la foto
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= MILLISECONDS_SEND_PIC) {
-    
-    
-   if (modalita_usata == IMMAGINE_CON_MQTT){
-      // Se uso mqtt, pubblico la foto sul topic
-
-      Serial.print("Faccio foto...") ;
-      size_t size;
-      unsigned char* foto = take_picture(size);
-      Serial.print("ok\t") ;
-      
-      Serial.print("Converto...") ;
-      String string_to_send = convert_to_mqtt_string(foto, size);
-      Serial.print("ok\t") ;
-
-      Serial.print("Pubblico...Risulato: ") ;
-      unsigned int tempo_prec = millis();
-      Serial.print(mqtt_client.publish(TOPIC_PUBLISH_IMMAGINE, string_to_send.c_str()));
-      Serial.println("\tTempo impiegato: " + (String) (millis() - tempo_prec));
-
-    } else if (modalita_usata == IMMAGINE_CON_BLE) {
-      size_t size;
-      unsigned char* foto = take_picture(size);
-      String string_to_send = convert_to_mqtt_string(foto, size);
-
-      
-      Serial.println("mando fotos");
-      bleSerial.print(string_to_send.c_str());
-        
-      
-
-      // SerialBT.write((uint8_t *) string_to_send.c_str(), (size_t) string_to_send.length());
-    }
-
-
-    previousMillis = currentMillis;
-
-  }
-*/
-  
 }
 
 void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
@@ -200,10 +103,42 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println("[" + (String) topic + "] " + payload_str);
 
-
-  if (((String) TOPIC_CAMPANELLO_PREMUTO).equals(topic)){
+  // Configurazioni: frequenza invio immagini, deep sleep, timeout invio immagini
+  if (((String) TOPIC_FREQUENZA_INVIO_IMMAGINI).equals(topic)){
+    frequenza_invio_immagini = atoi(payload_str.c_str());
+    Serial.println("Distanza invio immagini: " + (String) frequenza_invio_immagini);
+  
+  } else if (((String) TOPIC_TIMEOUT_INVIO_IMMAGINI).equals(topic)){
+    timeout_invio_immagini = atoi(payload_str.c_str());
+    Serial.println("Timeout video streaming: " + (String) timeout_invio_immagini);
+  
+  } else if (((String) TOPIC_DEEP_SLEEP).equals(topic)){
+    if (payload_str.equals("1"))
+        deep_sleep = true;
+    else 
+        deep_sleep = false;
+    Serial.println("Deep sleep: " + (String) deep_sleep);
+  
+  
+  } else if (  ((String) TOPIC_CAMPANELLO_PREMUTO).equals(topic) || ((String) TOPIC_RICHIESTA_INVIO_IMMAGINI).equals(topic) ){
+    // Se campanello premuto o richiesta invio immagine -> mando foto o video
     if (payload_str.equals("1")){
+        primaImmagineMandata = millis();
         take_pic_and_send();
+        if (frequenza_invio_immagini != -1) {
+          Serial.println("Inizio video ");
+          streaming_video_in_corso = true;
+        }
+    } else {
+      Serial.println("Stop video/foto");
+      streaming_video_in_corso = false;
+    }
+
+  }  else if (((String) TOPIC_RESET_ESP).equals(topic)){
+    
+    if (payload_str.equals("1")){
+        ESP.restart();
     }
   }
+  
 }

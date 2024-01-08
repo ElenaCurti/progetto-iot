@@ -1,20 +1,7 @@
 #include "connessione_wifi.h"
-#include <ESP32Ping.h>
+// #include <ESP32Ping.h>
 
-
-IPAddress esp_as_AP() { 
-  const char *ap_ssid     = "Wifi Esp32";
-  const char *ap_password = "Esp32Password";
-
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP(ap_ssid, ap_password);
-  IPAddress ip_address_esp = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(ip_address_esp);
-
-  return ip_address_esp;
-}
-
+const int SECONDI_ATTESA_WIFI = 10;
 
 void setup_wifi(){
 
@@ -37,20 +24,22 @@ void setup_wifi(){
     // WiFi.persistent(true);          // to automatically reconnect to the previously connected access point
 }
 
-void connessione_wifi(){
+bool connessione_wifi(){
     // TODO se la esp non si connette (es. entro 5 sec) -> prova a fare restart dell'esp
     // TODO fai uno script su pc per connettersi sempre allo stesso wifi e per resettare mosquitto ogni volta che si cambia wifi
 
     if (WiFi.status() == WL_CONNECTED)
-        return;
+        return true;
+    
+    unsigned long primo_tentativo_connessione_wifi = millis(); 
 
     setup_wifi();
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.status() != WL_CONNECTED && millis() - primo_tentativo_connessione_wifi <= SECONDI_ATTESA_WIFI*1000) {
         Serial.print("Connecting to WiFi...\t");
-        Serial.print("Ping 192.168.1.23: " );
-        Serial.print(Ping.ping(IPAddress(192,168,1,23), 1));
-        Serial.print("\tPing 8.8.8.8: " );
-        Serial.println(Ping.ping(IPAddress(8,8,8,8), 1));
+        // Serial.print("Ping 192.168.1.23: " );
+        // Serial.print(Ping.ping(IPAddress(192,168,1,23), 1));
+        // Serial.print("\tPing 8.8.8.8: " );
+        // Serial.println(Ping.ping(IPAddress(8,8,8,8), 1));
 
         delay(1000);
 
@@ -58,9 +47,29 @@ void connessione_wifi(){
 
     }
 
-    Serial.print("Connected to WiFi. IP: ");
-    Serial.println(WiFi.localIP());
+    if (WiFi.status() == WL_CONNECTED){
+        Serial.print("Connected to WiFi. IP: ");
+        Serial.println(WiFi.localIP());
+        return true;
+    } else
+        Serial.print("Connessione wifi NON riuscita");
+    return false;
+
 }
 
 
 
+
+
+IPAddress esp_as_AP() { 
+  const char *ap_ssid     = "Wifi Esp32";
+  const char *ap_password = "Esp32Password";
+
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP(ap_ssid, ap_password);
+  IPAddress ip_address_esp = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(ip_address_esp);
+
+  return ip_address_esp;
+}

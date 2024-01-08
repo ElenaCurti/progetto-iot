@@ -12,5 +12,5 @@
 #define WIFI_CASA
 
 void setup_wifi();
-void connessione_wifi();
+bool connessione_wifi();
 IPAddress esp_as_AP() ;

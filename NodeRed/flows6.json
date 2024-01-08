@@ -1,0 +1,54 @@
+[
+    {
+        "id": "478a5f37ec18385d",
+        "type": "mqtt in",
+        "z": "8c18e233c7d90889",
+        "name": "",
+        "topic": "door/esp_nfc/tag_swiped",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "3c590ebc25e0b5cc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 340,
+        "wires": [
+            [
+                "cb0e70cb334fcc37"
+            ]
+        ]
+    },
+    {
+        "id": "3c590ebc25e0b5cc",
+        "type": "mqtt-broker",
+        "name": "BrokerUsato",
+        "broker": "192.168.1.23",
+        "port": "1883",
+        "clientid": "elenaId-nodered",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

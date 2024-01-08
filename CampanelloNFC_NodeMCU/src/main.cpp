@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "nfc_nodemcu.h"
+
+#define USA_BLUETOOTH
 #include <modalita_comunicazione.h>
+
 #include "configurazione_board.h"
 
 // Lista dei vari topic 
@@ -22,6 +25,7 @@ String* tag_autorizzati = {new String("209.53.34.217")} ; // Inizialmente solo t
 int config_num_tentativi_errati_permessi[2] = {3,5};
 bool check_tag_locally = true;
 bool deep_sleep = false;
+int usa_bluetooth = 2;  // 0->non usarlo, 1->usalo solo se MQTT non va, 2->sempre acceso
 
 // Varibili per controllo campanello premuto
 #define PIN_CAMPANELLO 35
@@ -39,6 +43,10 @@ const int SECONDI_BLOCCO_READER = 30;
 // Simulatore apertura porta
 #define PIN_LED_VERDE 32
 void apertura_porta_led_verde();
+
+// Variabile per capire se utente vuole bluetooth
+int old_usa_bluetooth = usa_bluetooth;
+
 
 void setup() {
   Serial.begin(115200);
@@ -130,6 +138,13 @@ void loop() {
   }
   // Serial.print( (String) digitalRead(PIN_CAMPANELLO) + " " );
 
+  // Nuova configurazione del bluetooth
+  if (old_usa_bluetooth != usa_bluetooth){
+    old_usa_bluetooth = usa_bluetooth;
+    usa_bluetooth_changed(usa_bluetooth);
+  }
+  
+
 
   delay(20);
 
@@ -180,9 +195,15 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
   // Controllo se il messaggio e' una configurazione
   
   if(((String) TOPIC_CONFIGURAZIONE).equals((String) topic)){
-    String err = configurazioneBoardJSON(payload_str, tag_autorizzati,num_tag_autorizzati, config_num_tentativi_errati_permessi, check_tag_locally, deep_sleep) ;
+    int old_usa_bt = usa_bluetooth;
+    String err = configurazioneBoardJSON(payload_str, tag_autorizzati,num_tag_autorizzati, config_num_tentativi_errati_permessi, check_tag_locally, deep_sleep, usa_bluetooth) ;
+    if (old_usa_bluetooth != usa_bluetooth ){
+      old_usa_bluetooth = usa_bluetooth;
+      usa_bluetooth_changed(usa_bluetooth);
+    }
     if (!err.equals(""))
       inviaMessaggio(TOPIC_ERRORE, err.c_str());
+    
   }
 
   if(((String) TOPIC_STATO_LETTORE_NFC).equals((String) topic)){

@@ -1,8 +1,79 @@
 #include <WiFiClient.h>
 #include "modalita_comunicazione.h"
 #include <PubSubClient.h>
-// #include "BluetoothSerial.h"
 #include <connessione_wifi.h>
+
+#define USA_BLUETOOTH   // Flag attivo solo su board con lettore nfc
+
+
+String device_name_g ="";
+
+#ifdef USA_BLUETOOTH
+#include "BluetoothSerial.h"
+
+// TODO: usa BT solo se e' nelle configurazioni e solo se non raggiungibile MQTT
+BluetoothSerial SerialBT;
+bool client_bluetooth_connected = false;
+extern int usa_bluetooth ;
+
+const uint8_t remoteAddressPC[] = {0x90, 0xE8, 0x68, 0xEF, 0x95, 0x1A};
+const uint8_t remoteAddressCell[] = {0xF4, 0x7D, 0xEF, 0x70, 0x90, 0xEE};
+
+
+void callback_bluetooth(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
+    // Callback function implementation
+    if(event == ESP_SPP_SRV_OPEN_EVT){
+        Serial.println("[BLUETOOTH] Client Connected: ");
+        
+        char* address = (char*)param->srv_open.rem_bda;
+        for (int i=0; i<ESP_BD_ADDR_LEN; i++){
+            Serial.print(address[i], HEX);
+            Serial.print(" ");
+        }
+        Serial.println("");
+
+        client_bluetooth_connected = true;
+        
+    } else if (event == ESP_SPP_CLOSE_EVT){
+        Serial.println("[BLUETOOTH] Client disonnected");
+        client_bluetooth_connected = false;
+
+    } else if (event == ESP_SPP_DATA_IND_EVT){
+        String payload = (char*) param->data_ind.data;
+        Serial.println("[BLUETOOTH] Nuovo messaggio arrivato: len=" + (String) param->data_ind.len + "\tMess:" + payload );
+        
+    } else
+        Serial.println("Altro evento:" + (String)((int) event));
+}
+
+void setup_blt(){
+    
+    Serial.print("Bluetooth ...") ; 
+    if(SerialBT.begin(device_name_g, true)){
+        Serial.println("OK");
+    } else{
+        Serial.println("ERROR");
+    }
+    SerialBT.register_callback(callback_bluetooth);
+}
+
+void blt_connect_to_pc(){
+    esp_bd_addr_t tmp ; // TODO = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6};
+    for (int i=0; i<ESP_BD_ADDR_LEN; i++)
+        tmp[i] = remoteAddressCell[i];
+    BTAddress add_pc(tmp);
+    // return; 
+    Serial.println("[BLUETOOTH] Mi connetto al pc");
+    if (SerialBT.connect(add_pc,0, ESP_SPP_SEC_NONE, ESP_SPP_ROLE_SLAVE)){
+        Serial.println("Connesso ok");
+    } else 
+        Serial.println("Connesso ERROR");
+
+}
+
+#endif
+
+
 
 // TODO cambia tutto in CamelCase o snake
 
@@ -24,8 +95,6 @@ const int MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT = 2*1000;
 
 bool stato_ble2 = false;
 
-String device_name_g ="";
-// BluetoothSerial SerialBT;
 
 // const size_t size_foto = 9600;
 // WiFiClient net;
@@ -35,11 +104,13 @@ PubSubClient mqtt_client(espClient);
 String topic_will_message_g ;
 String* lista_topic_subscription_g;
 int num_topic_subscription_g;
-void messageReceived2(String &topic, String &payload) ;
+
+
+// void messageReceived2(String &topic, String &payload) ;
 
 
 
-void messaggio_arrivato(char* topic, byte* payload, unsigned int length) ;
+
 
 
 
@@ -70,9 +141,15 @@ void mqtt_ble_setup(String device_name, const String lista_topic_subscription[],
         // mqtt_client.setSocketTimeout(60);
     }*/
 
-    // Inizialzzo Bluetooth
-    // SerialBT.begin(device_name_g); //Bluetooth device name
 
+#ifdef USA_BLUETOOTH
+    // Inizialzzo Bluetooth solo se usa_bluetooth e' 2
+    if (usa_bluetooth == 2){
+        setup_blt();
+        blt_connect_to_pc();
+    }
+    
+#endif
     
 }
 
@@ -106,16 +183,18 @@ void gestisciComunicazioneIdle(){
         
         // client non comunica con MQTT, ma e' connesso al Wifi -> se sono passati piu' di SECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT, ritento la connessione
         if (millis() - last_mqtt_reconnection_attempt >= MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT){
-            String clientId =  "elenaId-" +  device_name_g + String(random(0xffff), HEX); // TODO forse togli elenaId
+            // String clientId =  device_name_g + "-"+  String(random(0xffff), HEX); 
+            String clientId =  device_name_g ; 
             Serial.print("Wifi OK. Attempting MQTT re-connection as " + clientId + " ...");
             
             // Provo a riconnettere il client e specifico il will message da mandare in caso di disconnessione
-            if (mqtt_client.connect(clientId.c_str(), "", "", topic_will_message_g.c_str(), 2, true, "0")) {
+            String will_messaggio = "0 " + millis(); 
+            if (mqtt_client.connect(clientId.c_str(), "", "", topic_will_message_g.c_str(), 2, true, will_messaggio.c_str(), false)) {
                 Serial.println("reconnected as " + clientId );
 
                 for (int i=0; i<num_topic_subscription_g; i++)
                     mqtt_client.subscribe(lista_topic_subscription_g[i].c_str());
-                mqtt_client.publish(topic_will_message_g.c_str(), "1", true);   // TODO sistema
+                mqtt_client.publish(topic_will_message_g.c_str(), "1", true);   
 
             } else {
                 Serial.print("failed, rc=" + (String) mqtt_client.state());
@@ -138,12 +217,26 @@ void gestisciComunicazioneIdle(){
     mqtt_client.loop();
 
 
+
     // TODO -> se BLE rotto, risolvi
+    // connect(uint8_t remoteAddress[], int channel=0, esp_spp_sec_t sec_mask=(ESP_SPP_SEC_ENCRYPT|ESP_SPP_SEC_AUTHENTICATE), esp_spp_role_t role=ESP_SPP_ROLE_MASTER);
+
+    if (! mqtt_client.connected() && usa_bluetooth > 0 && !client_bluetooth_connected ){
+        // Accendo Bluetooth
+        setup_blt();
+        blt_connect_to_pc();
+        
+    }
+    
+            
+    /*if (SerialBT.available()) {
+        Serial.write(SerialBT.read());
+    }*/
 }
 
 const int BIG_MESSAGE_SIZE_CHUNK_BYTE = 2400;
 void mqttBigMessaggio(String topic, String messaggio){
-    Serial.print("(long mess)");
+    Serial.print("(long mess "+(String)messaggio.length()+")");
 
     Serial.print(mqtt_client.beginPublish(topic.c_str(), messaggio.length(), false));
     Serial.print("a ");
@@ -158,7 +251,7 @@ void mqttBigMessaggio(String topic, String messaggio){
         String chunk = messaggio.substring(i, min(i + chunkSize, length));
         Serial.print("i");
         if (!mqtt_client.connected()){
-            Serial.print("ERR: disconnesso durante la pubb ");
+            Serial.println("\nERRORE: disconnesso durante la pubblicazione! ");
             Serial.print(mqtt_client.endPublish());
             return;
 
@@ -190,15 +283,32 @@ void inviaMessaggio(String topic, String messaggio){
         } else 
             Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str()));
 
-    } /*else if (true) {  // TODO metti condizione del tipo "se dispositivo connesso"
-        Serial.print("(BLE) " );
+    } else if (client_bluetooth_connected) {  
+        Serial.print("(BT) " );
         String msg = "["+topic+"] " + messaggio ;
-        SerialBT.print(msg.c_str());
+        SerialBT.println(msg.c_str());
 
-    }*/
-    else 
-        Serial.print("disconnesso");
+    } else 
+        Serial.println("board disconnessa");
     
 }
 
 
+
+void usa_bluetooth_changed(int nuovo_usa_bt){
+    #ifdef USA_BLUETOOTH
+    switch (nuovo_usa_bt){
+        case 0:
+            SerialBT.end();
+            break;
+        case 1:
+            SerialBT.end();
+            break;
+        case 2: 
+            setup_blt();
+            break;
+    
+    }
+    #endif
+
+}

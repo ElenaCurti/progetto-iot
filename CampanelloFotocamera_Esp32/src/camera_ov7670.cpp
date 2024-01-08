@@ -22,6 +22,10 @@ const int D7 = 4;
 OV7670 *mia_camera;
 
 
+// Tempo di attesa prima di segnalare errore nella fotocamera
+const int SECONDI_ATTESA_CAMERA = 5;
+
+
 /*void printHexValues(const unsigned char *frame, size_t size) {
   for (size_t i = 0; i < size; i++) {
     // Print the hex values to the Serial Monitor
@@ -134,11 +138,33 @@ String convert_to_mqtt_string(unsigned char* array, size_t size){
 unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
     if (fotocamera == NULL) {
         Serial.print("Inizializzo camera...");
-        while (fotocamera == NULL){ // TODO non bloccante
+        unsigned long primo_tentativo_allocazione = millis();
+        bool risultato = false;
+        fotocamera = new OV7670(risultato,OV7670::Mode::QQQVGA_RGB565, SIOD, SIOC, VSYNC, HREF, XCLK, PCLK, D0, D1, D2, D3, D4, D5, D6, D7);
+        /*
+        OV7670* tmp;
+        while (!risultato && millis() - primo_tentativo_allocazione <= SECONDI_ATTESA_CAMERA*1000){ // TODO sistema (non bloccante)
             Serial.print(".");
-            fotocamera = new OV7670(OV7670::Mode::QQQVGA_RGB565, SIOD, SIOC, VSYNC, HREF, XCLK, PCLK, D0, D1, D2, D3, D4, D5, D6, D7);
+            tmp = new OV7670(risultato,OV7670::Mode::QQQVGA_RGB565, SIOD, SIOC, VSYNC, HREF, XCLK, PCLK, D0, D1, D2, D3, D4, D5, D6, D7);
+            if (!risultato){
+                Serial.print("Delete");
+                // delete tmp;
+            }
+            delay(100);
         }
+        if (!risultato){
+            size = -1;
+            Serial.println( "Errore allocazione camera. Controllare cavo alimentazione");
+            // char* errore = "Errore allocazione camera";
+            return (unsigned char* ) "Errore allocazione camera. Controllare cavo alimentazione";
+        }
+
+        Serial.print("O");
+        fotocamera = tmp;
+        Serial.println("K");
+        */
         Serial.println("OK");
+
     }
 
 
@@ -180,7 +206,7 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
     fotocamera->oneFrame();
     size = fotocamera->xres * fotocamera->yres * 2;
     Serial.println("Size: " + (String) size);
-    size = 9600;
+    // size = 9600;
     to_ret = fotocamera->frame;
 
 
