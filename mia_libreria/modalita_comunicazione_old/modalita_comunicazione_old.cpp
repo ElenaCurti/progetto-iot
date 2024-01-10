@@ -1,3 +1,7 @@
+// #define OLD
+
+
+#ifdef OLD
 #include <WiFiClient.h>
 #include "modalita_comunicazione.h"
 #include <PubSubClient.h>
@@ -10,6 +14,7 @@ String device_name_g ="";
 
 #ifdef USA_BLUETOOTH
 #include "BluetoothSerial.h"
+#include "esp_bt_main.h"
 
 
 // TODO: usa BT solo se e' nelle configurazioni e solo se non raggiungibile MQTT
@@ -17,21 +22,20 @@ BluetoothSerial SerialBT;
 bool client_bluetooth_connected = false;
 extern int usa_bluetooth ;
 bool wait_for_init = false;
-bool bluetooth_is_acceso = false;
+bool connesso = false;
 const uint8_t remoteAddressPC[] = {0x90, 0xE8, 0x68, 0xEF, 0x95, 0x1A};
 const uint8_t remoteAddressCell[] = {0xF4, 0x7D, 0xEF, 0x70, 0x90, 0xEE};
 
 
 void callback_bluetooth(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
     // Callback function implementation
-    Serial.println("");
     if(event == ESP_SPP_SRV_OPEN_EVT){
-        Serial.print("[BLUETOOTH] Client Connected to ");
+        Serial.println("[BLUETOOTH] Client Connected: ");
         
         char* address = (char*)param->srv_open.rem_bda;
         for (int i=0; i<ESP_BD_ADDR_LEN; i++){
             Serial.print(address[i], HEX);
-            Serial.print(":");
+            Serial.print(" ");
         }
         Serial.println("");
 
@@ -52,23 +56,48 @@ void callback_bluetooth(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
         Serial.println("Altro evento:" + (String)((int) event));
 }
 
-void accendi_blt(){
+void setup_blt(){
     // Serial.println("esp_bluedroid_init. Error:" + (String) ((int) esp_bluedroid_init()));
-    Serial.print("Accendo bluetooth ...") ; 
-    if(SerialBT.begin(device_name_g)){
+    Serial.print("Bluetooth ...") ; 
+    if(SerialBT.begin(device_name_g, true)){
         Serial.println("OK");
-        bluetooth_is_acceso = true;
     } else{
         Serial.println("ERROR");
-        bluetooth_is_acceso = false;
     }
     SerialBT.register_callback(callback_bluetooth);
 }
 
-void spegni_blt(){
-    Serial.println("Spengo il bluetooth");
-    SerialBT.end();
-    bluetooth_is_acceso = false;
+void blt_connect_to_pc(){
+    if (! wait_for_init || connesso )
+        return;
+    esp_bd_addr_t tmp ; // TODO = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6};
+    for (int i=0; i<ESP_BD_ADDR_LEN; i++)
+        tmp[i] = remoteAddressCell[i];
+    BTAddress add_pc(tmp);
+
+    const char *TARGET_BT_ADDRESS = "F4:7D:EF:70:90:EE";
+    Serial.println("Connecting to Bluetooth device...");
+    bool stato = true;
+    
+    Serial.println("esp_bluedroid_enable. Error:" + (String) ((int) esp_bluedroid_enable()));
+    Serial.println("esp_spp_init. Error:" + (String) ((int) esp_spp_init(ESP_SPP_MODE_CB)));
+    while (stato) {
+        stato = SerialBT.connect(tmp);
+        Serial.println(stato);
+        delay(1000);
+    }
+    connesso = true;
+    Serial.println("Connected to Bluetooth device!");
+
+    
+    /*
+    // return; 
+    Serial.println("[BLUETOOTH] Mi connetto al pc");
+    if (SerialBT.connect(add_pc,0, ESP_SPP_SEC_NONE, ESP_SPP_ROLE_SLAVE)){
+        Serial.println("Connesso ok");
+    } else 
+        Serial.println("Connesso ERROR");
+    */
 }
 
 #endif
@@ -145,7 +174,8 @@ void mqtt_ble_setup(String device_name, const String lista_topic_subscription[],
 #ifdef USA_BLUETOOTH
     // Inizialzzo Bluetooth solo se usa_bluetooth e' 2
     if (usa_bluetooth == 2){
-        accendi_blt();
+        setup_blt();
+        // blt_connect_to_pc();
     }
     
 #endif
@@ -175,12 +205,6 @@ void gestisciComunicazioneIdle(){
     if (mqtt_client.connected()){ 
         // Client MQTT connesso -> tutto ok, chiamo il loop
         last_stable_mqtt_connection = millis();
-
-        #ifdef USA_BLUETOOTH
-        if (bluetooth_is_acceso && usa_bluetooth == 1){
-            spegni_blt();
-        }
-        #endif
         
         // return;
         // TODO eventualmente vai in deep sleep
@@ -224,13 +248,15 @@ void gestisciComunicazioneIdle(){
 
 
     // TODO -> se BLE rotto, risolvi
+    // connect(uint8_t remoteAddress[], int channel=0, esp_spp_sec_t sec_mask=(ESP_SPP_SEC_ENCRYPT|ESP_SPP_SEC_AUTHENTICATE), esp_spp_role_t role=ESP_SPP_ROLE_MASTER);
 
-    #ifdef USA_BLUETOOTH
-    // Se bluetooth e' spendo, eventualmente lo accendo
-    if (!bluetooth_is_acceso && ((usa_bluetooth == 1 && !mqtt_client.connected())  || usa_bluetooth == 2 ) ){
-        accendi_blt();
+    // if (! mqtt_client.connected() && usa_bluetooth > 0 && !client_bluetooth_connected ){
+    if (!connesso){
+        // Accendo Bluetooth
+        setup_blt();
+        // blt_connect_to_pc();
+        
     }
-    #endif
     
             
     /*if (SerialBT.available()) {
@@ -262,7 +288,7 @@ void mqttBigMessaggio(String topic, String messaggio){
         }
         mqtt_client.write((uint8_t *)chunk.c_str(), chunk.length());
         Serial.print("f");
-        // mqtt_client.loop();
+        mqtt_client.loop();
         delay(10); 
     }
     // Serial.print(mqtt_client.write((uint8_t *)messaggio.c_str(), messaggio.length()));
@@ -287,13 +313,11 @@ void inviaMessaggio(String topic, String messaggio){
         } else 
             Serial.print(mqtt_client.publish(topic.c_str(), messaggio.c_str()));
 
-    #ifdef USA_BLUETOOTH
     } else if (client_bluetooth_connected) {  
         Serial.print("(BT) " );
         String msg = "["+topic+"] " + messaggio ;
-        size_t risultato_invio = SerialBT.println(msg.c_str());
-        Serial.println(risultato_invio);
-    #endif
+        SerialBT.println(msg.c_str());
+
     } else 
         Serial.println("board disconnessa");
     
@@ -303,23 +327,22 @@ void inviaMessaggio(String topic, String messaggio){
 
 void usa_bluetooth_changed(int nuovo_usa_bt){
     #ifdef USA_BLUETOOTH
-    if (usa_bluetooth == nuovo_usa_bt)
-        return;
-
-    Serial.println("Usa bluetooth changed");
     switch (nuovo_usa_bt){
         case 0:
-            spegni_blt();
+            SerialBT.end();
             break;
         case 1:
-            spegni_blt();
+            SerialBT.end();
             break;
         case 2: 
-            accendi_blt();
+            setup_blt();
             break;
     
     }
-    usa_bluetooth = nuovo_usa_bt;
     #endif
 
 }
+
+
+
+#endif

@@ -33,9 +33,10 @@ bool connessione_wifi(){
     
     unsigned long primo_tentativo_connessione_wifi = millis(); 
 
+    Serial.print("Connecting to WiFi...\t");
     setup_wifi();
     while (WiFi.status() != WL_CONNECTED && millis() - primo_tentativo_connessione_wifi <= SECONDI_ATTESA_WIFI*1000) {
-        Serial.print("Connecting to WiFi...\t");
+        Serial.print(".");
         // Serial.print("Ping 192.168.1.23: " );
         // Serial.print(Ping.ping(IPAddress(192,168,1,23), 1));
         // Serial.print("\tPing 8.8.8.8: " );
@@ -48,11 +49,11 @@ bool connessione_wifi(){
     }
 
     if (WiFi.status() == WL_CONNECTED){
-        Serial.print("Connected to WiFi. IP: ");
+        Serial.print("OK. IP: ");
         Serial.println(WiFi.localIP());
         return true;
     } else
-        Serial.print("Connessione wifi NON riuscita");
+        Serial.println("ERROR");
     return false;
 
 }
