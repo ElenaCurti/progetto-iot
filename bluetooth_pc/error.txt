@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "D:\Elena\_Elena\Shared\Universita\Magistrale\IoT\Esame_progetto_iot\bluetooth_pc\bluetooth_connect_to_device.py", line 42, in <module>
-    sock.send("keep_alive")
-  File "C:\Users\utente\AppData\Local\Programs\Python\Python311\Lib\site-packages\bluetooth\msbt.py", line 99, in send
-    return bt.send (self._sockfd, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-OSError: Connessione interrotta dal software del computer host.
-

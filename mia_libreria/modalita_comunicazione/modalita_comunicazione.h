@@ -9,4 +9,5 @@ void mqtt_ble_setup(String device_name, const String lista_topic_subscription[],
 
 void usa_bluetooth_changed(int nuovo_usa_bt);
 
+void messaggio_arrivato2(String topic, String payload_str) ;
 void messaggio_arrivato(char* topic, byte* payload, unsigned int length) ;

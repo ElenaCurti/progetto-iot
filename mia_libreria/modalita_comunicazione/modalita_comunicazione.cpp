@@ -15,16 +15,16 @@ String device_name_g ="";
 // TODO: usa BT solo se e' nelle configurazioni e solo se non raggiungibile MQTT
 BluetoothSerial SerialBT;
 bool client_bluetooth_connected = false;
-extern int usa_bluetooth ;
+int usa_bluetooth = 1;  // 0->non usarlo, 1->usalo solo se MQTT non va, 2->sempre acceso
 bool wait_for_init = false;
 bool bluetooth_is_acceso = false;
 const uint8_t remoteAddressPC[] = {0x90, 0xE8, 0x68, 0xEF, 0x95, 0x1A};
 const uint8_t remoteAddressCell[] = {0xF4, 0x7D, 0xEF, 0x70, 0x90, 0xEE};
 
-
 void callback_bluetooth(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
     // Callback function implementation
     Serial.println("");
+    
     if(event == ESP_SPP_SRV_OPEN_EVT){
         Serial.print("[BLUETOOTH] Client Connected to ");
         
@@ -42,12 +42,24 @@ void callback_bluetooth(esp_spp_cb_event_t event, esp_spp_cb_param_t *param){
         client_bluetooth_connected = false;
 
     } else if (event == ESP_SPP_DATA_IND_EVT){
-        String payload = (char*) param->data_ind.data;
-        Serial.println("[BLUETOOTH] Nuovo messaggio arrivato: len=" + (String) param->data_ind.len + "\tMess:" + payload );
+        String data = (char*) param->data_ind.data;
+        int len = param->data_ind.len;
         
+        Serial.println("[BLUETOOTH] Nuovo messaggio arrivato: len=" + (String) len  + "\tMess:" + (String) data );
+        
+        int fine_topic = data.indexOf("]");
+        if (fine_topic == -1)
+            return;
+
+        String topic = data.substring(1, fine_topic);
+        String payload = data.substring(fine_topic + 2, len); 
+        // Serial.println("Topic: " + topic  + "\t Payload:" + payload );
+        messaggio_arrivato2(topic, payload);
+
     
     } else if(event == ESP_SPP_INIT_EVT){
         wait_for_init = true;
+        Serial.print("[BLUETOOTH] Indirizzo Bluetooth della esp e'\t" + SerialBT.getBtAddressString());
     }else 
         Serial.println("Altro evento:" + (String)((int) event));
 }
@@ -193,7 +205,7 @@ void gestisciComunicazioneIdle(){
             Serial.print("Wifi OK. Attempting MQTT re-connection as " + clientId + " ...");
             
             // Provo a riconnettere il client e specifico il will message da mandare in caso di disconnessione
-            String will_messaggio = "0 " + millis(); 
+            String will_messaggio = "0" ;//+ millis(); 
             if (mqtt_client.connect(clientId.c_str(), "", "", topic_will_message_g.c_str(), 2, true, will_messaggio.c_str(), false)) {
                 Serial.println("reconnected as " + clientId );
 

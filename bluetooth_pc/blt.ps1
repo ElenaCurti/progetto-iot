@@ -7,4 +7,7 @@ Set-Content -Path $INPUT_FILE -Value "" -NoNewline
 Set-Content -Path $OUTPUT_FILE -Value "" -NoNewline
 Set-Content -Path $ERROR_FILE -Value "" -NoNewline
 
-Start-Process "python" '.\bluetooth_connect_to_device.py' -RedirectStandardInput $INPUT_FILE -RedirectStandardError $ERROR_FILE -RedirectStandardOutput $OUTPUT_FILE -NoNewWindow -Wait
+# Start-Process "python" '.\bluetooth_connect_to_device.py' -RedirectStandardInput $INPUT_FILE -RedirectStandardError $ERROR_FILE -RedirectStandardOutput $OUTPUT_FILE -NoNewWindow -Wait
+
+python '.\bluetooth_connect_to_device.py' 
+# -RedirectStandardInput $INPUT_FILE -RedirectStandardError $ERROR_FILE -RedirectStandardOutput $OUTPUT_FILE -NoNewWindow -Wait

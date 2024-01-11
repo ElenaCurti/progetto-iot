@@ -25,7 +25,7 @@ String* tag_autorizzati = {new String("209.53.34.217")} ; // Inizialmente solo t
 int config_num_tentativi_errati_permessi[2] = {3,5};
 bool check_tag_locally = true;
 bool deep_sleep = false;
-int usa_bluetooth = 1;  // 0->non usarlo, 1->usalo solo se MQTT non va, 2->sempre acceso
+ 
 
 // Varibili per controllo campanello premuto
 #define PIN_CAMPANELLO 35
@@ -179,15 +179,10 @@ bool isTagAuthorized(const String& tag) {
 }
 
 
-void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
-  String payload_str = "" ;
-  for (size_t i = 0; i < length; i++)  {
-    payload_str += (char) payload[i];
-  }
-  Serial.println("[" + (String) topic + "] " + payload_str);
-  
+void messaggio_arrivato2(String topic, String payload_str) {
   // Controllo se il messaggio e' una configurazione
-  
+  Serial.println("[" + (String) topic + "] " + payload_str);
+    
   if(((String) TOPIC_CONFIGURAZIONE).equals((String) topic)){
     int usa_bluetooth = -1;
     String err = configurazioneBoardJSON(payload_str, tag_autorizzati,num_tag_autorizzati, config_num_tentativi_errati_permessi, check_tag_locally, deep_sleep, usa_bluetooth) ;
@@ -215,5 +210,15 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
     }
   }
   
+}
+
+
+void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
+  String payload_str = "" ;
+  for (size_t i = 0; i < length; i++)  {
+    payload_str += (char) payload[i];
+  }
+  
+  messaggio_arrivato2((String)topic, payload_str);
 
 }

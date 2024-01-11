@@ -33,7 +33,7 @@ bool connessione_wifi(){
     
     unsigned long primo_tentativo_connessione_wifi = millis(); 
 
-    Serial.print("Connecting to WiFi...\t");
+    Serial.print("Connecting to WiFi...");
     setup_wifi();
     while (WiFi.status() != WL_CONNECTED && millis() - primo_tentativo_connessione_wifi <= SECONDI_ATTESA_WIFI*1000) {
         Serial.print(".");

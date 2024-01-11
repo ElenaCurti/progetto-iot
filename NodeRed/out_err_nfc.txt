@@ -1,0 +1,2 @@
+Impossibile accedere al file. Il file � utilizzato da un altro processo.
+

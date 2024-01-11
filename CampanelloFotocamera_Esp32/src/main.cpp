@@ -19,7 +19,6 @@ const char* TOPIC_PUBLISH_IMMAGINE = "door/esp_cam/image";
 
 // Variabili per BLE
 
-
 // Variabili per video in streaming
 unsigned long primaImmagineMandata = -1;
 unsigned long previousMillisStreamingVideo = 0;
@@ -96,11 +95,8 @@ void loop() {
 
 }
 
-void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
-  String payload_str = "" ;
-  for (size_t i = 0; i < length; i++)  {
-    payload_str += (char) payload[i];
-  }
+void messaggio_arrivato2(String topic, String payload_str){
+
   Serial.println("[" + (String) topic + "] " + payload_str);
 
   // Configurazioni: frequenza invio immagini, deep sleep, timeout invio immagini
@@ -141,4 +137,14 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
     }
   }
   
+}
+
+
+void messaggio_arrivato(char* topic, byte* payload, unsigned int length) {
+  String payload_str = "" ;
+  for (size_t i = 0; i < length; i++)  {
+    payload_str += (char) payload[i];
+  }
+
+  messaggio_arrivato2((String) topic, payload_str);
 }
