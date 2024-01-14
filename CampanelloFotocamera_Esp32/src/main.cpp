@@ -3,6 +3,7 @@
 #include "camera_ov7670.h"  
 #include <PubSubClient.h>
 #include <modalita_comunicazione.h>
+#include "BluetoothSerial.h"
 
 // Variabili per mqtt
 const int NUM_SUB = 6;
@@ -50,22 +51,28 @@ void take_pic_and_send(){
   Serial.print("Faccio foto...") ;
   size_t size;
   unsigned char* foto = take_picture(size);
-  if (size == -1){
-    Serial.println((char*)foto);
-    inviaMessaggio(TOPIC_PUBLISH_IMMAGINE, (char*) foto);
+
+  // if (size == -1){
+  //   Serial.println((char*)foto);
+  //   inviaMessaggio(TOPIC_PUBLISH_IMMAGINE, (String) foto);
     
-    return;
-  }
+  //   return;
+  // }
   // Serial.print("ok\t") ;
   
-  // Serial.print("Converto...") ;
+  Serial.print("Converto...") ;
   String string_to_send = convert_to_mqtt_string(foto, size);
   Serial.print("ok\t") ;
 
   Serial.print("Invio...Risulato: ") ;
   unsigned int tempo_prec = millis();
   // string_to_send[2000] = '\0';
-  inviaMessaggio(TOPIC_PUBLISH_IMMAGINE, string_to_send);
+  // Serial.print("prima:" + (String) string_to_send.length() + " ");
+  String tmp_topic = "";
+  for (int i =0; i<((String)TOPIC_PUBLISH_IMMAGINE).length(); i++)
+    tmp_topic += TOPIC_PUBLISH_IMMAGINE[i];
+
+  inviaBigMessaggio(tmp_topic, string_to_send, string_to_send.length());
   
   Serial.println("\tTempo impiegato: " + (String) (millis() - tempo_prec) + " ms");
 }

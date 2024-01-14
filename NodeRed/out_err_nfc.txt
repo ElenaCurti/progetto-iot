@@ -1,2 +1,2 @@
-Impossibile accedere al file. Il file � utilizzato da un altro processo.
+[door/esp_nfc/tag_swiped] 122.48.29.217
 

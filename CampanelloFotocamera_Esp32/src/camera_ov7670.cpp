@@ -163,6 +163,7 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
         fotocamera = tmp;
         Serial.println("K");
         */
+        fotocamera->oneFrame();
         Serial.println("OK");
 
     }
@@ -206,10 +207,9 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
     fotocamera->oneFrame();
     size = fotocamera->xres * fotocamera->yres * 2;
     Serial.println("Size: " + (String) size);
+    
     // size = 9600;
     to_ret = fotocamera->frame;
-
-
     return to_ret;
     // return foto;
       
