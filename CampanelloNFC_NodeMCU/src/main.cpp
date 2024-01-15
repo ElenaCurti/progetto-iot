@@ -8,16 +8,19 @@
 
 // Lista dei vari topic 
 // TODO se broker remoto: aggiungi un livello root per filtrare i "miei" messaggi
-const int NUM_SUB = 3;
-const char* TOPIC_CONFIGURAZIONE = "door/esp_nfc/config";
-const char* TOPIC_STATO_PORTA = "door/esp_nfc/led";
-const char* TOPIC_STATO_LETTORE_NFC = "door/esp_nfc/nfc_reader_state";
+const int NUM_SUB = 4;
+const char* TOPIC_CONFIGURAZIONE = "my_devices/door/esp_nfc/config";
+const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
 
-const char* TOPIC_WILL_MESSAGE = "door/esp_nfc/state";
-const char* TOPIC_BUTTON_PREMUTO = "door/esp_nfc/button" ;
-const char* TOPIC_TAG_STRISCIATO = "door/esp_nfc/tag_swiped";
-const char* TOPIC_INTRUSO = "door/esp_nfc/intruder"; 
-const char* TOPIC_ERRORE = "door/esp_nfc/errors"; 
+const char* TOPIC_STATO_PORTA = "my_devices/door/esp_nfc/led";
+const char* TOPIC_STATO_LETTORE_NFC = "my_devices/door/esp_nfc/nfc_reader_state";
+
+const char* TOPIC_WILL_MESSAGE = "my_devices/door/esp_nfc/state";
+const char* TOPIC_BUTTON_PREMUTO = "my_devices/door/esp_nfc/button" ;
+const char* TOPIC_TAG_STRISCIATO = "my_devices/door/esp_nfc/tag_swiped";
+const char* TOPIC_INTRUSO = "my_devices/door/esp_nfc/intruder"; 
+const char* TOPIC_PUBLISH_STATO_NFC = "my_devices/door/esp_nfc/reader_is_blocked";
+const char* TOPIC_ERRORE = "my_devices/door/esp_nfc/errors"; 
 
 // Lista dei parametri configurabili, inizialmente settati con valori di default
 int num_tag_autorizzati = 1 ;
@@ -38,6 +41,12 @@ bool isTagAuthorized(const String& tag);
 int num_tentativi_errati_fatti = 0;
 unsigned long ultimo_tentativo_errato = -1 ;
 const int SECONDI_BLOCCO_READER = 30;
+bool isNFCReaderBloccato();
+// Il reader nfc e' inizialmente attivo. settando qui true (=nfc bloccato), nel loop,
+// la prima volta che vado a leggere lo stato del lettore risultera' attivo, e quindi 
+// diverso da quello qui impostato e quindi pubblichero' che e' attivo
+bool nfc_reader_is_bloccato = false; 
+  
 
 
 // Simulatore apertura porta
@@ -54,8 +63,10 @@ void setup() {
   nfc_setup();
 
   // Setup comunicazione
-  const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_STATO_PORTA, TOPIC_STATO_LETTORE_NFC};
+  const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_STATO_PORTA, TOPIC_STATO_LETTORE_NFC,TOPIC_CONFIGURAZIONI_GLOBALI};
   mqtt_ble_setup("nfc", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
+  
+
 
   // Setup campanello + Creo un task per la lettura del button del campanello, per evitare ritardi
   pinMode(PIN_CAMPANELLO, INPUT);
@@ -108,7 +119,12 @@ void loop() {
   gestisciComunicazioneIdle();
 
   // Lettura NFC
-  if (!isNFCReaderBloccato()) {
+  bool stato_attuale_nfc_reader = isNFCReaderBloccato();
+  if (nfc_reader_is_bloccato != stato_attuale_nfc_reader){
+    inviaMessaggio(TOPIC_PUBLISH_STATO_NFC, (String)((int)stato_attuale_nfc_reader), true);
+    nfc_reader_is_bloccato != stato_attuale_nfc_reader;
+  }
+  if (!stato_attuale_nfc_reader) {
     String tag_letto = readNFC() ;
     if (!tag_letto.equals("")) {
       Serial.print("Tag letto: " + tag_letto + "\tRisultato dell invio: ");
@@ -182,6 +198,11 @@ bool isTagAuthorized(const String& tag) {
 void messaggio_arrivato2(String topic, String payload_str) {
   // Controllo se il messaggio e' una configurazione
   Serial.println("[" + (String) topic + "] " + payload_str);
+
+  // Configurazione "globale" (per tutte le board): broker_mqtt
+  if (((String) TOPIC_CONFIGURAZIONI_GLOBALI).equals(topic)){
+    cambia_broker_mqtt(payload_str);
+  }
     
   if(((String) TOPIC_CONFIGURAZIONE).equals((String) topic)){
     int usa_bluetooth = -1;

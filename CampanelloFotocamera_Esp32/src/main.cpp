@@ -3,19 +3,21 @@
 #include "camera_ov7670.h"  
 #include <PubSubClient.h>
 #include <modalita_comunicazione.h>
-#include "BluetoothSerial.h"
 
 // Variabili per mqtt
-const int NUM_SUB = 6;
-const char* TOPIC_FREQUENZA_INVIO_IMMAGINI = "door/esp_cam/config/freq_send_img";
-const char* TOPIC_DEEP_SLEEP = "door/esp_cam/config/deep_sleep";
-const char* TOPIC_TIMEOUT_INVIO_IMMAGINI = "door/esp_cam/timeout_send_img";
-const char* TOPIC_CAMPANELLO_PREMUTO = "door/esp_nfc/button" ;
-const char* TOPIC_RESET_ESP = "door/esp_cam/reset";
-const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "door/esp_cam/request_send_img";
+const int NUM_SUB = 7;
+const char* TOPIC_FREQUENZA_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/freq_send_img";
+const char* TOPIC_DEEP_SLEEP = "my_devices/door/esp_cam/config/deep_sleep";
+const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
+const char* TOPIC_TIMEOUT_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/timeout_send_img";
 
-const char* TOPIC_WILL_MESSAGE = "door/esp_cam/state";  // TODO migliora con orario
-const char* TOPIC_PUBLISH_IMMAGINE = "door/esp_cam/image"; 
+const char* TOPIC_CAMPANELLO_PREMUTO = "my_devices/door/esp_nfc/button" ;
+const char* TOPIC_RESET_ESP = "my_devices/door/esp_cam/reset";
+const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "my_devices/door/esp_cam/request_send_img";
+
+
+const char* TOPIC_WILL_MESSAGE = "my_devices/door/esp_cam/state";  // TODO migliora con orario
+const char* TOPIC_PUBLISH_IMMAGINE = "my_devices/door/esp_cam/image"; 
 // char* hexArray;
 
 // Variabili per BLE
@@ -40,7 +42,14 @@ void setup() {
   
     
   // Controllo MQTT e Bluetooth
-  const String elenco_subscription[NUM_SUB] = {TOPIC_FREQUENZA_INVIO_IMMAGINI,TOPIC_DEEP_SLEEP,TOPIC_CAMPANELLO_PREMUTO, TOPIC_RESET_ESP, TOPIC_RICHIESTA_INVIO_IMMAGINI, TOPIC_TIMEOUT_INVIO_IMMAGINI};
+  const String elenco_subscription[NUM_SUB] = {
+    TOPIC_FREQUENZA_INVIO_IMMAGINI,
+    TOPIC_DEEP_SLEEP,
+    TOPIC_CAMPANELLO_PREMUTO, 
+    TOPIC_RESET_ESP, 
+    TOPIC_RICHIESTA_INVIO_IMMAGINI, 
+    TOPIC_TIMEOUT_INVIO_IMMAGINI, 
+    TOPIC_CONFIGURAZIONI_GLOBALI};
   mqtt_ble_setup("cam", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
   gestisciComunicazioneIdle();
 
@@ -106,7 +115,13 @@ void messaggio_arrivato2(String topic, String payload_str){
 
   Serial.println("[" + (String) topic + "] " + payload_str);
 
-  // Configurazioni: frequenza invio immagini, deep sleep, timeout invio immagini
+  // Configurazione "globale" (per tutte le board): broker_mqtt
+  if (((String) TOPIC_CONFIGURAZIONI_GLOBALI).equals(topic)){
+    cambia_broker_mqtt(payload_str);
+  
+  }
+  
+  // Configurazioni "locali": frequenza invio immagini, deep sleep, timeout invio immagini
   if (((String) TOPIC_FREQUENZA_INVIO_IMMAGINI).equals(topic)){
     frequenza_invio_immagini = atoi(payload_str.c_str());
     Serial.println("Distanza invio immagini: " + (String) frequenza_invio_immagini);

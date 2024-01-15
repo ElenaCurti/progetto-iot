@@ -134,6 +134,7 @@ String convert_to_mqtt_string(unsigned char* array, size_t size){
     return convert_to_mqtt_string(array, size, "%02X");
 }
 
+unsigned char* take_picture(size_t &size); 
 
 unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
     if (fotocamera == NULL) {
@@ -163,9 +164,9 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
         fotocamera = tmp;
         Serial.println("K");
         */
-        fotocamera->oneFrame();
-        Serial.println("OK");
-
+        
+        // take_picture(size);     // Scarto la prima foto perche' sempre vuota
+        Serial.println("OK");        
     }
 
 

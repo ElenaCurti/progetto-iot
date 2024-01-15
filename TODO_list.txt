@@ -2,7 +2,14 @@
 ./CampanelloFotocamera_Esp32/src/main.cpp:const char* TOPIC_WILL_MESSAGE = "door/esp_cam/state";  // TODO migliora con orario -> Forse ok
 ./CampanelloFotocamera_Esp32/src/main.cpp:bool deep_sleep = false;  // TODO
 
-./CampanelloFotocamera_Esp32/src/main.cpp:  Serial.begin(115200); // TODO:Bluetooth 
+
+(Bluetooth:
+- eventualmente migliorare il check device 
+- migliorare input timeout
+
+NodeRed:
+- Flag abilitato del lettore nfc
+)
 
 
 
@@ -10,7 +17,6 @@
 
 ./CampanelloNFC_NodeMCU/src/configurazione_board.cpp:    // TODO check con array vuoto  -> Forse ok
 ./CampanelloNFC_NodeMCU/src/configurazione_board.cpp:    // TODO eventualemente metterlo nella forma:   -> non penso lo faro'
-./CampanelloNFC_NodeMCU/src/main.cpp:// TODO se broker remoto: aggiungi un livello root per filtrare i "miei" messaggi
 ./CampanelloNFC_NodeMCU/src/main.cpp:      inviaMessaggio(TOPIC_TAG_STRISCIATO, tag_letto);  // TODO aggiungi tipo tag_letto + "e' entrato"/ non e' entrato
 ./CampanelloNFC_NodeMCU/src/nfc_nodemcu.cpp:    // TODO aggiungi tipo max 5 sec di ricerca  -> metti lettura NFC nel secondo loop
 
@@ -21,12 +27,9 @@
 ./mia_libreria/connessione_wifi/connessione_wifi.cpp:    // TODO fai uno script su pc per connettersi sempre allo stesso wifi e per resettare mosquitto ogni volta che si cambia wifi
 ./mia_libreria/mio_mqtt/mio_mqtt.cpp:        // TODO es. se per 6 volte fallisce, reset esp -> da decidere se fare
 ./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:// TODO cambia tutto in CamelCase o snake
-./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:    IPAddress ip_broker = IPAddress(192,168,43,252);    // TODO mettere broker come configurazione
 ./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:            WiFi.disconnect();  // TODO forse disconnect e reconnect vanno tolti
 ./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:        // TODO eventualmente vai in deep sleep
-./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:            String clientId =  "elenaId-" +  device_name_g + String(random(0xffff), HEX); // TODO forse togli elenaId
 ./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:    // TODO -> se BLE rotto, risolvi
-./mia_libreria/modalita_comunicazione/modalita_comunicazione.cpp:    } /*else if (true) {  // TODO metti condizione del tipo "se dispositivo connesso"
 
 
 

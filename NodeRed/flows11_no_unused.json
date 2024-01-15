@@ -35,9 +35,9 @@
         "id": "3c590ebc25e0b5cc",
         "type": "mqtt-broker",
         "name": "BrokerUsato",
-        "broker": "192.168.43.252",
+        "broker": "broker.mqtt.cool",
         "port": "1883",
-        "clientid": "nfc-nodered",
+        "clientid": "nodered",
         "autoConnect": true,
         "usetls": false,
         "protocolVersion": "4",
@@ -359,7 +359,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 610,
-        "y": 340,
+        "y": 360,
         "wires": [
             [
                 "7c7f5fdd0557d647"
@@ -421,8 +421,7 @@
             [
                 "6132409519edca74",
                 "db1ed666cfb4c6b4",
-                "007fed61cdcaf3f7",
-                "9525e415c9d89a85"
+                "007fed61cdcaf3f7"
             ]
         ]
     },
@@ -667,7 +666,7 @@
         "oldrc": false,
         "name": "Python - Bluetooth check device",
         "x": 870,
-        "y": 2040,
+        "y": 2020,
         "wires": [
             [],
             [],
@@ -1634,8 +1633,7 @@
         "name": "link out 4",
         "mode": "link",
         "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269"
+            "e87b3b74df0bf879"
         ],
         "x": 2425,
         "y": 1200,
@@ -1771,8 +1769,7 @@
         "y": 640,
         "wires": [
             [
-                "7e5e41690cbbcd02",
-                "1d4608ce163fce00"
+                "7e5e41690cbbcd02"
             ]
         ]
     },
@@ -1825,74 +1822,6 @@
                 "7e5e41690cbbcd02"
             ]
         ]
-    },
-    {
-        "id": "ddc8d88faacdbe74",
-        "type": "mqtt out",
-        "z": "8c18e233c7d90889",
-        "name": "",
-        "topic": "",
-        "qos": "",
-        "retain": "true",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "3c590ebc25e0b5cc",
-        "x": 930,
-        "y": 540,
-        "wires": []
-    },
-    {
-        "id": "22c643a21305c065",
-        "type": "link in",
-        "z": "8c18e233c7d90889",
-        "name": "Manda messaggio retain",
-        "links": [
-            "ff2e5ecdcb78b946",
-            "f5680f0a1887ac6a"
-        ],
-        "x": 775,
-        "y": 540,
-        "wires": [
-            [
-                "ddc8d88faacdbe74"
-            ]
-        ]
-    },
-    {
-        "id": "1d4608ce163fce00",
-        "type": "debug",
-        "z": "8c18e233c7d90889",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 740,
-        "wires": []
-    },
-    {
-        "id": "9525e415c9d89a85",
-        "type": "debug",
-        "z": "8c18e233c7d90889",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 220,
-        "y": 620,
-        "wires": []
     },
     {
         "id": "7cf2c4b3c5c8f32d",
@@ -2194,8 +2123,7 @@
         "name": "Manda messaggio",
         "mode": "link",
         "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269"
+            "e87b3b74df0bf879"
         ],
         "x": 1455,
         "y": 420,
@@ -2393,8 +2321,7 @@
         "name": "Manda messaggio",
         "mode": "link",
         "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269"
+            "e87b3b74df0bf879"
         ],
         "x": 825,
         "y": 80,
@@ -2562,8 +2489,7 @@
         "name": "Manda messaggio",
         "mode": "link",
         "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269"
+            "e87b3b74df0bf879"
         ],
         "x": 485,
         "y": 620,
@@ -2659,8 +2585,7 @@
         "name": "Manda messaggio",
         "mode": "link",
         "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269"
+            "e87b3b74df0bf879"
         ],
         "x": 885,
         "y": 740,
@@ -2823,7 +2748,6 @@
         "id": "c960aad4ee463057",
         "type": "ui_toast",
         "z": "8b4f62e2713401d0",
-        "d": true,
         "position": "top right",
         "displayTime": "5",
         "highlight": "red",
@@ -2872,7 +2796,7 @@
         "id": "ebd45a88251b59c4",
         "type": "link out",
         "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
+        "name": "link out 1",
         "mode": "link",
         "links": [
             "e87b3b74df0bf879"
@@ -2885,7 +2809,7 @@
         "id": "d5fbf340676057d0",
         "type": "link out",
         "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
+        "name": "link out 2",
         "mode": "link",
         "links": [
             "e87b3b74df0bf879"
@@ -3052,9 +2976,22 @@
         "y": 1060,
         "wires": [
             [
-                "f5680f0a1887ac6a"
+                "9f811edab4a388d2"
             ]
         ]
+    },
+    {
+        "id": "9f811edab4a388d2",
+        "type": "link out",
+        "z": "8b4f62e2713401d0",
+        "name": "Manda messaggio",
+        "mode": "link",
+        "links": [
+            "e87b3b74df0bf879"
+        ],
+        "x": 815,
+        "y": 1060,
+        "wires": []
     },
     {
         "id": "3b507158a08ca676",
@@ -3081,7 +3018,7 @@
         "y": 1000,
         "wires": [
             [
-                "f5680f0a1887ac6a"
+                "9f811edab4a388d2"
             ]
         ]
     },
@@ -3186,36 +3123,7 @@
         "id": "56791992ea15a8a2",
         "type": "inject",
         "z": "8b4f62e2713401d0",
-        "name": "Cambia broker (pc)",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "my_devices/global_config/change_broker",
-        "payload": "192.168.43.252",
-        "payloadType": "str",
-        "x": 300.15875244140625,
-        "y": 1361.58740234375,
-        "wires": [
-            [
-                "ff2e5ecdcb78b946"
-            ]
-        ]
-    },
-    {
-        "id": "0264db7d642624b8",
-        "type": "inject",
-        "z": "8b4f62e2713401d0",
-        "name": "Cambia broker (broker.mqtt.cool)",
+        "name": "Cambia broker",
         "props": [
             {
                 "p": "payload"
@@ -3232,38 +3140,25 @@
         "topic": "my_devices/global_config/change_broker",
         "payload": "broker.mqtt.cool",
         "payloadType": "str",
-        "x": 290,
-        "y": 1400,
+        "x": 290.15875244140625,
+        "y": 1361.58740234375,
         "wires": [
             [
-                "ff2e5ecdcb78b946"
+                "e0d9762acc9664a5"
             ]
         ]
     },
     {
-        "id": "ff2e5ecdcb78b946",
+        "id": "e0d9762acc9664a5",
         "type": "link out",
         "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio retain",
+        "name": "link out 5",
         "mode": "link",
         "links": [
-            "22c643a21305c065"
+            "e87b3b74df0bf879"
         ],
-        "x": 485,
-        "y": 1380,
-        "wires": []
-    },
-    {
-        "id": "f5680f0a1887ac6a",
-        "type": "link out",
-        "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "22c643a21305c065"
-        ],
-        "x": 805,
-        "y": 1040,
+        "x": 430.15875244140625,
+        "y": 1361.58740234375,
         "wires": []
     }
 ]

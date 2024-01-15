@@ -1,2 +1,2 @@
-[door/esp_nfc/tag_swiped] 122.48.29.217
+Connesso (BT) a NFC
 
