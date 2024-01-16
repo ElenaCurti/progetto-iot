@@ -1,2 +1,2 @@
-[my_devices/door/esp_cam/image] 
+Connesso (BT) a CAM
 

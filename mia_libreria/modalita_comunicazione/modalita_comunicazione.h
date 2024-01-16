@@ -14,6 +14,7 @@ void messaggio_arrivato(char* topic, byte* payload, unsigned int length) ;
 
 bool mqtt_is_connected();
 void cambia_broker_mqtt(String new_broker);
+void cambia_reset_board_mqtt_disconnect(String payload_str);
 
 void usa_bluetooth_changed(int nuovo_usa_bt);
 

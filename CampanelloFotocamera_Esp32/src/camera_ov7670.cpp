@@ -165,7 +165,7 @@ unsigned char* take_picture_with_camera(OV7670*& fotocamera, size_t &size){
         Serial.println("K");
         */
         
-        // take_picture(size);     // Scarto la prima foto perche' sempre vuota
+        take_picture(size);     // Scarto la prima foto perche' sempre vuota
         Serial.println("OK");        
     }
 

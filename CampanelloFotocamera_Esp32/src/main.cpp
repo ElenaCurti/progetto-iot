@@ -5,13 +5,15 @@
 #include <modalita_comunicazione.h>
 
 // Variabili per mqtt
-const int NUM_SUB = 7;
+const int NUM_SUB = 9;
 const char* TOPIC_FREQUENZA_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/freq_send_img";
 const char* TOPIC_DEEP_SLEEP = "my_devices/door/esp_cam/config/deep_sleep";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
+const char* TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT = "my_devices/global_config/rst_disconnect";
 const char* TOPIC_TIMEOUT_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/timeout_send_img";
 
 const char* TOPIC_CAMPANELLO_PREMUTO = "my_devices/door/esp_nfc/button" ;
+const char* TOPIC_INTRUSO = "my_devices/door/esp_nfc/intruder" ;
 const char* TOPIC_RESET_ESP = "my_devices/door/esp_cam/reset";
 const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "my_devices/door/esp_cam/request_send_img";
 
@@ -49,18 +51,23 @@ void setup() {
     TOPIC_RESET_ESP, 
     TOPIC_RICHIESTA_INVIO_IMMAGINI, 
     TOPIC_TIMEOUT_INVIO_IMMAGINI, 
-    TOPIC_CONFIGURAZIONI_GLOBALI};
+    TOPIC_CONFIGURAZIONI_GLOBALI, 
+    TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT, 
+    TOPIC_INTRUSO};
   mqtt_ble_setup("cam", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
   gestisciComunicazioneIdle();
 
-  
 }
-
+bool first_pic = true;
 void take_pic_and_send(){
   Serial.print("Faccio foto...") ;
   size_t size;
   unsigned char* foto = take_picture(size);
 
+  if (first_pic) {
+    foto = take_picture(size);
+    first_pic = false;
+  }
   // if (size == -1){
   //   Serial.println((char*)foto);
   //   inviaMessaggio(TOPIC_PUBLISH_IMMAGINE, (String) foto);
@@ -115,11 +122,17 @@ void messaggio_arrivato2(String topic, String payload_str){
 
   Serial.println("[" + (String) topic + "] " + payload_str);
 
-  // Configurazione "globale" (per tutte le board): broker_mqtt
+  // Configurazione "globale" (per tutte le board): broker_mqtt, abilita/disabilita reset board se sconnessa da broker mqtt
   if (((String) TOPIC_CONFIGURAZIONI_GLOBALI).equals(topic)){
     cambia_broker_mqtt(payload_str);
   
   }
+
+  if (((String) TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT).equals(topic)){
+    cambia_reset_board_mqtt_disconnect(payload_str);  
+  }
+
+  
   
   // Configurazioni "locali": frequenza invio immagini, deep sleep, timeout invio immagini
   if (((String) TOPIC_FREQUENZA_INVIO_IMMAGINI).equals(topic)){
@@ -138,7 +151,7 @@ void messaggio_arrivato2(String topic, String payload_str){
     Serial.println("Deep sleep: " + (String) deep_sleep);
   
   
-  } else if (  ((String) TOPIC_CAMPANELLO_PREMUTO).equals(topic) || ((String) TOPIC_RICHIESTA_INVIO_IMMAGINI).equals(topic) ){
+  } else if (  ((String) TOPIC_CAMPANELLO_PREMUTO).equals(topic) || ((String) TOPIC_RICHIESTA_INVIO_IMMAGINI).equals(topic)){
     // Se campanello premuto o richiesta invio immagine -> mando foto o video
     if (payload_str.equals("1")){
         primaImmagineMandata = millis();
@@ -152,7 +165,10 @@ void messaggio_arrivato2(String topic, String payload_str){
       streaming_video_in_corso = false;
     }
 
-  }  else if (((String) TOPIC_RESET_ESP).equals(topic)){
+  } else if (((String) TOPIC_INTRUSO).equals(topic)){
+    Serial.println("Intruso, mando foto");
+    take_pic_and_send();
+  } else if (((String) TOPIC_RESET_ESP).equals(topic)){
     
     if (payload_str.equals("1")){
         ESP.restart();

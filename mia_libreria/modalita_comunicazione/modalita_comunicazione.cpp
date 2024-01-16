@@ -53,7 +53,10 @@ bool bluetooth_is_acceso = false;
 void accendi_blt();
 void spegni_blt();
 
-
+int num_tentativi_connessione_mqtt = 0 ; // TDOO stessa cosa per  fallimento nel mandare immagini
+int num_tentativi_connessione_wifi = 0 ; 
+int max_tentativi_reconnect_prima_del_restart = -1; // TODO metti a 20
+int TENTATIVI_DISCONNESSIONE_MQTT_POI_ACCENDI_BT = 3;
 
 void mqtt_ble_setup(String device_name, const String lista_topic_subscription[], int num_topic_subscription, const String topic_will_message){
     // Salvo le variabili globali
@@ -79,7 +82,7 @@ void mqtt_ble_setup(String device_name, const String lista_topic_subscription[],
         #endif
         mqtt_client.setServer(ip_broker, PORTA_DEFAULT_BROKER);
         broker_mqtt = ip_broker.toString(); 
-        Serial.println("[MQTT] Inizialmente connesso a: " + broker_mqtt);
+        Serial.println("[MQTT] Broker iniziale: " + broker_mqtt);
     } else if (ip_broker.fromString(broker_mqtt)){
         // broker_mqtt e' un ip
         mqtt_client.setServer(ip_broker, PORTA_DEFAULT_BROKER);
@@ -131,6 +134,7 @@ void gestisciComunicazioneIdle(){
             // WiFi.reconnect();
 
             last_wifi_reconnection_attempt = millis();
+            num_tentativi_connessione_wifi ++;
         }
         
 
@@ -140,7 +144,7 @@ void gestisciComunicazioneIdle(){
     if (mqtt_client.connected()){ 
         // Client MQTT connesso -> tutto ok, chiamo il loop
         last_stable_mqtt_connection = millis();
-
+        num_tentativi_connessione_mqtt = 0;
         
         if (bluetooth_is_acceso && usa_bluetooth == 1){
             spegni_blt();
@@ -149,9 +153,11 @@ void gestisciComunicazioneIdle(){
         // return;
         // TODO eventualmente vai in deep sleep
     } else if (WiFi.status() == WL_CONNECTED){
+        num_tentativi_connessione_wifi = 0;
         
         // client non comunica con MQTT, ma e' connesso al Wifi -> se sono passati piu' di SECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT, ritento la connessione
         if (millis() - last_mqtt_reconnection_attempt >= MILLISECONDI_TRA_TENTATIVI_RICONNESSIONE_MQTT){
+            num_tentativi_connessione_mqtt ++;
             // String clientId =  device_name_g + "-"+  String(random(0xffff), HEX); 
             String clientId =  device_name_g ; 
             Serial.print("[MQTT] Wifi OK. Attempting MQTT re-connection to "+broker_mqtt+" as " + clientId + " ...");
@@ -190,9 +196,18 @@ void gestisciComunicazioneIdle(){
     // TODO -> se BLE rotto, risolvi
 
     
-    // Se bluetooth e' spendo, eventualmente lo accendo
-    if (!bluetooth_is_acceso && ((usa_bluetooth == 1 && !mqtt_client.connected())  || usa_bluetooth == 2 ) ){
+    // Se bluetooth e' spento, eventualmente lo accendo
+    if (!bluetooth_is_acceso && ((usa_bluetooth == 1 && !mqtt_client.connected() && max(num_tentativi_connessione_mqtt, num_tentativi_connessione_wifi) >=TENTATIVI_DISCONNESSIONE_MQTT_POI_ACCENDI_BT)  || usa_bluetooth == 2 ) ){
         accendi_blt();
+    }
+
+    if (max_tentativi_reconnect_prima_del_restart!=-1 &&
+            (num_tentativi_connessione_mqtt == max_tentativi_reconnect_prima_del_restart \
+            || num_tentativi_connessione_wifi == max_tentativi_reconnect_prima_del_restart)
+        ) {
+        Serial.println("[MQTT] Board disconnessa da troppo, faccio il restart");
+        ESP.restart();
+
     }
     
             
@@ -217,6 +232,11 @@ void cambia_broker_mqtt(String new_broker){
     mqtt_ble_setup(device_name_g, lista_topic_subscription_g, num_topic_subscription_g, topic_will_message_g);    
 }
 
+
+void cambia_reset_board_mqtt_disconnect(String payload_str){
+    max_tentativi_reconnect_prima_del_restart = atoi(payload_str.c_str());
+    Serial.println("[WIFI-MQTT] Cambio max tentativi prima del reset:" + (String) max_tentativi_reconnect_prima_del_restart);
+}
 
 
 void inviaBigMessaggio(String &topic, String &messaggio, int size_messaggio){
@@ -253,12 +273,31 @@ void inviaBigMessaggio(String &topic, String &messaggio, int size_messaggio){
     
     
     } else if (SerialBT.hasClient()) {
-
+        // Serial.println("bt big mess"+ (String) msg.length());
+        // String msg = "["+topic+"] " + messaggio;
+        // Serial.print(SerialBT._spp_queue_packet_img((uint8_t *) msg.c_str(), msg.length()));
+        // return;
         size_t risultato_tot = 0; 
         risultato_tot += SerialBT.print("[");
         risultato_tot += SerialBT.print(topic);
         risultato_tot += SerialBT.print("] ");
+        
         risultato_tot += SerialBT.println(messaggio);
+
+        /*int chunkSize = 100;
+
+        for (int i = 0; i < size_messaggio; i += chunkSize) {
+
+            Serial.print(" "+(String) i);
+            String chunk = messaggio.substring(i, min(i + chunkSize, size_messaggio));
+            Serial.print("i");
+            risultato_tot += SerialBT.print(chunk);
+            Serial.print("f");
+            delay(10); 
+        }
+
+        risultato_tot += SerialBT.println();*/
+
         Serial.print(risultato_tot);
 
     } else 

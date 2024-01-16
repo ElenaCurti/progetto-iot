@@ -16,14 +16,6 @@
         "env": []
     },
     {
-        "id": "8e8ebe259a351cf1",
-        "type": "tab",
-        "label": "Flow 2",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "f42f0c6ac0c908c0",
         "type": "tab",
         "label": "NFC",
@@ -444,8 +436,7 @@
             "3d919d0bb7aff126",
             "9f811edab4a388d2",
             "62de6c9968fc216d",
-            "e0d9762acc9664a5",
-            "24107174129b8318"
+            "e0d9762acc9664a5"
         ],
         "x": 135,
         "y": 540,
@@ -1944,7 +1935,7 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
@@ -1983,8 +1974,8 @@
         "scope": [
             "8e91a3a36fdc835c"
         ],
-        "x": 390,
-        "y": 240,
+        "x": 230,
+        "y": 300,
         "wires": [
             [
                 "20caac218c202fd6"
@@ -1996,15 +1987,15 @@
         "type": "function",
         "z": "e033c8a02dcd63b3",
         "name": "Check connessione broker + eventualmente inizia BT",
-        "func": "// Status viene chiamato ogni 17 secondi\nvar stato = msg.status.text;\nvar parts = stato.split(\".\");\nvar lastPart = parts[parts.length - 1];\n\nvar old_com = flow.get(\"comunicazione_nodered\");\n\nif (lastPart == \"connected\" ){\n    msg.payload = \"Connesso\";\n\n    // Se nodered riesce a collegarsi al broker mqtt, setto la comuniczione a \"mqtt\"\n    if (old_com == undefined || old_com != \"mqtt\") {\n        flow.set(\"comunicazione_nodered\", \"mqtt\");\n    }\n\n}else {\n    msg.payload = \"Disconnesso\";\n    // Se nodered NON riesce a collegarsi al broker mqtt, setto la comuniczione a \"bt\"\n    if (old_com == undefined || old_com != \"bt\"){\n        flow.set(\"comunicazione_nodered\", \"bt\");\n        flow.set(\"comunicazione_cam\", \"bt\");\n        flow.set(\"comunicazione_nfc\", \"bt\");\n\n        msg.start_bt_cam = true;\n        msg.start_bt_nfc = true;\n    }\n\n}\n\nreturn msg;",
+        "func": "// Status viene chiamato ogni 17 secondi\nvar stato = msg.status.text;\nvar parts = stato.split(\".\");\nvar lastPart = parts[parts.length - 1];\n\nvar old_com = flow.get(\"comunicazione_nodered\");\n\nif (lastPart == \"connected\" ){\n    msg.payload = \"Connesso\";\n\n    // Se nodered riesce a collegarsi al broker mqtt, setto la comuniczione a \"mqtt\"\n    if (old_com == undefined || old_com != \"mqtt\") {\n        flow.set(\"comunicazione_nodered\", \"mqtt\");\n    }\n\n}else {\n    msg.payload = \"Disconnesso\";\n    // Se nodered NON riesce a collegarsi al broker mqtt, setto la comuniczione a \"provo_bt\"\n    if (old_com == undefined || old_com != \"bt\"){\n        flow.set(\"comunicazione_nodered\", \"provo_bt\");\n        flow.set(\"comunicazione_cam\", \"provo_bt\");\n        flow.set(\"comunicazione_nfc\", \"provo_bt\");\n\n        msg.start_bt_cam = true;\n        msg.start_bt_nfc = true;\n    }\n\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 240,
+        "x": 580,
+        "y": 320,
         "wires": [
             []
         ]
@@ -2022,8 +2013,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 170,
-        "y": 240,
+        "x": 250,
+        "y": 180,
         "wires": [
             []
         ]
@@ -2045,8 +2036,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1650,
-        "y": 600,
+        "x": 910,
+        "y": 560,
         "wires": []
     },
     {
@@ -2070,8 +2061,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 640,
+        "x": 190,
+        "y": 560,
         "wires": [
             [
                 "5c1076c7e8aebc56"
@@ -2083,20 +2074,100 @@
         "type": "function",
         "z": "e033c8a02dcd63b3",
         "name": "Check CAM stato cambiato + upate dashboard",
-        "func": "\n\nmsg.payload = flow.get(\"comunicazione_cam\");\nvar old = flow.get(\"old_comunicazione_cam\");\nif (msg.payload != old){\n    // Comunicazione cam e' stata cambiata\n    // TODO\n\n    /*\n    \n    Possibili stati: irraggiungibile, mqtt, bt\n\n    ------  QUANDO PASSO DA UNO STATO A UN ALTRO? --------\n        Passo a irraggiungibile:\n            -> all'inizio di node-red\n            -> se lo script python e' terminato ed ero nello stato bt\n        Passo a mqtt:\n            -> se da mqtt state arriva 1\n        Passo a bt:\n            -> se da mqtt state arriva 0 e stavo comunicando con mqtt o ero irraggiungibile\n            -> se lo script python stampa \"Connesso\"\n    \n\n    ------- COSA SUCCEDE SE SI PASSA DA UNO STATO A UN ALTRO? --------\n        Se passo da irraggiungibile a mqtt -> nulla */\n\n   \n    //  Se passo da irraggiungibile a bt -> nulla\n    if(old == \"irraggiungibile\" && msg.payload == \"bt\"){\n        msg.da_fare = \"start_sript_bt\";\n    }\n        \n    // Se passo da mqtt a irraggiungibile -> passo a bt -> start script\n    if (old == \"mqtt\" && msg.payload == \"irraggiungibile\"){\n        node.log(\"2\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_cam\", \"bt\");\n    }\n    \n    // Se passo da mqtt a bt -> start script \n    if (old == \"mqtt\" && msg.payload == \"bt\") {\n        node.log(\"3\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_cam\", \"bt\");\n    }\n\n\n    //    Se passo da bt a irraggiungibile -> la riconnessione verra' riprovata dopo al max 10 sec\n    // if (old == \"bt\" && msg.payload == \"irraggiungibile\"){\n        // node.log(\"6\");\n        // flow.set(\"comunicazione_cam\", \"provo_bt\");\n    // }\n\n    // Se passo da bt a mqtt -> killo script\n    if (old == \"bt\" && msg.payload == \"mqtt\"){\n        node.log(\"7\");\n        msg.da_fare = \"kill_sript_bt\";\n    }\n    \n    \n    \n    flow.set(\"old_comunicazione_cam\", msg.payload);\n}   \n\nreturn msg;",
+        "func": "\n\nmsg.payload = flow.get(\"comunicazione_cam\");\nvar old = flow.get(\"old_comunicazione_cam\");\nif (msg.payload != old){\n    // Comunicazione cam e' stata cambiata\n    // TODO\n\n    /*\n    \n    Possibili stati: irraggiungibile, mqtt, provo_bt, bt\n\n    ------  QUANDO PASSO DA UNO STATO A UN ALTRO? --------\n        Passo a irraggiungibile:\n            -> all'inizio di node-red\n            -> se lo script python e' terminato ed ero nello stato provo_bt o bt\n        Passo a mqtt:\n            -> se da mqtt state arriva 1\n        Passo a provo_bt:\n            -> se da mqtt state arriva 0\n        Passo a bt:\n            -> se lo script python stampa \"Connesso\"\n    \n\n    ------- COSA SUCCEDE SE SI PASSA DA UNO STATO A UN ALTRO? --------\n        Se passo da irraggiungibile a mqtt -> nulla\n    */\n\n    //  Se passo da irraggiungibile a provo_bt -> faccio partire script bt\n    if (old == \"irraggiungibile\" && msg.payload == \"provo_bt\"){\n        msg.da_fare = \"start_sript_bt\";\n        node.log(\"1\");\n    }\n    \n    //  Se passo da irraggiungibile a bt -> nulla\n    \n        \n    // Se passo da mqtt a irraggiungibile -> passo a prova_bt\n    if (old == \"mqtt\" && msg.payload == \"irraggiungibile\"){\n        node.log(\"2\");\n        flow.set(\"comunicazione_cam\", \"provo_bt\");\n    }\n    \n    //    Se passo da mqtt a provo_bt -> faccio partire script\n    if (old == \"mqtt\" && msg.payload == \"provo_bt\"){\n        msg.da_fare = \"start_sript_bt\";\n        node.log(\"3\");\n\n    }\n    // Se passo da mqtt a bt -> nulla\n\n    //    Se passo da provo_bt a irraggiungibile -> passo a prova_bt in modo da riprovare a collegarmi (alterntiva: attendi 10 sec)\n    if (old == \"provo_bt\" && msg.payload == \"irraggiungibile\"){\n        flow.set(\"comunicazione_cam\", \"provo_bt\");\n        node.log(\"4\");\n    }\n\n\n    \n    // Se passo da provo_bt a mqtt -> killo script\n    if (old == \"provo_bt\" && msg.payload == \"mqtt\"){\n        msg.da_fare = \"kill_sript_bt\";\n        node.log(\"5\");\n\n    }\n\n    //    Se passo da provo_bt a bt -> nulla\n\n    //    Se passo da bt a irraggiungibile -> passo a prova_bt in modo da riprovare a collegarmi (alterntiva: attendi 10 sec)\n    if (old == \"bt\" && msg.payload == \"irraggiungibile\"){\n        node.log(\"6\");\n        flow.set(\"comunicazione_cam\", \"provo_bt\");\n    }\n\n    // Se passo da bt a mqtt -> killo script\n    if (old == \"bt\" && msg.payload == \"mqtt\"){\n        node.log(\"7\");\n        msg.da_fare = \"kill_sript_bt\";\n    }\n    \n    // Se passo da bt a provo_bt -> faccio partire script\n    if (old == \"bt\" && msg.payload == \"provo_bt\"){\n        node.log(\"8\");\n        msg.da_fare = \"start_sript_bt\";\n    }\n    \n    \n    flow.set(\"old_comunicazione_cam\", flow.get(\"comunicazione_cam\"));\n}   \n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 640,
+        "x": 560,
+        "y": 560,
         "wires": [
             [
                 "5fc506fa5056c6fc",
                 "159fe82693847afe"
             ]
+        ]
+    },
+    {
+        "id": "bfb3bde89852ed9c",
+        "type": "ui_text",
+        "z": "e033c8a02dcd63b3",
+        "group": "cd718b65b0c0bc62",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Comunicazione con NFC:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 950,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "bfb669bb02899b2c",
+        "type": "function",
+        "z": "e033c8a02dcd63b3",
+        "name": "Check NFC stato cambiato + upate dashboard",
+        "func": "msg.payload = flow.get(\"comunicazione_nfc\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1620,
+        "wires": [
+            [
+                "bfb3bde89852ed9c"
+            ]
+        ]
+    },
+    {
+        "id": "3ce35880f5ae8593",
+        "type": "mqtt in",
+        "z": "e033c8a02dcd63b3",
+        "name": "",
+        "topic": "my_devices/door/esp_nfc/state",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "3c590ebc25e0b5cc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 1580,
+        "wires": [
+            [
+                "47e82c2790320f04"
+            ]
+        ]
+    },
+    {
+        "id": "47e82c2790320f04",
+        "type": "function",
+        "z": "e033c8a02dcd63b3",
+        "name": "Passa a \"mqtt\" o \"provo_bt\"",
+        "func": "if (msg.payload == \"1\")\n    flow.set(\"comunicazione_nfc\", \"mqtt\");\nelse\n    flow.set(\"comunicazione_nfc\", \"provo_bt\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1580,
+        "wires": [
+            []
         ]
     },
     {
@@ -2112,8 +2183,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 330,
-        "y": 560,
+        "x": 230,
+        "y": 480,
         "wires": [
             [
                 "0b0da21d36ddc122"
@@ -2124,16 +2195,16 @@
         "id": "0b0da21d36ddc122",
         "type": "function",
         "z": "e033c8a02dcd63b3",
-        "name": "Passa a \"mqtt\" o \"bt\"",
-        "func": "if (msg.payload == \"1\")\n    flow.set(\"comunicazione_cam\", \"mqtt\");\nelse if (flow.get(\"comunicazione_cam\") != \"bt\") \n    // Se board si scollega da mqtt e non sto comunicando con bt, ritento la comunicazione bt\n    flow.set(\"comunicazione_cam\", \"bt\");\nreturn msg;",
+        "name": "Passa a \"mqtt\" o \"provo_bt\"",
+        "func": "if (msg.payload == \"1\")\n    flow.set(\"comunicazione_cam\", \"mqtt\");\nelse if (flow.get(\"comunicazione_cam\") != \"bt\") \n    // Se board si scollega da mqtt e non sto comunicando  con bt, ritento la comunicazione bt\n    flow.set(\"comunicazione_cam\", \"provo_bt\");\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 560,
+        "x": 540,
+        "y": 480,
         "wires": [
             []
         ]
@@ -2150,8 +2221,8 @@
         "redo": false,
         "op": "string",
         "closer": "SIGKILL",
-        "x": 1320,
-        "y": 780,
+        "x": 1220,
+        "y": 700,
         "wires": [
             [
                 "79fb90d79d5316da"
@@ -2167,15 +2238,15 @@
         "type": "function",
         "z": "e033c8a02dcd63b3",
         "name": "Forse board irraggiungibile",
-        "func": "if (flow.get(\"comunicazione_cam\") == \"bt\" || flow.get(\"comunicazione_cam\") == \"bt_connesso\")\n    flow.set(\"comunicazione_cam\",\"irraggiungibile\");\nreturn msg;",
+        "func": "if (flow.get(\"comunicazione_cam\") == \"provo_bt\" || flow.get(\"comunicazione_cam\") == \"bt\")\n    flow.set(\"comunicazione_cam\",\"irraggiungibile\");\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1680,
-        "y": 900,
+        "x": 1580,
+        "y": 820,
         "wires": [
             []
         ]
@@ -2200,8 +2271,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1580,
-        "y": 760,
+        "x": 1480,
+        "y": 680,
         "wires": [
             [
                 "93b966758cc4d3e9"
@@ -2215,18 +2286,47 @@
         "id": "93b966758cc4d3e9",
         "type": "function",
         "z": "e033c8a02dcd63b3",
-        "name": "Segnalo la connessione bt",
-        "func": "flow.set(\"comunicazione_cam\", \"bt_connesso\");\nreturn msg;",
+        "name": "Passo a \"bt\"",
+        "func": "flow.set(\"comunicazione_cam\", \"bt\");\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1900,
-        "y": 720,
+        "x": 1750,
+        "y": 640,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "2a50d8652ee997b5",
+        "type": "inject",
+        "z": "e033c8a02dcd63b3",
+        "name": "Aggiorna connessioni boards",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 1620,
+        "wires": [
+            [
+                "bfb669bb02899b2c"
+            ]
         ]
     },
     {
@@ -2251,8 +2351,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 2,
-        "x": 930,
-        "y": 780,
+        "x": 830,
+        "y": 700,
         "wires": [
             [
                 "f54a669a1dbbacb7"
@@ -2274,8 +2374,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1090,
-        "y": 780,
+        "x": 990,
+        "y": 700,
         "wires": [
             [
                 "25ebba5b410a7376",
@@ -2295,8 +2395,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1090,
-        "y": 840,
+        "x": 990,
+        "y": 760,
         "wires": [
             [
                 "25ebba5b410a7376",
@@ -2325,8 +2425,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 880,
-        "y": 840,
+        "x": 780,
+        "y": 760,
         "wires": [
             [
                 "94112e81df8cedc9"
@@ -2345,8 +2445,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1870,
-        "y": 780,
+        "x": 1770,
+        "y": 700,
         "wires": [
             [
                 "f75e5619c4fdeb47"
@@ -2370,8 +2470,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 2130,
-        "y": 760,
+        "x": 2030,
+        "y": 680,
         "wires": [
             [
                 "463a704259457186"
@@ -2387,8 +2487,8 @@
         "links": [
             "518e81a0d326064b"
         ],
-        "x": 2345,
-        "y": 760,
+        "x": 2245,
+        "y": 680,
         "wires": []
     },
     {
@@ -2400,8 +2500,8 @@
         "links": [
             "8eb16bd75eadf7bd"
         ],
-        "x": 2315,
-        "y": 1580,
+        "x": 2135,
+        "y": 1200,
         "wires": []
     },
     {
@@ -2413,8 +2513,8 @@
         "links": [
             "e9d789509278d3f9"
         ],
-        "x": 2445,
-        "y": 1660,
+        "x": 2165,
+        "y": 1020,
         "wires": []
     },
     {
@@ -2426,8 +2526,8 @@
         "links": [
             "a60c677347135904"
         ],
-        "x": 2365,
-        "y": 1700,
+        "x": 2185,
+        "y": 1060,
         "wires": []
     },
     {
@@ -2439,8 +2539,8 @@
         "links": [
             "72429e099cc4b6ca"
         ],
-        "x": 2285,
-        "y": 1800,
+        "x": 2185,
+        "y": 1120,
         "wires": []
     },
     {
@@ -2448,9 +2548,9 @@
         "type": "comment",
         "z": "e033c8a02dcd63b3",
         "name": "",
-        "info": "Se l'immagine e' arrivata con il BT, non la pubblico su mqtt da node red perche' tanto l'altra board non è sottoscritta al topic in cui pubblico l'immagine.\nSe avessi un device sottoscritto a tale topic, avrei dovuto pubblicarla",
-        "x": 2440,
-        "y": 760,
+        "info": "Se e' arrivata con il BT l'immagine, non la pubblico su mqtt da node red perche' tanto l'altra board non ci è sottoscritta",
+        "x": 2340,
+        "y": 680,
         "wires": []
     },
     {
@@ -2459,8 +2559,6 @@
         "z": "e033c8a02dcd63b3",
         "name": "link in 1",
         "links": [
-            "24107174129b8318",
-            "348554f2e28f0263",
             "3d919d0bb7aff126",
             "783b1918abc47099",
             "85247eaccfcb5651",
@@ -2471,12 +2569,11 @@
             "f5680f0a1887ac6a",
             "ff2e5ecdcb78b946"
         ],
-        "x": 945,
-        "y": 940,
+        "x": 845,
+        "y": 860,
         "wires": [
             [
-                "876325c7b41539d9",
-                "8c9470bd4d5e4115"
+                "876325c7b41539d9"
             ]
         ]
     },
@@ -2485,15 +2582,15 @@
         "type": "function",
         "z": "e033c8a02dcd63b3",
         "name": "Manda input CAM",
-        "func": "// Se la cam e' attualmente connessa col BT e il messaggio da mandare e' nella lista delle \n// sottoscrizioni della cam, allora gli mando il messaggio \nif (flow.get(\"comunicazione_cam\") == \"bt_connesso\") {\n    var topicList = flow.get(\"subs_cam\");\n    if (topicList.includes(msg.topic)){\n        msg.payload = \"[\" + msg.topic + \"] \" + msg.payload; \n        return msg;\n    }\n}\n\nreturn null;",
+        "func": "// Se la cam e' attualmente connessa col BT e il messaggio da mandare e' nella lista delle \n// sottoscrizioni della cam, allora gli mando il messaggio \nif (flow.get(\"comunicazione_cam\") == \"bt\") {\n    var topicList = flow.get(\"subs_cam\");\n    if (topicList.includes(msg.topic)){\n        msg.payload = \"[\" + msg.topic + \"] \" + msg.payload; \n        return msg;\n    }\n}\n\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1090,
-        "y": 940,
+        "x": 990,
+        "y": 860,
         "wires": [
             [
                 "25ebba5b410a7376",
@@ -2513,8 +2610,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1320,
-        "y": 680,
+        "x": 1220,
+        "y": 600,
         "wires": []
     },
     {
@@ -2529,8 +2626,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1280,
-        "y": 920,
+        "x": 1180,
+        "y": 840,
         "wires": []
     },
     {
@@ -2545,586 +2642,18 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1320,
-        "y": 1000,
+        "x": 1220,
+        "y": 920,
         "wires": []
     },
     {
-        "id": "83dfabc9b9cf190d",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "Se board irraggiungibile -> riprova con BT",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "20",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 330,
-        "y": 860,
-        "wires": [
-            [
-                "ae37693b1f762b9d"
-            ]
-        ]
-    },
-    {
-        "id": "ae37693b1f762b9d",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "function 5",
-        "func": "if (flow.get(\"comunicazione_cam\") == \"irraggiungibile\")\n    flow.set(\"comunicazione_cam\", \"bt\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 600,
-        "y": 860,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "8c9470bd4d5e4115",
-        "type": "debug",
-        "z": "e033c8a02dcd63b3",
-        "name": "debug 10",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 1000,
-        "wires": []
-    },
-    {
-        "id": "914e8c025e39fa0f",
+        "id": "dc7d0b3b424bc133",
         "type": "comment",
         "z": "e033c8a02dcd63b3",
-        "name": "CAM",
+        "name": "TODO inject al deployment",
         "info": "",
-        "x": 270,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "c4b3d3795f27df75",
-        "type": "ui_text",
-        "z": "e033c8a02dcd63b3",
-        "group": "cd718b65b0c0bc62",
-        "order": 8,
-        "width": 0,
-        "height": 0,
-        "name": "",
-        "label": "Comunicazione con NFC:",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#000000",
-        "x": 1490,
-        "y": 1440,
-        "wires": []
-    },
-    {
-        "id": "6ea38fb1ec1ed474",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "Aggiorna connessioni boards",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "0.5",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 250,
-        "y": 1480,
-        "wires": [
-            [
-                "0dcb7d40c839f869"
-            ]
-        ]
-    },
-    {
-        "id": "0dcb7d40c839f869",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Check NFCstato cambiato + upate dashboard",
-        "func": "\n\nmsg.payload = flow.get(\"comunicazione_nfc\");\nvar old = flow.get(\"old_comunicazione_nfc\");\nif (msg.payload != old){\n    // Comunicazione nfc e' stata nfcbiata\n    // TODO\n\n    /*\n    \n    Possibili stati: irraggiungibile, mqtt, bt\n\n    ------  QUANDO PASSO DA UNO STATO A UN ALTRO? --------\n        Passo a irraggiungibile:\n            -> all'inizio di node-red\n            -> se lo script python e' terminato ed ero nello stato bt\n        Passo a mqtt:\n            -> se da mqtt state arriva 1\n        Passo a bt:\n            -> se da mqtt state arriva 0 e stavo comunicando con mqtt o ero irraggiungibile\n            -> se lo script python stampa \"Connesso\"\n    \n\n    ------- COSA SUCCEDE SE SI PASSA DA UNO STATO A UN ALTRO? --------\n        Se passo da irraggiungibile a mqtt -> nulla */\n\n   \n    //  Se passo da irraggiungibile a bt -> nulla\n    if(old == \"irraggiungibile\" && msg.payload == \"bt\"){\n        msg.da_fare = \"start_sript_bt\";\n    }\n        \n    // Se passo da mqtt a irraggiungibile -> passo a bt -> start script\n    if (old == \"mqtt\" && msg.payload == \"irraggiungibile\"){\n        node.log(\"2\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_nfc\", \"bt\");\n    }\n    \n    // Se passo da mqtt a bt -> start script \n    if (old == \"mqtt\" && msg.payload == \"bt\") {\n        node.log(\"3\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_nfc\", \"bt\");\n    }\n\n\n    //    Se passo da bt a irraggiungibile -> la riconnessione verra' riprovata dopo al max 10 sec\n    // if (old == \"bt\" && msg.payload == \"irraggiungibile\"){\n        // node.log(\"6\");\n        // flow.set(\"comunicazione_nfc\", \"provo_bt\");\n    // }\n\n    // Se passo da bt a mqtt -> killo script\n    if (old == \"bt\" && msg.payload == \"mqtt\"){\n        node.log(\"7\");\n        msg.da_fare = \"kill_sript_bt\";\n    }\n    \n    \n    \n    flow.set(\"old_comunicazione_nfc\", msg.payload);\n}   \n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 1480,
-        "wires": [
-            [
-                "c4b3d3795f27df75",
-                "494e254307d1d366"
-            ]
-        ]
-    },
-    {
-        "id": "9022daa16c50d991",
-        "type": "mqtt in",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "topic": "my_devices/door/esp_nfc/state",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "3c590ebc25e0b5cc",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 290,
-        "y": 1400,
-        "wires": [
-            [
-                "b9fab51f0d3f1bf7"
-            ]
-        ]
-    },
-    {
-        "id": "b9fab51f0d3f1bf7",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Passa a \"mqtt\" o \"bt\"",
-        "func": "if (msg.payload == \"1\")\n    flow.set(\"comunicazione_nfc\", \"mqtt\");\nelse if (flow.get(\"comunicazione_nfc\") != \"bt\") \n    // Se board si scollega da mqtt e non sto comunicando con bt, ritento la comunicazione bt\n    flow.set(\"comunicazione_nfc\", \"bt\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 580,
-        "y": 1400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d8e79064e9dfd664",
-        "type": "daemon",
-        "z": "e033c8a02dcd63b3",
-        "name": "Bluetooth NFC",
-        "command": "python.exe",
-        "args": "..\\bluetooth_pc\\bt_connect_multithread.py",
-        "autorun": false,
-        "cr": true,
-        "redo": false,
-        "op": "string",
-        "closer": "SIGKILL",
-        "x": 1280,
-        "y": 1620,
-        "wires": [
-            [
-                "bd713d28426df5e9"
-            ],
-            [],
-            [
-                "417b806cee4f3188"
-            ]
-        ]
-    },
-    {
-        "id": "417b806cee4f3188",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Forse board irraggiungibile",
-        "func": "if (flow.get(\"comunicazione_nfc\") == \"bt\" || flow.get(\"comunicazione_nfc\") == \"bt_connesso\")\n    flow.set(\"comunicazione_nfc\",\"irraggiungibile\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1640,
-        "y": 1740,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "bd713d28426df5e9",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "Check \"connesso\" o output",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "cont",
-                "v": "Connesso",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 1540,
-        "y": 1600,
-        "wires": [
-            [
-                "a94706bfe071f573"
-            ],
-            [
-                "b039e12e85ac2f66"
-            ]
-        ]
-    },
-    {
-        "id": "a94706bfe071f573",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Segnalo la connessione bt",
-        "func": "flow.set(\"comunicazione_nfc\", \"bt_connesso\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1860,
-        "y": 1560,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "494e254307d1d366",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "property": "da_fare",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "start_sript_bt",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "kill_sript_bt",
-                "vt": "str"
-            }
-        ],
-        "checkall": "false",
-        "repair": false,
-        "outputs": 2,
-        "x": 890,
-        "y": 1620,
-        "wires": [
-            [
-                "7216c656be90d9b6"
-            ],
-            [
-                "104581d38dd99c14"
-            ]
-        ]
-    },
-    {
-        "id": "7216c656be90d9b6",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Start BT nfc",
-        "func": "msg.args = \"--nfc\";\nmsg.start = true;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 1620,
-        "wires": [
-            [
-                "d8e79064e9dfd664"
-            ]
-        ]
-    },
-    {
-        "id": "104581d38dd99c14",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Kill process",
-        "func": "msg.kill = true; \nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 1680,
-        "wires": [
-            [
-                "d8e79064e9dfd664"
-            ]
-        ]
-    },
-    {
-        "id": "9913a294dd7ed696",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 840,
-        "y": 1680,
-        "wires": [
-            [
-                "104581d38dd99c14"
-            ]
-        ]
-    },
-    {
-        "id": "b039e12e85ac2f66",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "New BT message ",
-        "func": "// Separo topic e payload\nvar mess_arr = msg.payload;\nlet matchResult = mess_arr.match(/\\[(.*?)\\]\\s*(.*)/);\nif (!matchResult)\n    return null; \n\nlet topic = matchResult[1];\nmsg.topic = topic;\n\nlet payload = matchResult[2];\nmsg.payload = payload;\n\nnode.log(\"topic\" + topic);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1830,
-        "y": 1620,
-        "wires": [
-            [
-                "0aabf9bddeddd6ce"
-            ]
-        ]
-    },
-    {
-        "id": "7a837c882f6b41c7",
-        "type": "comment",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "info": "Se l'immagine e' arrivata con il BT, non la pubblico su mqtt da node red perche' tanto l'altra board non è sottoscritta al topic in cui pubblico l'immagine.\nSe avessi un device sottoscritto a tale topic, avrei dovuto pubblicarla",
-        "x": 2400,
-        "y": 1600,
-        "wires": []
-    },
-    {
-        "id": "38032b323723dc1c",
-        "type": "link in",
-        "z": "e033c8a02dcd63b3",
-        "name": "link in 2",
-        "links": [
-            "24107174129b8318",
-            "348554f2e28f0263",
-            "3d919d0bb7aff126",
-            "783b1918abc47099",
-            "85247eaccfcb5651",
-            "b458d83fe470509a",
-            "cd3c846e4e60ed19",
-            "d5fbf340676057d0",
-            "ebd45a88251b59c4",
-            "f5680f0a1887ac6a",
-            "ff2e5ecdcb78b946"
-        ],
-        "x": 905,
-        "y": 1780,
-        "wires": [
-            [
-                "9bf110208d44d960"
-            ]
-        ]
-    },
-    {
-        "id": "9bf110208d44d960",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Manda input NFC",
-        "func": "// Se la nfc e' attualmente connessa col BT e il messaggio da mandare e' nella lista delle \n// sottoscrizioni della nfc, allora gli mando il messaggio \nif (flow.get(\"comunicazione_nfc\") == \"bt_connesso\") {\n    var topicList = flow.get(\"subs_nfc\");\n    if (topicList.includes(msg.topic)){\n        msg.payload = \"[\" + msg.topic + \"] \" + msg.payload; \n        return msg;\n    }\n}\n\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 1780,
-        "wires": [
-            [
-                "d8e79064e9dfd664"
-            ]
-        ]
-    },
-    {
-        "id": "05f04afb637228fa",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "Se board irraggiungibile -> riprova con BT",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "20",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 290,
-        "y": 1700,
-        "wires": [
-            [
-                "5c32422378c0ca3a"
-            ]
-        ]
-    },
-    {
-        "id": "5c32422378c0ca3a",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "function 6",
-        "func": "if (flow.get(\"comunicazione_nfc\") == \"irraggiungibile\")\n    flow.set(\"comunicazione_nfc\", \"bt\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 560,
-        "y": 1700,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "56f2b4f77a1060fc",
-        "type": "comment",
-        "z": "e033c8a02dcd63b3",
-        "name": "NFC",
-        "info": "",
-        "x": 170,
-        "y": 1340,
-        "wires": []
-    },
-    {
-        "id": "0aabf9bddeddd6ce",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "Subscriptions node-red",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/tag_swiped",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/button",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/intruder",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/errors",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 4,
-        "x": 2090,
-        "y": 1640,
-        "wires": [
-            [
-                "29371f8fc0ef3014"
-            ],
-            [
-                "689e1a7ddd93418d",
-                "2e119f21d2525375"
-            ],
-            [
-                "92a1b36bbc5cfd55",
-                "2e119f21d2525375"
-            ],
-            [
-                "bad121c6502fb625"
-            ]
-        ]
-    },
-    {
-        "id": "2e119f21d2525375",
-        "type": "mqtt out",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "topic": "",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "3c590ebc25e0b5cc",
-        "x": 2530,
-        "y": 1620,
+        "x": 750,
+        "y": 80,
         "wires": []
     },
     {
@@ -3430,8 +2959,7 @@
         "mode": "link",
         "links": [
             "98a6f3a8838eb818",
-            "e87b3b74df0bf879",
-            "38032b323723dc1c"
+            "e87b3b74df0bf879"
         ],
         "x": 1455,
         "y": 420,
@@ -3498,8 +3026,7 @@
         "wires": [
             [
                 "972c6ab9e76e06a8",
-                "f83188491fc86816",
-                "348554f2e28f0263"
+                "f83188491fc86816"
             ]
         ]
     },
@@ -3519,20 +3046,6 @@
         "broker": "3c590ebc25e0b5cc",
         "x": 1530,
         "y": 380,
-        "wires": []
-    },
-    {
-        "id": "348554f2e28f0263",
-        "type": "link out",
-        "z": "f42f0c6ac0c908c0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 345,
-        "y": 740,
         "wires": []
     },
     {
@@ -3711,8 +3224,7 @@
         "links": [
             "e87b3b74df0bf879",
             "4ed927689e34b269",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 875,
         "y": 40,
@@ -3744,8 +3256,7 @@
         "links": [
             "fec084381cfe638b",
             "1cce8fa5ab96b93d",
-            "463a704259457186",
-            "8a84b984d0063a27"
+            "463a704259457186"
         ],
         "x": 475,
         "y": 1040,
@@ -3786,7 +3297,7 @@
         "order": 2,
         "width": "6",
         "height": "6",
-        "format": "<canvas id=\"canvas\" style=\"border:solid;\"> </canvas>\n<!-- <div id=\"messages\"></div> -->\n<script>\n    var first = 0;  // Usato per inizializzare il canvas\n\n    var xres = 80; // Larghezza foto\n    var yres = 60; // Altezza foto\n    var ctx; // Serve per la \"stampa\" della foto\n    var imgData; // Serve per la stampa della foto\n    var gcanvasid = \"canvas\"; // id del canvas che conterra' la foto\n\n    function hexStringToUint8Array(hexString) {\n        // Remove any non-hex characters (like spaces or newline characters)\n        hexString = String(hexString);\n        hexString = hexString.replace(/[^0-9a-fA-F]/g, '');\n\n        // Split the string into pairs of two\n        const pairs = hexString.match(/.{1,2}/g);\n\n        // Convert each pair to a byte value\n        const byteArray = pairs.map((pair) => parseInt(pair, 16));\n\n        // Create a Uint8Array from the byte values\n        return new Uint8Array(byteArray);\n    }\n\n    function init_canvas() {\n\n        canvas = document.getElementById(\"canvas\");\n        canvas.width = xres;\n        canvas.height = yres;\n\n        ctx = canvas.getContext(\"2d\");\n        imgData = ctx.createImageData(canvas.width, canvas.height);\n\n        for (var i = 0; i < imgData.data.length; i +=4) {\n            imgData.data[i + 0] = 0xCC;\n            imgData.data[i + 1] = 0xCC;\n            imgData.data[i + 2] = 0xCC;\n            imgData.data[i + 3] = 255;\n        }\n        ctx.putImageData(imgData, canvas.width, canvas.height);\n        ctx.globalAlpha = 0.5;\n\n    }\n\n\n    // Funzione che \"stampa\" l'immagine nel canvas\n    function display(pixels) {\n        //alert('display'); \n        ln = 0;\n        var i = 0;\n        for (y = 0; y < yres; y++) {\n            for (x = 0; x < xres; x++) {\n                i = (y * xres + x) << 1;\n                pixel16 = (0xffff & pixels[i]) | ((0xffff & pixels[i + 1]) << 8);\n                imgData.data[ln + 0] = ((((pixel16 >> 11) & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 1] = ((((pixel16 >> 5) & 0x3F) * 259) + 33) >> 6;\n                imgData.data[ln + 2] = (((pixel16 & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 3] = (0xFFFFFFFF) & 255;\n                ln += 4;\n            }\n        }\n        \n        ctx.putImageData(imgData, 0, 0);\n    }\n\n    /*function mess_arrived(msg) {\n        // NEW MESSAGE ARRIVED IN \"INPUT\": msg\n        if (first === 0) {\n            console.log(\"first\");\n            init_canvas();\n            first = 1;\n        }\n        \n        // Check if the message is in the chunked format \"[topic] i message\"\n        var chunkFormatMatches = msg.match(/\\[(\\d+)\\]\\s(.*)/);\n        \n        if (chunkFormatMatches && chunkFormatMatches.length === 3) {\n            // Chunked format: \"[topic] i message\"\n            var chunkIndex = parseInt(chunkFormatMatches[1]);\n            var chunkData = hexStringToUint8Array(chunkFormatMatches[2]);\n            \n            receivedChunks[chunkIndex] = chunkData;\n            \n            if (chunkIndex === expectedChunks) {\n                // Display the image when all expected chunks are received\n                var completeImage = new Uint8Array(expectedChunks * chunkData.length);\n                \n                for (var i = 0; i < expectedChunks; i++) { \n                    var chunk=receivedChunks[i]; completeImage.set(chunk, i * chunk.length); \n                }\n                display(completeImage); \n                \n                // Clear receivedChunks for the next image \n                receivedChunks={}; \n                \n                // Increment expectedChunks for the next image \n                expectedChunks=0; \n            }\n        } else { \n            // Non-chunked format: Just bytes to be converted to Uint8Array \n            var rawData=hexStringToUint8Array(msg); \n            display(rawData); \n        } \n    }*/\n\n\n    (function(scope) {\n        scope.$watch('msg.payload', function(msg) { // $watch fires each time the node is triggered in the flow\n        // mess_arrived(msg);\n        // return ;\n        // NUOVO MESSAGGIO ARRIVATO IN \"INPUT\": msg\n        if (first == 0) {\n            console.log(\"first\");\n            init_canvas() ;\n            first = 1;        \n        }\n        \n        pixel = hexStringToUint8Array(msg);\n        display(pixel);\n            \n    });\n\n\n\n})(scope);\n</script>",
+        "format": "<canvas id=\"canvas\" style=\"border:solid;\"> </canvas>\n<!-- <div id=\"messages\"></div> -->\n<script>\n    var first = 0;  // Usato per inizializzare il canvas\n\n    var xres = 80; // Larghezza foto\n    var yres = 60; // Altezza foto\n    var ctx; // Serve per la \"stampa\" della foto\n    var imgData; // Serve per la stampa della foto\n    var gcanvasid = \"canvas\"; // id del canvas che conterra' la foto\n\n    function hexStringToUint8Array(hexString) {\n        // Remove any non-hex characters (like spaces or newline characters)\n        hexString = String(hexString);\n        hexString = hexString.replace(/[^0-9a-fA-F]/g, '');\n\n        // Split the string into pairs of two\n        const pairs = hexString.match(/.{1,2}/g);\n\n        // Convert each pair to a byte value\n        const byteArray = pairs.map((pair) => parseInt(pair, 16));\n\n        // Create a Uint8Array from the byte values\n        return new Uint8Array(byteArray);\n    }\n\n    function init_canvas() {\n\n        canvas = document.getElementById(\"canvas\");\n        canvas.width = xres;\n        canvas.height = yres;\n\n        ctx = canvas.getContext(\"2d\");\n        imgData = ctx.createImageData(canvas.width, canvas.height);\n\n        for (var i = 0; i < imgData.data.length; i +=4) {\n            imgData.data[i + 0] = 0xCC;\n            imgData.data[i + 1] = 0xCC;\n            imgData.data[i + 2] = 0xCC;\n            imgData.data[i + 3] = 255;\n        }\n        ctx.putImageData(imgData, canvas.width, canvas.height);\n        ctx.globalAlpha = 0.5;\n\n    }\n\n\n    // Funzione che \"stampa\" l'immagine nel canvas\n    function display(pixels) {\n        //alert('display'); \n        ln = 0;\n        var i = 0;\n        for (y = 0; y < yres; y++) {\n            for (x = 0; x < xres; x++) {\n                i = (y * xres + x) << 1;\n                pixel16 = (0xffff & pixels[i]) | ((0xffff & pixels[i + 1]) << 8);\n                imgData.data[ln + 0] = ((((pixel16 >> 11) & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 1] = ((((pixel16 >> 5) & 0x3F) * 259) + 33) >> 6;\n                imgData.data[ln + 2] = (((pixel16 & 0x1F) * 527) + 23) >> 6;\n                imgData.data[ln + 3] = (0xFFFFFFFF) & 255;\n                ln += 4;\n            }\n        }\n        \n        ctx.putImageData(imgData, 0, 0);\n    }\n\n    function mess_arrived(msg) {\n        // NEW MESSAGE ARRIVED IN \"INPUT\": msg\n        if (first === 0) {\n            console.log(\"first\");\n            init_canvas();\n            first = 1;\n        }\n        \n        // Check if the message is in the chunked format \"[topic] i message\"\n        var chunkFormatMatches = msg.match(/\\[(\\d+)\\]\\s(.*)/);\n        \n        if (chunkFormatMatches && chunkFormatMatches.length === 3) {\n            // Chunked format: \"[topic] i message\"\n            var chunkIndex = parseInt(chunkFormatMatches[1]);\n            var chunkData = hexStringToUint8Array(chunkFormatMatches[2]);\n            \n            receivedChunks[chunkIndex] = chunkData;\n            \n            if (chunkIndex === expectedChunks) {\n                // Display the image when all expected chunks are received\n                var completeImage = new Uint8Array(expectedChunks * chunkData.length);\n                \n                for (var i = 0; i < expectedChunks; i++) { \n                    var chunk=receivedChunks[i]; completeImage.set(chunk, i * chunk.length); \n                }\n                display(completeImage); \n                \n                // Clear receivedChunks for the next image \n                receivedChunks={}; \n                \n                // Increment expectedChunks for the next image \n                expectedChunks=0; \n            }\n        } else { \n            // Non-chunked format: Just bytes to be converted to Uint8Array \n            var rawData=hexStringToUint8Array(msg); \n            display(rawData); \n        } \n    }\n\n\n    (function(scope) {\n        scope.$watch('msg.payload', function(msg) { // $watch fires each time the node is triggered in the flow\n        mess_arrived(msg);\n        return ;\n        // NUOVO MESSAGGIO ARRIVATO IN \"INPUT\": msg\n        if (first == 0) {\n            console.log(\"first\");\n            init_canvas() ;\n            first = 1;        \n        }\n        \n        pixel = hexStringToUint8Array(msg);\n        display(pixel);\n            \n    });\n\n\n\n})(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -3886,8 +3397,7 @@
         "links": [
             "e87b3b74df0bf879",
             "4ed927689e34b269",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 485,
         "y": 620,
@@ -3987,8 +3497,7 @@
         "links": [
             "e87b3b74df0bf879",
             "4ed927689e34b269",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 885,
         "y": 740,
@@ -4080,8 +3589,7 @@
         "y": 260,
         "wires": [
             [
-                "95cd540de2b12196",
-                "24107174129b8318"
+                "95cd540de2b12196"
             ]
         ]
     },
@@ -4119,21 +3627,6 @@
         "broker": "3c590ebc25e0b5cc",
         "x": 890,
         "y": 700,
-        "wires": []
-    },
-    {
-        "id": "24107174129b8318",
-        "type": "link out",
-        "z": "3215fe15d9aa44e7",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 345,
-        "y": 240,
         "wires": []
     },
     {
@@ -4322,8 +3815,7 @@
         "mode": "link",
         "links": [
             "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 905,
         "y": 240,
@@ -4337,8 +3829,7 @@
         "mode": "link",
         "links": [
             "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 635,
         "y": 460,
@@ -4474,8 +3965,7 @@
         "mode": "link",
         "links": [
             "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 735,
         "y": 1220,
@@ -4709,8 +4199,7 @@
         "mode": "link",
         "links": [
             "22c643a21305c065",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 525,
         "y": 1420,
@@ -4724,8 +4213,7 @@
         "mode": "link",
         "links": [
             "22c643a21305c065",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
+            "98a6f3a8838eb818"
         ],
         "x": 805,
         "y": 1040,

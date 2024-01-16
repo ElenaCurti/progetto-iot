@@ -8,9 +8,11 @@
 
 // Lista dei vari topic 
 // TODO se broker remoto: aggiungi un livello root per filtrare i "miei" messaggi
-const int NUM_SUB = 4;
+const int NUM_SUB = 6;
 const char* TOPIC_CONFIGURAZIONE = "my_devices/door/esp_nfc/config";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
+const char* TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT = "my_devices/global_config/rst_disconnect";
+const char* TOPIC_RESET_ESP = "my_devices/door/esp_nfc/reset";
 
 const char* TOPIC_STATO_PORTA = "my_devices/door/esp_nfc/led";
 const char* TOPIC_STATO_LETTORE_NFC = "my_devices/door/esp_nfc/nfc_reader_state";
@@ -63,7 +65,14 @@ void setup() {
   nfc_setup();
 
   // Setup comunicazione
-  const String elenco_subscription[NUM_SUB] = {TOPIC_CONFIGURAZIONE, TOPIC_STATO_PORTA, TOPIC_STATO_LETTORE_NFC,TOPIC_CONFIGURAZIONI_GLOBALI};
+  const String elenco_subscription[NUM_SUB] = {
+    TOPIC_CONFIGURAZIONE, 
+    TOPIC_STATO_PORTA, 
+    TOPIC_STATO_LETTORE_NFC,
+    TOPIC_CONFIGURAZIONI_GLOBALI, 
+    TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT, 
+    TOPIC_RESET_ESP
+    };
   mqtt_ble_setup("nfc", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
   
 
@@ -199,9 +208,13 @@ void messaggio_arrivato2(String topic, String payload_str) {
   // Controllo se il messaggio e' una configurazione
   Serial.println("[" + (String) topic + "] " + payload_str);
 
-  // Configurazione "globale" (per tutte le board): broker_mqtt
+  // Configurazione "globale" (per tutte le board): broker_mqtt, reset board se disconnessa
   if (((String) TOPIC_CONFIGURAZIONI_GLOBALI).equals(topic)){
     cambia_broker_mqtt(payload_str);
+  }
+
+  if (((String) TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT).equals(topic)){
+    cambia_reset_board_mqtt_disconnect(payload_str);  
   }
     
   if(((String) TOPIC_CONFIGURAZIONE).equals((String) topic)){
@@ -228,6 +241,13 @@ void messaggio_arrivato2(String topic, String payload_str) {
   if(((String) TOPIC_STATO_PORTA).equals((String) topic)){
     if (payload_str.equals("1")){
       apertura_porta_led_verde();
+    }
+  }
+
+  if (((String) TOPIC_RESET_ESP).equals(topic)){
+    
+    if (payload_str.equals("1")){
+        ESP.restart();
     }
   }
   
