@@ -5,10 +5,10 @@
 const char* LEVEL_TAG_AUTORIZZATI = "tag_autorizzati";
 const char* LEVEL_NUM_TENTATIVI_ERRATI = "num_tentativi_errati";
 const char* LEVEL_CHECK_TAG_LOCALLY = "check_tag_localmente";
-const char* LEVEL_DEEP_SLEEP = "deep_sleep";
+const char* LEVEL_SECONDI_BOARD_INATTIVA = "secondi_board_inattiva";
 const char* LEVEL_USA_BLUETOOTH = "use_bluetooth";
 
-String configurazioneBoardJSON(const String jsonString, String*& tag_autorizzati, int &num_tag_autorizzati, int* num_tentativi_errati, bool &check_tag_locally, bool &deep_sleep, int& usa_bluetooth) 
+String configurazioneBoardJSON(const String jsonString, String*& tag_autorizzati, int &num_tag_autorizzati, int* num_tentativi_errati, bool &check_tag_locally, int &secondi_board_inattiva, int& usa_bluetooth) 
 {
   Serial.println("------ Nuova configurazione -----");
 
@@ -66,13 +66,13 @@ String configurazioneBoardJSON(const String jsonString, String*& tag_autorizzati
     Serial.println((String) LEVEL_CHECK_TAG_LOCALLY + ": " + (String) check_tag_locally);
   }
 
-  if (doc.containsKey(LEVEL_DEEP_SLEEP)) {
-    deep_sleep = doc[LEVEL_DEEP_SLEEP];
-    Serial.println((String) LEVEL_DEEP_SLEEP + ": " + (String) deep_sleep);
+  if (doc.containsKey(LEVEL_SECONDI_BOARD_INATTIVA)) {
+    secondi_board_inattiva = (int) doc[LEVEL_SECONDI_BOARD_INATTIVA];
+    Serial.println((String) LEVEL_SECONDI_BOARD_INATTIVA + ": " + (String) secondi_board_inattiva);
   }
 
   if (doc.containsKey(LEVEL_USA_BLUETOOTH)) {
-    usa_bluetooth = (int)doc[LEVEL_USA_BLUETOOTH];
+    usa_bluetooth = (int) doc[LEVEL_USA_BLUETOOTH];
     Serial.println((String) LEVEL_USA_BLUETOOTH + ": " + (String) usa_bluetooth);
   }
   

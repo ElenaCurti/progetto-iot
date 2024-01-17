@@ -7,11 +7,11 @@
 // Variabili per mqtt
 const int NUM_SUB = 9;
 const char* TOPIC_FREQUENZA_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/freq_send_img";
-const char* TOPIC_DEEP_SLEEP = "my_devices/door/esp_cam/config/deep_sleep";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT = "my_devices/global_config/rst_disconnect";
 const char* TOPIC_TIMEOUT_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/timeout_send_img";
 
+const char* TOPIC_DEEP_SLEEP = "my_devices/door/esp_cam/deep_sleep";
 const char* TOPIC_CAMPANELLO_PREMUTO = "my_devices/door/esp_nfc/button" ;
 const char* TOPIC_INTRUSO = "my_devices/door/esp_nfc/intruder" ;
 const char* TOPIC_RESET_ESP = "my_devices/door/esp_cam/reset";
@@ -32,8 +32,9 @@ bool streaming_video_in_corso = false;
 // Configurazioni
 long frequenza_invio_immagini = -1;  
 long timeout_invio_immagini = 30*1000;  //Dopo 30 sec da quando e' stato premuto il campanello smetto di inviare il video ; -1 per continuare "per sempre" 
-bool deep_sleep = false;  // TODO
 
+// Configurazione del deep sleep
+#define uS_TO_S_FACTOR 1000000
 
 void setup() {
   Serial.begin(115200); // TODO serial forse e' considerata quella del BLE ?
@@ -56,6 +57,8 @@ void setup() {
     TOPIC_INTRUSO};
   mqtt_ble_setup("cam", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
   gestisciComunicazioneIdle();
+
+  
 
 }
 bool first_pic = true;
@@ -144,11 +147,39 @@ void messaggio_arrivato2(String topic, String payload_str){
     Serial.println("Timeout video streaming: " + (String) timeout_invio_immagini);
   
   } else if (((String) TOPIC_DEEP_SLEEP).equals(topic)){
-    if (payload_str.equals("1"))
-        deep_sleep = true;
-    else 
-        deep_sleep = false;
-    Serial.println("Deep sleep: " + (String) deep_sleep);
+    // Setto la wake up source del deep 
+    Serial.print("[Deep sleep] Abilito timer wake up...");
+    bool risultato = false;
+    int spaceIndex = payload_str.indexOf(' ');
+    if (spaceIndex == -1 ){
+      Serial.println("Tempo specificato NON valido!");
+      return;
+    }
+    int num = payload_str.substring(0, spaceIndex).toInt();
+    char unita_tempo = payload_str.charAt(spaceIndex + 1);
+
+    switch (unita_tempo) {
+      case 's':
+          risultato = esp_sleep_enable_timer_wakeup(num*uS_TO_S_FACTOR) == ESP_OK;
+          break;
+      case 'm':
+          risultato = esp_sleep_enable_timer_wakeup(60*num*uS_TO_S_FACTOR) == ESP_OK;
+          break;
+      case 'h':
+          risultato = esp_sleep_enable_timer_wakeup(60*60*num*uS_TO_S_FACTOR) == ESP_OK;
+          break;
+    }
+
+    if (!risultato){
+      Serial.println("Tempo specificato NON valido!");
+      return;
+    }
+    Serial.println("ok");
+
+  
+    Serial.println("Deep sleep attivo");
+    esp_deep_sleep_start();
+
   
   
   } else if (  ((String) TOPIC_CAMPANELLO_PREMUTO).equals(topic) || ((String) TOPIC_RICHIESTA_INVIO_IMMAGINI).equals(topic)){

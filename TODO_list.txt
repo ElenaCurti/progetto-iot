@@ -1,6 +1,5 @@
 ./CampanelloFotocamera_Esp32/src/camera_ov7670.cpp:        while (fotocamera == NULL){ // TODO non bloccante
 ./CampanelloFotocamera_Esp32/src/main.cpp:const char* TOPIC_WILL_MESSAGE = "door/esp_cam/state";  // TODO migliora con orario -> Forse ok
-./CampanelloFotocamera_Esp32/src/main.cpp:bool deep_sleep = false;  // TODO
 
 
 (Bluetooth:
@@ -17,7 +16,6 @@ NodeRed:
 
 ./CampanelloNFC_NodeMCU/src/configurazione_board.cpp:    // TODO check con array vuoto  -> Forse ok
 ./CampanelloNFC_NodeMCU/src/configurazione_board.cpp:    // TODO eventualemente metterlo nella forma:   -> non penso lo faro'
-./CampanelloNFC_NodeMCU/src/main.cpp:      inviaMessaggio(TOPIC_TAG_STRISCIATO, tag_letto);  // TODO aggiungi tipo tag_letto + "e' entrato"/ non e' entrato
 ./CampanelloNFC_NodeMCU/src/nfc_nodemcu.cpp:    // TODO aggiungi tipo max 5 sec di ricerca  -> metti lettura NFC nel secondo loop
 
 

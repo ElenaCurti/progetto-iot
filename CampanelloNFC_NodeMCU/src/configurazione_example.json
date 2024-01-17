@@ -5,6 +5,6 @@
     ],
     "num_tentativi_errati": [3, 5], 
     "check_tag_localmente": true,
-    "deep_sleep": false, 
-    "use_bluetooth": 2
+    "use_bluetooth": 2, 
+    "secondi_board_inattiva": 60
 }

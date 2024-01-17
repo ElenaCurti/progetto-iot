@@ -8,7 +8,7 @@
     #endif
 #endif
 
-// #define WIFI_CASA
+#define WIFI_CASA
 
 void setup_wifi();
 bool connessione_wifi();
