@@ -5,8 +5,8 @@
 /*
 -------------------------------------------------
 Wiring:
-  SDA (filo bianco) -> pin 17 (Serial2 - RX2)
-  SCL (filo blu)    -> pin 16 (Serial2 - TX2) 
+  SCL (filo blu)       -> pin 17 (Serial2 - TX2)
+  SDA (filo bianco)    -> pin 16 (Serial2 - RX2) 
 (Serial1 provoca reset)
 -------------------------------------------------
 Valori letti:

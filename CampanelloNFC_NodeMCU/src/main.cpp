@@ -15,23 +15,23 @@
 
 // Lista dei vari topic 
 const int NUM_SUB = 7;  // Aggiorna anche array
-const char* TOPIC_CONFIGURAZIONE = "my_devices/door/esp_nfc/config";
+const char* TOPIC_CONFIGURAZIONE = "my_devices/esp_nfc/config";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT = "my_devices/global_config/rst_disconnect";
-const char* TOPIC_RESET_ESP = "my_devices/door/esp_nfc/reset";
+const char* TOPIC_RESET_ESP = "my_devices/esp_nfc/reset";
 
-const char* TOPIC_DEEP_SLEEP = "my_devices/door/esp_nfc/deep_sleep"; 
-const char* TOPIC_STATO_PORTA = "my_devices/door/esp_nfc/led";
-const char* TOPIC_STATO_LETTORE_NFC = "my_devices/door/esp_nfc/nfc_reader_state";
+const char* TOPIC_DEEP_SLEEP = "my_devices/esp_nfc/deep_sleep"; 
+const char* TOPIC_STATO_PORTA = "my_devices/esp_nfc/led";
+const char* TOPIC_STATO_LETTORE_NFC = "my_devices/esp_nfc/nfc_reader_state";
 
 
-const char* TOPIC_WILL_MESSAGE = "my_devices/door/esp_nfc/state";
-const char* TOPIC_BUTTON_PREMUTO = "my_devices/door/esp_nfc/button" ;
-const char* TOPIC_TAG_STRISCIATO = "my_devices/door/esp_nfc/tag_swiped";
-const char* TOPIC_INTRUSO = "my_devices/door/esp_nfc/intruder"; 
-const char* TOPIC_PUBLISH_STATO_NFC = "my_devices/door/esp_nfc/reader_is_blocked";
-const char* TOPIC_ERRORE = "my_devices/door/esp_nfc/errors"; 
-const char* TOPIC_PUB_STATO_NFC_E_TENTATIVI = "my_devices/door/esp_nfc/nfc_attempts";
+const char* TOPIC_WILL_MESSAGE = "my_devices/esp_nfc/state";
+const char* TOPIC_BUTTON_PREMUTO = "my_devices/esp_nfc/button" ;
+const char* TOPIC_TAG_STRISCIATO = "my_devices/esp_nfc/tag_swiped";
+const char* TOPIC_INTRUSO = "my_devices/esp_nfc/intruder"; 
+// const char* TOPIC_PUBLISH_STATO_NFC = "my_devices/esp_nfc/reader_is_blocked";
+const char* TOPIC_ERRORE = "my_devices/esp_nfc/errors"; 
+const char* TOPIC_PUB_STATO_NFC_E_TENTATIVI = "my_devices/esp_nfc/nfc_attempts";
 
 
 // Lista dei parametri configurabili, inizialmente settati con valori di default
@@ -41,6 +41,8 @@ int config_num_tentativi_errati_permessi[2] = {3,5}; // Dopo 3 tentativi errati 
 bool check_tag_locally = true;  // Se true il controllo del tag viene fatto dalla board
 int secondi_board_inattiva = -1;  // La board e' considerata "inattiva" dopo un tot di secondi, settabili qui e configurabili. Se =-1 la board non va in deep sleep
 
+unsigned long last_button_premuto_or_tag_letto = millis();  // Per inattivita della board
+
 // Varibili per controllo campanello premuto
 #define PIN_CAMPANELLO GPIO_NUM_25
 bool stato_campanello = false;              // True se campanello premuto; false altrimenti
@@ -49,8 +51,7 @@ void check_campanello_premuto(void* pvParameters);
 
 // Variabili/funzioni usati per il controllo del lettore nfc
 bool isTagAuthorized(const String& tag);
-int num_tentativi_errati_fatti = 0; 
-  /* 
+/* 
     Se num_tentativi_errati_fatti=0 e c'e' il deep sleep (secondi_board_inattiva!=-1) -> supponiamo 
     che l'utente non autorizzato strisci per tante volte un tag non autorizzato -> il lettore si blocca.
     L'utente non autorizzato potrebbe aspettare che la board vada in deep sleep e poi "svegliarla" 
@@ -61,18 +62,15 @@ int num_tentativi_errati_fatti = 0;
     Soluzione alternativa (se si vuole il deep sleep) -> settare num_tentativi_errati_fatti uguale a
     config_num_tentativi_errati_permessi[1]+1  e aspettare che il lettore venga sbloccato dal pc
   */
-unsigned long ultimo_tentativo_errato = -1 ;
+RTC_DATA_ATTR int num_tentativi_errati_fatti = 0; 
+  
+unsigned long ultimo_tentativo_errato = -1 ;  // Orario in cui l'utente ha strisciato l'ultimo tag sbagliato
 const int SECONDI_BLOCCO_READER = 30;
 bool isNFCReaderBloccato();
 
-  /*
-  // bool nfc_reader_is_bloccato = false; 
-    Il reader nfc e' inizialmente attivo. Settando qui true (=nfc bloccato), nel loop,
-    la prima volta che vado a leggere lo stato del lettore risultera' attivo, e quindi 
-    diverso da quello qui impostato e quindi pubblichero' che e' attivo
-  */ 
+ 
 
-unsigned long last_button_premuto_or_tag_letto = millis();
+
 
 // Simulatore apertura porta
 #define PIN_LED_VERDE 32
@@ -99,7 +97,7 @@ void setup() {
     TOPIC_DEEP_SLEEP
   };
   mqtt_ble_setup("nfc", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
-  
+  mqtt_bt_loop();
 
 
   // Setup campanello + Creo un task per la lettura del button del campanello, per evitare ritardi
@@ -158,7 +156,7 @@ void tentativoErrato(String tag_letto){
 
 void loop() {
 
-  gestisciComunicazioneIdle();
+  mqtt_bt_loop();
 
   // Lettura NFC
   bool stato_attuale_nfc_reader = isNFCReaderBloccato();
@@ -256,7 +254,8 @@ void check_wakeup_reason(){
   wakeup_reason = esp_sleep_get_wakeup_cause();
   if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT0){
     Serial.println("Board risvegliata al click del campanello");
-    // La board si e' svegliata per il click del campanello -> segno il campanello come premuto, in modo da inviare il messaggio con MQTT
+    // La board si e' svegliata per il click del campanello -> segno il campanello come premuto, in modo da inviare il messaggio "campanello premuto"
+    delay(2000);
     stato_campanello = true;
   }
   

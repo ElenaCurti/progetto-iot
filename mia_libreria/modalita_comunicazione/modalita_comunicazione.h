@@ -1,7 +1,7 @@
 
 void mqtt_ble_setup(String device_name, const String lista_topic_subscription[], int num_topic_subscription, const String topic_will_message);
 
-void gestisciComunicazioneIdle();
+void mqtt_bt_loop();
 
 void inviaMessaggio(String topic, String messaggio, int size_messaggio);
 void inviaMessaggio(String topic, String messaggio, bool retain);

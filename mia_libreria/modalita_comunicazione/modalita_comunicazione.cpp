@@ -5,10 +5,6 @@
 #include "BluetoothSerial.h"
 #include <IPAddress.h>
 
-// TODO cambia tutto in CamelCase o snake
-
-
-
 // Nome BT e MQTT del device + Elenco dei topic a cui la board e' sottoscritta
 String device_name_g ="";
 String* lista_topic_subscription_g;
@@ -47,10 +43,12 @@ bool bluetooth_is_acceso = false;
 void accendi_blt();
 void spegni_blt();
 
-int num_tentativi_connessione_mqtt = 0 ; // TODO stessa cosa per  fallimento nel mandare immagini
-int num_tentativi_connessione_wifi = 0 ; 
-int max_tentativi_reconnect_prima_del_restart = -1; // TODO metti a 20
-int TENTATIVI_DISCONNESSIONE_MQTT_POI_ACCENDI_BT = 3;
+int num_tentativi_connessione_mqtt = 0 ; 
+int num_tentativi_connessione_wifi = 0 ;
+int num_tentativi_falliti_send_messaggio = 0;  
+int max_tentativi_reconnect_prima_del_restart = 20; // TODO metti a 20
+const int TENTATIVI_DISCONNESSIONE_MQTT_POI_ACCENDI_BT = 3;
+const int TENTATIVI_FALLITI_SEND_IMMAGINE = 5;
 
 // Variabile per il deep sleep
 // bool deep_sleep = true;
@@ -113,7 +111,7 @@ void mqtt_ble_setup(String device_name, const String lista_topic_subscription[],
 }
 
 
-void gestisciComunicazioneIdle(){
+void mqtt_bt_loop(){
 
     // Serial.print("gc ");
     
@@ -195,6 +193,13 @@ void gestisciComunicazioneIdle(){
         Serial.println("[MQTT] Board disconnessa da troppo, faccio il restart");
         ESP.restart();
     }
+
+    
+    if (num_tentativi_falliti_send_messaggio >= TENTATIVI_FALLITI_SEND_IMMAGINE){
+        Serial.println("Troppi tentativi errati per l'invio di un messaggi grandi. Reset.. ");
+        ESP.restart();
+    }
+
 }
 
 // ***************** MQTT *************************
@@ -243,6 +248,7 @@ void inviaBigMessaggio(String &topic, String &messaggio, int size_messaggio){
             
             if (!mqtt_client.connected()){
                 Serial.println("\n[MQTT] ERRORE: disconnesso durante la pubblicazione! ");
+                num_tentativi_falliti_send_messaggio++;
                 Serial.print(mqtt_client.endPublish());
                 return;
 
@@ -254,7 +260,13 @@ void inviaBigMessaggio(String &topic, String &messaggio, int size_messaggio){
         }
         // Serial.print(mqtt_client.write((uint8_t *)messaggio.c_str(), messaggio.length()));
         Serial.print("b");
-        Serial.print(mqtt_client.endPublish());
+        int res = mqtt_client.endPublish();
+        if (res == 1)
+            num_tentativi_falliti_send_messaggio = 0;
+        else 
+            num_tentativi_falliti_send_messaggio++;
+        
+        Serial.print(res);
     
     
     } else if (SerialBT.hasClient()) {
@@ -283,7 +295,13 @@ void inviaBigMessaggio(String &topic, String &messaggio, int size_messaggio){
 
         risultato_tot += SerialBT.println();*/
 
-        Serial.print(risultato_tot);
+        // Size del messaggio + size del topic + 2 parentesi + 1 spazio + 1 new line + \0
+        if (risultato_tot == size_messaggio+topic.length() + 5)
+            num_tentativi_falliti_send_messaggio = 0;
+        else 
+            num_tentativi_falliti_send_messaggio++;
+
+        Serial.print((String) risultato_tot ); //+ "Ideale: " + (String)size_messaggio+topic.length());
 
     } else 
         Serial.println("board disconnessa");

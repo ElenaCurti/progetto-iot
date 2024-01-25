@@ -3,23 +3,23 @@
 #include "camera_ov7670.h"  
 #include <PubSubClient.h>
 #include <modalita_comunicazione.h>
+#include "configurazione_board.h"
 
 // Variabili per mqtt
-const int NUM_SUB = 9;
-const char* TOPIC_FREQUENZA_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/freq_send_img";
+const int NUM_SUB = 8;
+const char* TOPIC_CONFIGURAZIONI_CAMERA = "my_devices/esp_cam/config";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI = "my_devices/global_config/change_broker";
 const char* TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT = "my_devices/global_config/rst_disconnect";
-const char* TOPIC_TIMEOUT_INVIO_IMMAGINI = "my_devices/door/esp_cam/config/timeout_send_img";
 
-const char* TOPIC_DEEP_SLEEP = "my_devices/door/esp_cam/deep_sleep";
-const char* TOPIC_CAMPANELLO_PREMUTO = "my_devices/door/esp_nfc/button" ;
-const char* TOPIC_INTRUSO = "my_devices/door/esp_nfc/intruder" ;
-const char* TOPIC_RESET_ESP = "my_devices/door/esp_cam/reset";
-const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "my_devices/door/esp_cam/request_send_img";
+const char* TOPIC_DEEP_SLEEP = "my_devices/esp_cam/deep_sleep";
+const char* TOPIC_CAMPANELLO_PREMUTO = "my_devices/esp_nfc/button" ;
+const char* TOPIC_INTRUSO = "my_devices/esp_nfc/intruder" ;
+const char* TOPIC_RESET_ESP = "my_devices/esp_cam/reset";
+const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "my_devices/esp_cam/request_send_img";
 
 
-const char* TOPIC_WILL_MESSAGE = "my_devices/door/esp_cam/state";  // TODO migliora con orario
-const char* TOPIC_PUBLISH_IMMAGINE = "my_devices/door/esp_cam/image"; 
+const char* TOPIC_WILL_MESSAGE = "my_devices/esp_cam/state";  // TODO migliora con orario
+const char* TOPIC_PUBLISH_IMMAGINE = "my_devices/esp_cam/image"; 
 // char* hexArray;
 
 // Variabili per BLE
@@ -30,14 +30,14 @@ unsigned long previousMillisStreamingVideo = 0;
 bool streaming_video_in_corso = false;
 
 // Configurazioni
-long frequenza_invio_immagini = -1;  
-long timeout_invio_immagini = 30*1000;  //Dopo 30 sec da quando e' stato premuto il campanello smetto di inviare il video ; -1 per continuare "per sempre" 
+long frequenza_invio_immagini = -1;     // Millisec distanza invio immagini (per video in streaming); -1 per mandare solo 1 foto 
+long timeout_invio_immagini = 30;       // Dopo 30 sec da quando e' stato premuto il campanello smetto di inviare il video ; -1 per continuare "per sempre" 
 
 // Configurazione del deep sleep
 #define uS_TO_S_FACTOR 1000000
 
 void setup() {
-  Serial.begin(115200); // TODO serial forse e' considerata quella del BLE ?
+  Serial.begin(115200); 
 
   
 
@@ -46,21 +46,21 @@ void setup() {
     
   // Controllo MQTT e Bluetooth
   const String elenco_subscription[NUM_SUB] = {
-    TOPIC_FREQUENZA_INVIO_IMMAGINI,
+    TOPIC_CONFIGURAZIONI_CAMERA,
     TOPIC_DEEP_SLEEP,
     TOPIC_CAMPANELLO_PREMUTO, 
     TOPIC_RESET_ESP, 
     TOPIC_RICHIESTA_INVIO_IMMAGINI, 
-    TOPIC_TIMEOUT_INVIO_IMMAGINI, 
     TOPIC_CONFIGURAZIONI_GLOBALI, 
     TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT, 
     TOPIC_INTRUSO};
   mqtt_ble_setup("cam", elenco_subscription, NUM_SUB, TOPIC_WILL_MESSAGE);
-  gestisciComunicazioneIdle();
+  mqtt_bt_loop();
 
   
 
 }
+
 bool first_pic = true;
 void take_pic_and_send(){
   Serial.print("Faccio foto...") ;
@@ -96,12 +96,12 @@ void take_pic_and_send(){
   Serial.println("\tTempo impiegato: " + (String) (millis() - tempo_prec) + " ms");
 }
 
-void Bluetooth_handle();
 
-unsigned int last_mqtt_loop_called = -1;
+
+
 void loop() {
   
-  gestisciComunicazioneIdle();
+  mqtt_bt_loop();
 
   // Se devo trasmettere il video in streaming, non e' scaduto il timeout e sono 
   // passati frequenza_invio_immagini millisec dall'ultimo invio dell'immaigne, allroa ne mando un'altra
@@ -128,26 +128,25 @@ void messaggio_arrivato2(String topic, String payload_str){
   // Configurazione "globale" (per tutte le board): broker_mqtt, abilita/disabilita reset board se sconnessa da broker mqtt
   if (((String) TOPIC_CONFIGURAZIONI_GLOBALI).equals(topic)){
     cambia_broker_mqtt(payload_str);
-  
   }
 
   if (((String) TOPIC_CONFIGURAZIONI_GLOBALI_RESET_MQTT_DISCONNECT).equals(topic)){
     cambia_reset_board_mqtt_disconnect(payload_str);  
   }
 
-  
-  
-  // Configurazioni "locali": frequenza invio immagini, deep sleep, timeout invio immagini
-  if (((String) TOPIC_FREQUENZA_INVIO_IMMAGINI).equals(topic)){
-    frequenza_invio_immagini = atoi(payload_str.c_str());
+
+  // Configurazioni "locali": frequenza invio immagini, timeout invio immagini, usa BT
+  if (((String) TOPIC_CONFIGURAZIONI_CAMERA).equals(topic)) {
     Serial.println("Distanza invio immagini: " + (String) frequenza_invio_immagini);
-  
-  } else if (((String) TOPIC_TIMEOUT_INVIO_IMMAGINI).equals(topic)){
-    timeout_invio_immagini = atoi(payload_str.c_str());
-    Serial.println("Timeout video streaming: " + (String) timeout_invio_immagini);
+    
+    int usa_bluetooth = -1;
+    String err = configurazioneCamJSON(payload_str, frequenza_invio_immagini, timeout_invio_immagini ,usa_bluetooth) ;
+    if (usa_bluetooth!=-1)
+      usa_bluetooth_changed(usa_bluetooth);
+    
   
   } else if (((String) TOPIC_DEEP_SLEEP).equals(topic)){
-    // Setto la wake up source del deep 
+    // Setto la wake up source del deep sleep
     Serial.print("[Deep sleep] Abilito timer wake up...");
     bool risultato = false;
     int spaceIndex = payload_str.indexOf(' ');
