@@ -46,7 +46,7 @@ void spegni_blt();
 int num_tentativi_connessione_mqtt = 0 ; 
 int num_tentativi_connessione_wifi = 0 ;
 int num_tentativi_falliti_send_messaggio = 0;  
-int max_tentativi_reconnect_prima_del_restart = 20; // TODO metti a 20
+int max_tentativi_reconnect_prima_del_restart = -1; // TODO metti a 20
 const int TENTATIVI_DISCONNESSIONE_MQTT_POI_ACCENDI_BT = 3;
 const int TENTATIVI_FALLITI_SEND_IMMAGINE = 5;
 

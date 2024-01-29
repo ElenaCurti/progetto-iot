@@ -18,8 +18,8 @@ const char* TOPIC_RESET_ESP = "my_devices/esp_cam/reset";
 const char* TOPIC_RICHIESTA_INVIO_IMMAGINI = "my_devices/esp_cam/request_send_img";
 
 
-const char* TOPIC_WILL_MESSAGE = "my_devices/esp_cam/state";  // TODO migliora con orario
-const char* TOPIC_PUBLISH_IMMAGINE = "my_devices/esp_cam/image"; 
+const char* TOPIC_WILL_MESSAGE = "my_devices/esp_cam/state"; 
+const char* TOPIC_PUBLISH_IMMAGINE = "my_devices/esp_cam/image";  
 // char* hexArray;
 
 // Variabili per BLE

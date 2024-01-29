@@ -1,6 +1,6 @@
 [
     {
-        "id": "e033c8a02dcd63b3",
+        "id": "a4916c1a4f7481d5",
         "type": "tab",
         "label": "Comunicazione2",
         "disabled": false,
@@ -8,7 +8,7 @@
         "env": []
     },
     {
-        "id": "f42f0c6ac0c908c0",
+        "id": "b5a831fb647ed2bb",
         "type": "tab",
         "label": "NFC",
         "disabled": false,
@@ -16,7 +16,7 @@
         "env": []
     },
     {
-        "id": "3215fe15d9aa44e7",
+        "id": "6295ce559f308453",
         "type": "tab",
         "label": "Campanello ",
         "disabled": false,
@@ -24,7 +24,7 @@
         "env": []
     },
     {
-        "id": "8b4f62e2713401d0",
+        "id": "4dded24dd3436822",
         "type": "tab",
         "label": "Amministratore",
         "disabled": false,
@@ -32,38 +32,15 @@
         "env": []
     },
     {
-        "id": "3c590ebc25e0b5cc",
-        "type": "mqtt-broker",
-        "name": "BrokerUsato",
-        "broker": "192.168.43.252",
-        "port": "1883",
-        "clientid": "cam-nodered",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
+        "id": "53020d40f250289c",
+        "type": "ui_tab",
+        "name": "Home3",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
     },
     {
-        "id": "1882cf541cd0b971",
+        "id": "8202e2ad2a93da8d",
         "type": "ui_base",
         "theme": {
             "name": "theme-light",
@@ -84,8 +61,7 @@
                 "name": "Untitled Theme 1",
                 "default": "#4B7930",
                 "baseColor": "#4B7930",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "reset": false
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
             },
             "themeState": {
                 "base-color": {
@@ -161,6 +137,48 @@
         }
     },
     {
+        "id": "99685c19efa18096",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "53020d40f250289c",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3c590ebc25e0b5cc",
+        "type": "mqtt-broker",
+        "name": "BrokerUsato",
+        "broker": "broker.mqtt.cool",
+        "port": "1883",
+        "clientid": "elenaId-nodered",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
         "id": "6778e3a8648143cc",
         "type": "ui_tab",
         "name": "Home",
@@ -213,7 +231,32 @@
         "className": ""
     },
     {
-        "id": "cd718b65b0c0bc62",
+        "id": "7c00691034cd17f7",
+        "type": "coap-server",
+        "name": "192.168.43.252",
+        "port": "5683",
+        "ipv6": false
+    },
+    {
+        "id": "ac37753663974bd5",
+        "type": "ble-service",
+        "name": "Bluetooth Service",
+        "uuid": "9abceb75-8e6d-42ce-9529-fa8a03358a25 "
+    },
+    {
+        "id": "19f194c987f1e198",
+        "type": "ble-config",
+        "name": "nfc",
+        "retryLimit": "10",
+        "infoVendor": "",
+        "infoVendorType": "str",
+        "infoName": "",
+        "infoNameType": "str",
+        "infoSerial": "",
+        "infoSerialType": "str"
+    },
+    {
+        "id": "ae2eabef23af1bfc",
         "type": "ui_group",
         "name": "Connessioni Board",
         "tab": "6778e3a8648143cc",
@@ -224,9 +267,9 @@
         "className": ""
     },
     {
-        "id": "a3b79a265996b69b",
+        "id": "4de3d97ba91d4e79",
         "type": "inject",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Variabili iniziali",
         "props": [
             {
@@ -244,16 +287,16 @@
         "y": 120,
         "wires": [
             [
-                "ca2bf5c7e0484f63"
+                "50975563a07f6997"
             ]
         ]
     },
     {
-        "id": "ca2bf5c7e0484f63",
+        "id": "50975563a07f6997",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Set variabili iniziali",
-        "func": "// if (!flow.get(\"old_comunicazione_cam\") == undefined)\n//     return;\n\n\n\nflow.set(\"old_comunicazione_cam\", \"irraggiungibile\");\nflow.set(\"old_comunicazione_nfc\", \"irraggiungibile\");\nflow.set(\"old_comunicazione_nodered\", \"irraggiungibile\");\n\nflow.set(\"comunicazione_cam\",\"irraggiungibile\");\nflow.set(\"comunicazione_nfc\", \"irraggiungibile\");\nflow.set(\"comunicazione_nodered\", \"irraggiungibile\");\n\nif (flow.get(\"state_mqtt_cam\") == \"1\")\n    flow.set(\"comunicazione_cam\",\"mqtt\");\n\n\nif (flow.get(\"state_mqtt_nfc\") == \"1\")\n    flow.set(\"comunicazione_nfc\",\"mqtt\");\n\nflow.set(\"subs_nfc\", [\n    \"my_devices/door/esp_nfc/config\", \n    \"my_devices/door/esp_nfc/led\",\n    \"my_devices/door/esp_nfc/nfc_reader_state\", \n    \"my_devices/global_config/change_broker\"]);\n\n\nflow.set(\"subs_cam\", [\n    \"my_devices/door/esp_cam/config/freq_send_img\", \n    \"my_devices/door/esp_cam/deep_sleep\",\n    \"my_devices/door/esp_cam/config/timeout_send_img\",\n    \"my_devices/door/esp_nfc/button\",\n    \"my_devices/door/esp_cam/reset\",\n    \"my_devices/door/esp_cam/request_send_img\", \n    \"my_devices/global_config/change_broker\"])",
+        "func": "// if (!flow.get(\"old_comunicazione_cam\") == undefined)\n//     return;\n\n\n\nflow.set(\"old_comunicazione_cam\", \"irraggiungibile\");\nflow.set(\"old_comunicazione_nfc\", \"irraggiungibile\");\nflow.set(\"old_comunicazione_nodered\", \"irraggiungibile\");\n\nflow.set(\"comunicazione_cam\",\"irraggiungibile\");\nflow.set(\"comunicazione_nfc\", \"irraggiungibile\");\nflow.set(\"comunicazione_nodered\", \"irraggiungibile\");\n\nif (flow.get(\"state_mqtt_cam\") == \"1\")\n    flow.set(\"comunicazione_cam\",\"mqtt\");\n\n\nif (flow.get(\"state_mqtt_nfc\") == \"1\")\n    flow.set(\"comunicazione_nfc\",\"mqtt\");\n\nflow.set(\"subs_nfc\", [\n    \"my_devices/esp_nfc/config\", \n    \"my_devices/esp_nfc/led\",\n    \"my_devices/esp_nfc/nfc_reader_state\", \n    \"my_devices/global_config/change_broker\"]);\n\n\nflow.set(\"subs_cam\", [\n    \"my_devices/esp_cam/config/freq_send_img\", \n    \"my_devices/esp_cam/deep_sleep\",\n    \"my_devices/esp_cam/config/timeout_send_img\",\n    \"my_devices/esp_nfc/button\",\n    \"my_devices/esp_cam/reset\",\n    \"my_devices/esp_cam/request_send_img\", \n    \"my_devices/global_config/change_broker\"])",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -267,25 +310,25 @@
         ]
     },
     {
-        "id": "e12ef72093a355ac",
+        "id": "616f600cbd196818",
         "type": "status",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Status connessione broker",
         "scope": [
-            "8e91a3a36fdc835c"
+            "14f850be6f22b7b1"
         ],
         "x": 390,
         "y": 260,
         "wires": [
             [
-                "20caac218c202fd6"
+                "f2bf050b67754c7a"
             ]
         ]
     },
     {
-        "id": "20caac218c202fd6",
+        "id": "f2bf050b67754c7a",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Check connessione broker + eventualmente inizia BT",
         "func": "// Status viene chiamato ogni 17 secondi\nvar stato = msg.status.text;\nvar parts = stato.split(\".\");\nvar lastPart = parts[parts.length - 1];\n\nvar old_com = flow.get(\"comunicazione_nodered\");\n\nif (lastPart == \"connected\" ){\n    msg.payload = \"Connesso\";\n\n    // Se nodered riesce a collegarsi al broker mqtt, setto la comuniczione a \"mqtt\"\n    if (old_com == undefined || old_com != \"mqtt\") {\n        flow.set(\"comunicazione_nodered\", \"mqtt\");\n    }\n\n}else {\n    msg.payload = \"Disconnesso\";\n    // Se nodered NON riesce a collegarsi al broker mqtt, setto la comuniczione a \"bt\"\n    if (old_com == undefined || old_com != \"bt\"){\n        flow.set(\"comunicazione_nodered\", \"bt\");\n\n        if (flow.get(\"comunicazione_cam\") !=\"bt_connesso\")\n            flow.set(\"comunicazione_cam\", \"bt\");\n    \n        if (flow.get(\"comunicazione_nfc\") !=\"bt_connesso\")\n            flow.set(\"comunicazione_nfc\", \"bt\");\n    \n    }\n\n}\n\nreturn msg;",
         "outputs": 1,
@@ -301,9 +344,9 @@
         ]
     },
     {
-        "id": "8e91a3a36fdc835c",
+        "id": "14f850be6f22b7b1",
         "type": "mqtt in",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "",
         "topic": "my_devices/#",
         "qos": "0",
@@ -320,10 +363,10 @@
         ]
     },
     {
-        "id": "5fc506fa5056c6fc",
+        "id": "2075483c54e6db7a",
         "type": "ui_text",
-        "z": "e033c8a02dcd63b3",
-        "group": "cd718b65b0c0bc62",
+        "z": "a4916c1a4f7481d5",
+        "group": "ae2eabef23af1bfc",
         "order": 8,
         "width": 0,
         "height": 0,
@@ -336,14 +379,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1650,
-        "y": 600,
+        "x": 1190,
+        "y": 640,
         "wires": []
     },
     {
-        "id": "ab8f8c536a9cf33a",
+        "id": "c212f69baed6e861",
         "type": "inject",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Aggiorna connessioni boards",
         "props": [
             {
@@ -365,14 +408,14 @@
         "y": 640,
         "wires": [
             [
-                "5c1076c7e8aebc56"
+                "5eeba3dff1c40dec"
             ]
         ]
     },
     {
-        "id": "5c1076c7e8aebc56",
+        "id": "5eeba3dff1c40dec",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Check CAM stato cambiato + upate dashboard",
         "func": "\n\nmsg.payload = flow.get(\"comunicazione_cam\");\nvar old = flow.get(\"old_comunicazione_cam\");\nif (msg.payload != old){\n    // Comunicazione cam e' stata cambiata\n    // TODO\n\n    /*\n    \n    Possibili stati: irraggiungibile, mqtt, bt\n\n    ------  QUANDO PASSO DA UNO STATO A UN ALTRO? --------\n        Passo a irraggiungibile:\n            -> all'inizio di node-red\n            -> se lo script python e' terminato ed ero nello stato bt\n        Passo a mqtt:\n            -> se da mqtt state arriva 1\n        Passo a bt:\n            -> se da mqtt state arriva 0 e stavo comunicando con mqtt o ero irraggiungibile\n            -> se lo script python stampa \"Connesso\"\n    \n\n    ------- COSA SUCCEDE SE SI PASSA DA UNO STATO A UN ALTRO? --------\n        Se passo da irraggiungibile a mqtt -> nulla */\n\n   \n    //  Se passo da irraggiungibile a bt -> nulla\n    if(old == \"irraggiungibile\" && msg.payload == \"bt\"){\n        msg.da_fare = \"start_sript_bt\";\n    }\n        \n    // Se passo da mqtt a irraggiungibile -> passo a bt -> start script\n    if (old == \"mqtt\" && msg.payload == \"irraggiungibile\"){\n        node.log(\"2\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_cam\", \"bt\");\n    }\n    \n    // Se passo da mqtt a bt -> start script \n    if (old == \"mqtt\" && msg.payload == \"bt\") {\n        node.log(\"3\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_cam\", \"bt\");\n    }\n\n\n    //    Se passo da bt a irraggiungibile -> la riconnessione verra' riprovata dopo al max 10 sec\n    // if (old == \"bt\" && msg.payload == \"irraggiungibile\"){\n        // node.log(\"6\");\n        // flow.set(\"comunicazione_cam\", \"provo_bt\");\n    // }\n\n    // Se passo da bt a mqtt -> killo script\n    if (old == \"bt\" && msg.payload == \"mqtt\"){\n        node.log(\"7\");\n        msg.da_fare = \"kill_sript_bt\";\n    }\n    \n    \n    \n    flow.set(\"old_comunicazione_cam\", msg.payload);\n}   \n\nif (msg.payload != \"mqtt\" && msg.payload != \"bt_connesso\") \n    msg.payload = \"irraggiungibile\";\n    \n\nreturn msg;",
         "outputs": 1,
@@ -385,17 +428,16 @@
         "y": 640,
         "wires": [
             [
-                "159fe82693847afe",
-                "437c07cf654914a2"
+                "f76f41b47040d1e9"
             ]
         ]
     },
     {
-        "id": "74e43deaab9a01fe",
+        "id": "dca59b0ec11997cc",
         "type": "mqtt in",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "",
-        "topic": "my_devices/door/esp_cam/state",
+        "topic": "my_devices/esp_cam/state",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -407,14 +449,14 @@
         "y": 560,
         "wires": [
             [
-                "0b0da21d36ddc122"
+                "2a285eab79efc8fa"
             ]
         ]
     },
     {
-        "id": "0b0da21d36ddc122",
+        "id": "2a285eab79efc8fa",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Passa a \"mqtt\" o \"bt\"",
         "func": "flow.set(\"state_mqtt_cam\", msg.payload);\n\nif (msg.payload == \"1\")\n    flow.set(\"comunicazione_cam\", \"mqtt\");\nelse if (flow.get(\"comunicazione_cam\") != \"bt\") \n    // Se board si scollega da mqtt e non sto comunicando con bt, ritento la comunicazione bt\n    flow.set(\"comunicazione_cam\", \"bt\");\nreturn msg;",
         "outputs": 1,
@@ -430,418 +472,9 @@
         ]
     },
     {
-        "id": "25ebba5b410a7376",
-        "type": "daemon",
-        "z": "e033c8a02dcd63b3",
-        "name": "Bluetooth CAM",
-        "command": "python.exe",
-        "args": "..\\bluetooth_pc\\bt_connect_multithread.py",
-        "autorun": false,
-        "cr": true,
-        "redo": false,
-        "op": "string",
-        "closer": "SIGKILL",
-        "x": 1320,
-        "y": 780,
-        "wires": [
-            [
-                "79fb90d79d5316da"
-            ],
-            [],
-            [
-                "2c76d6c3bc858438"
-            ]
-        ]
-    },
-    {
-        "id": "2c76d6c3bc858438",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Forse board irraggiungibile",
-        "func": "if (flow.get(\"comunicazione_cam\") == \"bt\" || flow.get(\"comunicazione_cam\") == \"bt_connesso\")\n    flow.set(\"comunicazione_cam\",\"irraggiungibile\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1680,
-        "y": 900,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "79fb90d79d5316da",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "Check \"connesso\" o output",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "cont",
-                "v": "Connesso",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 1580,
-        "y": 760,
-        "wires": [
-            [
-                "93b966758cc4d3e9"
-            ],
-            [
-                "632d73045a9397de"
-            ]
-        ]
-    },
-    {
-        "id": "93b966758cc4d3e9",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Segnalo la connessione bt",
-        "func": "flow.set(\"comunicazione_cam\", \"bt_connesso\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1900,
-        "y": 720,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "159fe82693847afe",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "property": "da_fare",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "start_sript_bt",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "kill_sript_bt",
-                "vt": "str"
-            }
-        ],
-        "checkall": "false",
-        "repair": false,
-        "outputs": 2,
-        "x": 930,
-        "y": 780,
-        "wires": [
-            [
-                "f54a669a1dbbacb7"
-            ],
-            [
-                "94112e81df8cedc9"
-            ]
-        ]
-    },
-    {
-        "id": "f54a669a1dbbacb7",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Start BT cam",
-        "func": "msg.args = \"--cam\";\nmsg.start = true;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1090,
-        "y": 780,
-        "wires": [
-            [
-                "25ebba5b410a7376"
-            ]
-        ]
-    },
-    {
-        "id": "94112e81df8cedc9",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Kill process",
-        "func": "msg.kill = true; \nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1090,
-        "y": 840,
-        "wires": [
-            [
-                "25ebba5b410a7376"
-            ]
-        ]
-    },
-    {
-        "id": "3f65dd3c8170d813",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 880,
-        "y": 840,
-        "wires": [
-            [
-                "94112e81df8cedc9"
-            ]
-        ]
-    },
-    {
-        "id": "632d73045a9397de",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "New BT message ",
-        "func": "// Separo topic e payload\nvar mess_arr = msg.payload;\nlet matchResult = mess_arr.match(/\\[(.*?)\\]\\s*(.*)/);\nif (!matchResult)\n    return null; \n\nlet topic = matchResult[1];\nmsg.topic = topic;\n\nlet payload = matchResult[2];\nmsg.payload = payload;\n\nnode.log(\"topic\" + topic);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1870,
-        "y": 780,
-        "wires": [
-            [
-                "f75e5619c4fdeb47"
-            ]
-        ]
-    },
-    {
-        "id": "f75e5619c4fdeb47",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "Subscriptions node-red",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_cam/image",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 2130,
-        "y": 760,
-        "wires": [
-            [
-                "463a704259457186"
-            ]
-        ]
-    },
-    {
-        "id": "463a704259457186",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "Immagine",
-        "mode": "link",
-        "links": [
-            "518e81a0d326064b"
-        ],
-        "x": 2345,
-        "y": 760,
-        "wires": []
-    },
-    {
-        "id": "29371f8fc0ef3014",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "Tag strisciato",
-        "mode": "link",
-        "links": [
-            "8eb16bd75eadf7bd",
-            "3a9b869a43dd6795"
-        ],
-        "x": 2315,
-        "y": 1580,
-        "wires": []
-    },
-    {
-        "id": "689e1a7ddd93418d",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "Campanello suonato",
-        "mode": "link",
-        "links": [
-            "e9d789509278d3f9"
-        ],
-        "x": 2805,
-        "y": 1700,
-        "wires": []
-    },
-    {
-        "id": "92a1b36bbc5cfd55",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "Intruso",
-        "mode": "link",
-        "links": [
-            "a60c677347135904"
-        ],
-        "x": 2585,
-        "y": 1740,
-        "wires": []
-    },
-    {
-        "id": "bad121c6502fb625",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "Errori",
-        "mode": "link",
-        "links": [
-            "72429e099cc4b6ca"
-        ],
-        "x": 2285,
-        "y": 1800,
-        "wires": []
-    },
-    {
-        "id": "688ff90fab084ae5",
+        "id": "896a64a23e7b76e3",
         "type": "comment",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "info": "Se l'immagine e' arrivata con il BT, non la pubblico su mqtt da node red perche' tanto l'altra board non è sottoscritta al topic in cui pubblico l'immagine.\nSe avessi un device sottoscritto a tale topic, avrei dovuto pubblicarla",
-        "x": 2440,
-        "y": 760,
-        "wires": []
-    },
-    {
-        "id": "98a6f3a8838eb818",
-        "type": "link in",
-        "z": "e033c8a02dcd63b3",
-        "name": "Manda messaggio camera",
-        "links": [
-            "24107174129b8318",
-            "348554f2e28f0263",
-            "3d919d0bb7aff126",
-            "783b1918abc47099",
-            "85247eaccfcb5651",
-            "b458d83fe470509a",
-            "cd3c846e4e60ed19",
-            "d5fbf340676057d0",
-            "ebd45a88251b59c4",
-            "f5680f0a1887ac6a",
-            "ff2e5ecdcb78b946",
-            "6463c2d61c1fc2c3",
-            "e8980bc6f8184280"
-        ],
-        "x": 945,
-        "y": 940,
-        "wires": [
-            [
-                "876325c7b41539d9"
-            ]
-        ]
-    },
-    {
-        "id": "876325c7b41539d9",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Manda input CAM",
-        "func": "// Se la cam e' attualmente connessa col BT e il messaggio da mandare e' nella lista delle \n// sottoscrizioni della cam, allora gli mando il messaggio \nif (flow.get(\"comunicazione_cam\") != \"mqtt\") {\n    var topicList = flow.get(\"subs_cam\");\n    if (topicList.includes(msg.topic)){\n        msg.payload = \"[\" + msg.topic + \"] \" + msg.payload; \n        return msg;\n    }\n}\n\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1090,
-        "y": 940,
-        "wires": [
-            [
-                "25ebba5b410a7376"
-            ]
-        ]
-    },
-    {
-        "id": "83dfabc9b9cf190d",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "Se board irraggiungibile -> riprova con BT",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "20",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 330,
-        "y": 860,
-        "wires": [
-            [
-                "ae37693b1f762b9d"
-            ]
-        ]
-    },
-    {
-        "id": "ae37693b1f762b9d",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "function 5",
-        "func": "if (flow.get(\"comunicazione_cam\") == \"irraggiungibile\")\n    flow.set(\"comunicazione_cam\", \"bt\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 600,
-        "y": 860,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "914e8c025e39fa0f",
-        "type": "comment",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "CAM",
         "info": "",
         "x": 270,
@@ -849,10 +482,10 @@
         "wires": []
     },
     {
-        "id": "c4b3d3795f27df75",
+        "id": "23b5e3a0d96e1225",
         "type": "ui_text",
-        "z": "e033c8a02dcd63b3",
-        "group": "cd718b65b0c0bc62",
+        "z": "a4916c1a4f7481d5",
+        "group": "ae2eabef23af1bfc",
         "order": 8,
         "width": 0,
         "height": 0,
@@ -865,14 +498,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1490,
-        "y": 1460,
+        "x": 1510,
+        "y": 880,
         "wires": []
     },
     {
-        "id": "6ea38fb1ec1ed474",
+        "id": "7ec708bf73c254f3",
         "type": "inject",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Aggiorna connessioni boards",
         "props": [
             {
@@ -890,18 +523,18 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 250,
-        "y": 1480,
+        "x": 270,
+        "y": 900,
         "wires": [
             [
-                "0dcb7d40c839f869"
+                "81f6d7f56766dd60"
             ]
         ]
     },
     {
-        "id": "0dcb7d40c839f869",
+        "id": "81f6d7f56766dd60",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Check NFCstato cambiato + upate dashboard",
         "func": "\n\nmsg.payload = flow.get(\"comunicazione_nfc\");\nvar old = flow.get(\"old_comunicazione_nfc\");\nif (msg.payload != old){\n    // Comunicazione nfc e' stata cambiata\n    // TODO\n\n    /*\n    \n    Possibili stati: irraggiungibile, mqtt, bt\n\n    ------  QUANDO PASSO DA UNO STATO A UN ALTRO? --------\n        Passo a irraggiungibile:\n            -> all'inizio di node-red\n            -> se lo script python e' terminato ed ero nello stato bt\n        Passo a mqtt:\n            -> se da mqtt state arriva 1\n        Passo a bt:\n            -> se da mqtt state arriva 0 e stavo comunicando con mqtt o ero irraggiungibile\n            -> se lo script python stampa \"Connesso\"\n    \n\n    ------- COSA SUCCEDE SE SI PASSA DA UNO STATO A UN ALTRO? --------\n        Se passo da irraggiungibile a mqtt -> nulla */\n\n   \n    //  Se passo da irraggiungibile a bt -> nulla\n    if(old == \"irraggiungibile\" && msg.payload == \"bt\"){\n        msg.da_fare = \"start_sript_bt\";\n    }\n        \n    // Se passo da mqtt a irraggiungibile -> passo a bt -> start script\n    if (old == \"mqtt\" && msg.payload == \"irraggiungibile\"){\n        node.log(\"2\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_nfc\", \"bt\");\n    }\n    \n    // Se passo da mqtt a bt -> start script \n    if (old == \"mqtt\" && msg.payload == \"bt\") {\n        node.log(\"3\");\n        msg.da_fare = \"start_sript_bt\";\n        // flow.set(\"comunicazione_nfc\", \"bt\");\n    }\n\n\n    //    Se passo da bt a irraggiungibile -> la riconnessione verra' riprovata dopo al max 10 sec\n    // if (old == \"bt\" && msg.payload == \"irraggiungibile\"){\n        // node.log(\"6\");\n        // flow.set(\"comunicazione_nfc\", \"provo_bt\");\n    // }\n\n    // Se passo da bt a mqtt -> killo script\n    if (old == \"bt\" && msg.payload == \"mqtt\"){\n        node.log(\"7\");\n        msg.da_fare = \"kill_sript_bt\";\n    }\n    \n    \n    \n    flow.set(\"old_comunicazione_nfc\", msg.payload);\n}   \n\n\n// Scritta sulla dashboard\nif (msg.payload != \"mqtt\" && msg.payload != \"bt_connesso\") \n    msg.payload = \"irraggiungibile\";\n\nreturn msg;",
         "outputs": 1,
@@ -910,21 +543,20 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 1480,
+        "x": 640,
+        "y": 900,
         "wires": [
             [
-                "494e254307d1d366",
-                "c120fd4c298871d9"
+                "563b162ced02148d"
             ]
         ]
     },
     {
-        "id": "9022daa16c50d991",
+        "id": "d78499ef22085c96",
         "type": "mqtt in",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/state",
+        "topic": "my_devices/esp_nfc/state",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -932,18 +564,18 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 290,
-        "y": 1400,
+        "x": 310,
+        "y": 820,
         "wires": [
             [
-                "b9fab51f0d3f1bf7"
+                "7474539ce91b8573"
             ]
         ]
     },
     {
-        "id": "b9fab51f0d3f1bf7",
+        "id": "7474539ce91b8573",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "Passa a \"mqtt\" o \"bt\"",
         "func": "flow.set(\"state_mqtt_nfc\", msg.payload);\n\nif (msg.payload == \"1\")\n    flow.set(\"comunicazione_nfc\", \"mqtt\");\nelse if (flow.get(\"comunicazione_nfc\") != \"bt\") \n    // Se board si scollega da mqtt e non sto comunicando con bt, ritento la comunicazione bt\n    flow.set(\"comunicazione_nfc\", \"bt\");\nreturn msg;",
         "outputs": 1,
@@ -952,519 +584,26 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 580,
-        "y": 1400,
+        "x": 600,
+        "y": 820,
         "wires": [
             []
         ]
     },
     {
-        "id": "d8e79064e9dfd664",
-        "type": "daemon",
-        "z": "e033c8a02dcd63b3",
-        "name": "Bluetooth NFC",
-        "command": "python.exe",
-        "args": "..\\bluetooth_pc\\bt_connect_multithread.py",
-        "autorun": false,
-        "cr": true,
-        "redo": false,
-        "op": "string",
-        "closer": "SIGKILL",
-        "x": 1280,
-        "y": 1620,
-        "wires": [
-            [
-                "bd713d28426df5e9",
-                "8a118d9fa8b0e127"
-            ],
-            [],
-            [
-                "417b806cee4f3188"
-            ]
-        ]
-    },
-    {
-        "id": "417b806cee4f3188",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Forse board irraggiungibile",
-        "func": "if (flow.get(\"comunicazione_nfc\") == \"bt\" || flow.get(\"comunicazione_nfc\") == \"bt_connesso\")\n    flow.set(\"comunicazione_nfc\",\"irraggiungibile\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1640,
-        "y": 1740,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "bd713d28426df5e9",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "Check \"connesso\" o output",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "cont",
-                "v": "Connesso",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 1540,
-        "y": 1600,
-        "wires": [
-            [
-                "a94706bfe071f573"
-            ],
-            [
-                "b039e12e85ac2f66"
-            ]
-        ]
-    },
-    {
-        "id": "a94706bfe071f573",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Segnalo la connessione bt",
-        "func": "node.log(\"com_nfc:\" + flow.get(\"comunicazione_nfc\"));\nif (flow.get(\"comunicazione_nfc\") != \"mqtt\")\n    flow.set(\"comunicazione_nfc\", \"bt_connesso\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1860,
-        "y": 1560,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "494e254307d1d366",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "property": "da_fare",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "start_sript_bt",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "kill_sript_bt",
-                "vt": "str"
-            }
-        ],
-        "checkall": "false",
-        "repair": false,
-        "outputs": 2,
-        "x": 890,
-        "y": 1620,
-        "wires": [
-            [
-                "7216c656be90d9b6"
-            ],
-            [
-                "104581d38dd99c14"
-            ]
-        ]
-    },
-    {
-        "id": "7216c656be90d9b6",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Start BT nfc",
-        "func": "msg.args = \"--nfc\";\nmsg.start = true;\nmsg.payload = \"\";\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 1620,
-        "wires": [
-            [
-                "d8e79064e9dfd664"
-            ]
-        ]
-    },
-    {
-        "id": "104581d38dd99c14",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Kill process",
-        "func": "msg.kill = true; \nmsg.payload = \"\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 1680,
-        "wires": [
-            [
-                "d8e79064e9dfd664"
-            ]
-        ]
-    },
-    {
-        "id": "9913a294dd7ed696",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 840,
-        "y": 1680,
-        "wires": [
-            [
-                "104581d38dd99c14"
-            ]
-        ]
-    },
-    {
-        "id": "b039e12e85ac2f66",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "New BT message ",
-        "func": "// Separo topic e payload\nvar mess_arr = msg.payload;\nlet matchResult = mess_arr.match(/\\[(.*?)\\]\\s*(.*)/);\nif (!matchResult)\n    return null; \n\nlet topic = matchResult[1];\nmsg.topic = topic;\n\nlet payload = matchResult[2];\nmsg.payload = payload;\n\nnode.log(\"topic\" + topic);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1830,
-        "y": 1620,
-        "wires": [
-            [
-                "0aabf9bddeddd6ce"
-            ]
-        ]
-    },
-    {
-        "id": "7a837c882f6b41c7",
+        "id": "750ad978ccf87329",
         "type": "comment",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "info": "Se l'immagine e' arrivata con il BT, non la pubblico su mqtt da node red perche' tanto l'altra board non è sottoscritta al topic in cui pubblico l'immagine.\nSe avessi un device sottoscritto a tale topic, avrei dovuto pubblicarla",
-        "x": 2660,
-        "y": 1540,
-        "wires": []
-    },
-    {
-        "id": "38032b323723dc1c",
-        "type": "link in",
-        "z": "e033c8a02dcd63b3",
-        "name": "Manda messaggio",
-        "links": [
-            "24107174129b8318",
-            "348554f2e28f0263",
-            "3d919d0bb7aff126",
-            "558ea3c7945d7647",
-            "783b1918abc47099",
-            "85247eaccfcb5651",
-            "b458d83fe470509a",
-            "cd3c846e4e60ed19",
-            "d5fbf340676057d0",
-            "ebd45a88251b59c4",
-            "f5680f0a1887ac6a",
-            "ff2e5ecdcb78b946",
-            "57634e79de5e1528"
-        ],
-        "x": 905,
-        "y": 1780,
-        "wires": [
-            [
-                "9bf110208d44d960"
-            ]
-        ]
-    },
-    {
-        "id": "9bf110208d44d960",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Manda input NFC",
-        "func": "// Se la nfc e' attualmente connessa col BT e il messaggio da mandare e' nella lista delle \n// sottoscrizioni della nfc, allora gli mando il messaggio \nif (flow.get(\"comunicazione_nfc\") != \"mqtt\") {\n    var topicList = flow.get(\"subs_nfc\");\n    if (topicList.includes(msg.topic)){\n        msg.payload = \"[\" + msg.topic + \"] \" + msg.payload; \n        return msg;\n    }\n}\n\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 1780,
-        "wires": [
-            [
-                "d8e79064e9dfd664"
-            ]
-        ]
-    },
-    {
-        "id": "05f04afb637228fa",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "Se board irraggiungibile -> riprova con BT",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "20",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 290,
-        "y": 1700,
-        "wires": [
-            [
-                "5c32422378c0ca3a"
-            ]
-        ]
-    },
-    {
-        "id": "5c32422378c0ca3a",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "function 6",
-        "func": "if (flow.get(\"comunicazione_nfc\") == \"irraggiungibile\")\n    flow.set(\"comunicazione_nfc\", \"bt\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 560,
-        "y": 1700,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "56f2b4f77a1060fc",
-        "type": "comment",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "NFC",
         "info": "",
-        "x": 170,
-        "y": 1340,
+        "x": 190,
+        "y": 760,
         "wires": []
     },
     {
-        "id": "0aabf9bddeddd6ce",
-        "type": "switch",
-        "z": "e033c8a02dcd63b3",
-        "name": "Subscriptions node-red",
-        "property": "topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/tag_swiped",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/button",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/intruder",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/errors",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "my_devices/door/esp_nfc/nfc_attempts",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 5,
-        "x": 2090,
-        "y": 1640,
-        "wires": [
-            [
-                "29371f8fc0ef3014"
-            ],
-            [
-                "2e119f21d2525375",
-                "1a1d6e2bbb278275"
-            ],
-            [
-                "2e119f21d2525375",
-                "d2f3e9ad8658e6e0"
-            ],
-            [
-                "bad121c6502fb625"
-            ],
-            [
-                "d7c1608620c56c2b"
-            ]
-        ]
-    },
-    {
-        "id": "2e119f21d2525375",
-        "type": "mqtt out",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "topic": "",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "3c590ebc25e0b5cc",
-        "x": 2470,
-        "y": 1620,
-        "wires": []
-    },
-    {
-        "id": "d7c1608620c56c2b",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "Stato lettore NFC",
-        "mode": "link",
-        "links": [
-            "0da934caf0fe0f63"
-        ],
-        "x": 2225,
-        "y": 1880,
-        "wires": []
-    },
-    {
-        "id": "1a1d6e2bbb278275",
+        "id": "f76f41b47040d1e9",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Campanello suonato",
-        "func": "if (flow.get(\"comunicazione_nodered\")!=\"mqtt\")\n    return msg;\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 2620,
-        "y": 1680,
-        "wires": [
-            [
-                "689e1a7ddd93418d",
-                "6463c2d61c1fc2c3"
-            ]
-        ]
-    },
-    {
-        "id": "d2f3e9ad8658e6e0",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "Intruso rilevato",
-        "func": "if (flow.get(\"comunicazione_nodered\")!=\"mqtt\")\n    return msg;\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 2420,
-        "y": 1740,
-        "wires": [
-            [
-                "92a1b36bbc5cfd55",
-                "e8980bc6f8184280"
-            ]
-        ]
-    },
-    {
-        "id": "6463c2d61c1fc2c3",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "link out 1",
-        "mode": "link",
-        "links": [
-            "98a6f3a8838eb818"
-        ],
-        "x": 2765,
-        "y": 1640,
-        "wires": []
-    },
-    {
-        "id": "e8980bc6f8184280",
-        "type": "link out",
-        "z": "e033c8a02dcd63b3",
-        "name": "link out 2",
-        "mode": "link",
-        "links": [
-            "98a6f3a8838eb818"
-        ],
-        "x": 2525,
-        "y": 1780,
-        "wires": []
-    },
-    {
-        "id": "8a118d9fa8b0e127",
-        "type": "debug",
-        "z": "e033c8a02dcd63b3",
-        "name": "debug 11",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1440,
-        "y": 1540,
-        "wires": []
-    },
-    {
-        "id": "437c07cf654914a2",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "function 8",
         "func": "if (msg.payload == \"bt_connesso\")\n    msg.payload = \"connesso BT\";\nreturn msg;",
         "outputs": 1,
@@ -1473,18 +612,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1100,
-        "y": 620,
+        "x": 940,
+        "y": 640,
         "wires": [
             [
-                "5fc506fa5056c6fc"
+                "2075483c54e6db7a"
             ]
         ]
     },
     {
-        "id": "c120fd4c298871d9",
+        "id": "563b162ced02148d",
         "type": "function",
-        "z": "e033c8a02dcd63b3",
+        "z": "a4916c1a4f7481d5",
         "name": "function 9",
         "func": "if (msg.payload == \"bt_connesso\")\n    msg.payload = \"connesso BT\";\nreturn msg;",
         "outputs": 1,
@@ -1493,66 +632,18 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 1480,
+        "x": 1040,
+        "y": 900,
         "wires": [
             [
-                "c4b3d3795f27df75"
+                "23b5e3a0d96e1225"
             ]
         ]
     },
     {
-        "id": "7ca8dbe966080b8e",
-        "type": "inject",
-        "z": "e033c8a02dcd63b3",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 820,
-        "y": 500,
-        "wires": [
-            [
-                "d7e2133f8f62892f",
-                "f54a669a1dbbacb7"
-            ]
-        ]
-    },
-    {
-        "id": "d7e2133f8f62892f",
-        "type": "function",
-        "z": "e033c8a02dcd63b3",
-        "name": "function 10",
-        "func": "flow.set(\"comunicazione_nfc\", \"bt\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 950,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7cf2c4b3c5c8f32d",
+        "id": "0c8da2cd4d7eb0c4",
         "type": "debug",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Intruso",
         "active": true,
@@ -1568,9 +659,9 @@
         "wires": []
     },
     {
-        "id": "f83188491fc86816",
+        "id": "387d7b9b29614f72",
         "type": "function",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "\"Intruso:\" + tag",
         "func": "msg.payload = \"Intruso rilevato: \" + msg.payload;\nreturn msg;",
         "outputs": 1,
@@ -1583,14 +674,14 @@
         "y": 660,
         "wires": [
             [
-                "7cf2c4b3c5c8f32d"
+                "0c8da2cd4d7eb0c4"
             ]
         ]
     },
     {
-        "id": "02327267871b92aa",
+        "id": "4f731280ea6593de",
         "type": "function",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "\"Tag letto: \" + tag",
         "func": "msg.payload = \"Tag letto: \" + msg.payload;\nreturn msg;",
         "outputs": 1,
@@ -1603,14 +694,14 @@
         "y": 80,
         "wires": [
             [
-                "e53730711f62599f"
+                "b093b4130966d883"
             ]
         ]
     },
     {
-        "id": "e53730711f62599f",
+        "id": "b093b4130966d883",
         "type": "debug",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "Tag letto",
         "active": true,
         "tosidebar": true,
@@ -1625,9 +716,9 @@
         "wires": []
     },
     {
-        "id": "519bd7f7bc203d53",
+        "id": "6e4ab4d639f598ac",
         "type": "ui_toast",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "position": "top right",
         "displayTime": "3",
         "highlight": "",
@@ -1644,9 +735,9 @@
         "wires": []
     },
     {
-        "id": "efcf21eccca58f39",
+        "id": "0dcb8e9d8cbafecd",
         "type": "ui_button",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Sblocca lettore NFC",
         "group": "68b41a4217490954",
@@ -1668,15 +759,15 @@
         "y": 500,
         "wires": [
             [
-                "5fc8a5d1f5b0b9a6",
-                "0661b74d309fa008"
+                "f52ce726d0b14244",
+                "49891ece36654b05"
             ]
         ]
     },
     {
-        "id": "972c6ab9e76e06a8",
+        "id": "21c1e3c791a2226b",
         "type": "ui_toast",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "position": "dialog",
         "displayTime": "3",
         "highlight": "",
@@ -1692,14 +783,14 @@
         "y": 580,
         "wires": [
             [
-                "e9e81eb8ca461278"
+                "17119da8afc8e3c1"
             ]
         ]
     },
     {
-        "id": "13e6bdf1fa517670",
+        "id": "74db771f244ff41b",
         "type": "ui_text",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "group": "68b41a4217490954",
         "order": 0,
@@ -1719,9 +810,9 @@
         "wires": []
     },
     {
-        "id": "e9e81eb8ca461278",
+        "id": "17119da8afc8e3c1",
         "type": "function",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Stato reader: bloccato",
         "func": "msg.payload = \"Bloccato\";\nmsg.enabled = true;\n\nreturn msg;",
@@ -1735,15 +826,15 @@
         "y": 580,
         "wires": [
             [
-                "13e6bdf1fa517670",
-                "efcf21eccca58f39"
+                "74db771f244ff41b",
+                "0dcb8e9d8cbafecd"
             ]
         ]
     },
     {
-        "id": "5fc8a5d1f5b0b9a6",
+        "id": "f52ce726d0b14244",
         "type": "function",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Stato reader: Abilitato",
         "func": "msg.payload = \"Abilitato\";\nmsg.enabled = false;\nreturn msg;",
@@ -1757,16 +848,16 @@
         "y": 580,
         "wires": [
             [
-                "efcf21eccca58f39",
-                "6658215bf2bc0338",
-                "13e6bdf1fa517670"
+                "0dcb8e9d8cbafecd",
+                "1b790e56e4ea41fe",
+                "74db771f244ff41b"
             ]
         ]
     },
     {
-        "id": "6658215bf2bc0338",
+        "id": "1b790e56e4ea41fe",
         "type": "debug",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Sbloco la lettura NFC",
         "active": true,
@@ -1782,9 +873,9 @@
         "wires": []
     },
     {
-        "id": "e1fbbce3606240b8",
+        "id": "26b0d670c2a4d615",
         "type": "inject",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Sblocco Iniziale",
         "props": [
@@ -1808,72 +899,34 @@
         "y": 380,
         "wires": [
             [
-                "5fc8a5d1f5b0b9a6",
-                "0661b74d309fa008"
+                "f52ce726d0b14244",
+                "49891ece36654b05"
             ]
         ]
     },
     {
-        "id": "8eb16bd75eadf7bd",
-        "type": "link in",
-        "z": "f42f0c6ac0c908c0",
-        "name": "Tag strisciato",
-        "links": [
-            "cb0e70cb334fcc37",
-            "f9322d9408f57b46",
-            "29371f8fc0ef3014"
-        ],
-        "x": 385,
-        "y": 140,
-        "wires": [
-            [
-                "02327267871b92aa",
-                "519bd7f7bc203d53"
-            ]
-        ]
-    },
-    {
-        "id": "a60c677347135904",
-        "type": "link in",
-        "z": "f42f0c6ac0c908c0",
-        "name": "Intruso",
-        "links": [
-            "5d90bde9e6309a4e",
-            "7c7f5fdd0557d647",
-            "92a1b36bbc5cfd55"
-        ],
-        "x": 235,
-        "y": 540,
-        "wires": [
-            [
-                "972c6ab9e76e06a8",
-                "f83188491fc86816"
-            ]
-        ]
-    },
-    {
-        "id": "85247eaccfcb5651",
+        "id": "8139e8d03a50252c",
         "type": "link out",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Manda messaggio",
         "mode": "link",
         "links": [
-            "98a6f3a8838eb818",
+            "81f5ff6c83b85910",
             "e87b3b74df0bf879",
-            "38032b323723dc1c"
+            "d5dd7a69242dd049"
         ],
         "x": 1455,
         "y": 420,
         "wires": []
     },
     {
-        "id": "0661b74d309fa008",
+        "id": "49891ece36654b05",
         "type": "function",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "Set message",
-        "func": "msg.topic = \"my_devices/door/esp_nfc/nfc_reader_state\";\nmsg.payload = \"1\";\nreturn msg;",
+        "func": "msg.topic = \"my_devices/esp_nfc/nfc_reader_state\";\nmsg.payload = \"1\";\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1884,17 +937,17 @@
         "y": 420,
         "wires": [
             [
-                "85247eaccfcb5651",
-                "2e97f2d734deac13"
+                "8139e8d03a50252c",
+                "592b2ace747acaf2"
             ]
         ]
     },
     {
-        "id": "ca3d3f16612dcbb6",
+        "id": "29f469604492e3cb",
         "type": "mqtt in",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/tag_swiped",
+        "topic": "my_devices/esp_nfc/tag_swiped",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -1906,17 +959,17 @@
         "y": 80,
         "wires": [
             [
-                "02327267871b92aa",
-                "519bd7f7bc203d53"
+                "4f731280ea6593de",
+                "6e4ab4d639f598ac"
             ]
         ]
     },
     {
-        "id": "1188503c93f9e768",
+        "id": "377c29bd285f684c",
         "type": "mqtt in",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/intruder",
+        "topic": "my_devices/esp_nfc/intruder",
         "qos": "0",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -1928,16 +981,15 @@
         "y": 640,
         "wires": [
             [
-                "972c6ab9e76e06a8",
-                "f83188491fc86816",
-                "348554f2e28f0263"
+                "21c1e3c791a2226b",
+                "387d7b9b29614f72"
             ]
         ]
     },
     {
-        "id": "2e97f2d734deac13",
+        "id": "592b2ace747acaf2",
         "type": "mqtt out",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "d": true,
         "name": "",
         "topic": "",
@@ -1954,23 +1006,9 @@
         "wires": []
     },
     {
-        "id": "348554f2e28f0263",
-        "type": "link out",
-        "z": "f42f0c6ac0c908c0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 345,
-        "y": 740,
-        "wires": []
-    },
-    {
-        "id": "371995104d611260",
+        "id": "2ae091028afe44e0",
         "type": "ui_button",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "group": "68b41a4217490954",
         "order": 2,
@@ -1991,14 +1029,14 @@
         "y": 1040,
         "wires": [
             [
-                "3b6cd81f4ea948a4"
+                "6a5286536fd6707b"
             ]
         ]
     },
     {
-        "id": "bd9d1603ffd9f3df",
+        "id": "4ea2ceaf79ea33e7",
         "type": "ui_button",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "group": "68b41a4217490954",
         "order": 8,
@@ -2019,14 +1057,14 @@
         "y": 1080,
         "wires": [
             [
-                "3b6cd81f4ea948a4"
+                "6a5286536fd6707b"
             ]
         ]
     },
     {
-        "id": "c8eecd56cd77136a",
+        "id": "79f2ddc1196bd6f5",
         "type": "ui_button",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "group": "68b41a4217490954",
         "order": 9,
@@ -2047,14 +1085,14 @@
         "y": 1120,
         "wires": [
             [
-                "3b6cd81f4ea948a4"
+                "6a5286536fd6707b"
             ]
         ]
     },
     {
-        "id": "2a6175f51c80f0a9",
+        "id": "8691e04d6810f9b0",
         "type": "ui_text",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "group": "68b41a4217490954",
         "order": 3,
         "width": 0,
@@ -2073,9 +1111,9 @@
         "wires": []
     },
     {
-        "id": "85f6466d0ae68468",
+        "id": "5034460d98b3fc62",
         "type": "mqtt out",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "topic": "",
         "qos": "",
@@ -2091,40 +1129,11 @@
         "wires": []
     },
     {
-        "id": "558ea3c7945d7647",
-        "type": "link out",
-        "z": "f42f0c6ac0c908c0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "38032b323723dc1c"
-        ],
-        "x": 725,
-        "y": 1120,
-        "wires": []
-    },
-    {
-        "id": "0da934caf0fe0f63",
-        "type": "link in",
-        "z": "f42f0c6ac0c908c0",
-        "name": "Stato lettore NFC",
-        "links": [
-            "d7c1608620c56c2b"
-        ],
-        "x": 675,
-        "y": 1300,
-        "wires": [
-            [
-                "e510198709345f5b"
-            ]
-        ]
-    },
-    {
-        "id": "97fca0c47a9ebf6e",
+        "id": "242a803e9d137f10",
         "type": "mqtt in",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/nfc_attempts",
+        "topic": "my_devices/esp_nfc/nfc_attempts",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -2136,14 +1145,14 @@
         "y": 1240,
         "wires": [
             [
-                "e510198709345f5b"
+                "a95b2df894802352"
             ]
         ]
     },
     {
-        "id": "e510198709345f5b",
+        "id": "a95b2df894802352",
         "type": "function",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "function 7",
         "func": "let resultArray = msg.payload.split(\" \");\nif (resultArray[0] == \"0\")\n    msg.payload = \"Abilitato\";\nelse if (resultArray[0] == \"1\")\n    msg.payload = \"Bloccato\";\nelse \n    msg.payload = \"Sconosciuto\";\nreturn msg;",
         "outputs": 1,
@@ -2156,15 +1165,15 @@
         "y": 1280,
         "wires": [
             [
-                "2a6175f51c80f0a9",
-                "73a938e3e7f86ea8"
+                "8691e04d6810f9b0",
+                "4a8c6e151f9f2541"
             ]
         ]
     },
     {
-        "id": "73a938e3e7f86ea8",
+        "id": "4a8c6e151f9f2541",
         "type": "delay",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "pauseType": "delay",
         "timeout": "5",
@@ -2182,14 +1191,14 @@
         "y": 1400,
         "wires": [
             [
-                "5ecc5a6e5f3b4633"
+                "8739b254f8d7fa34"
             ]
         ]
     },
     {
-        "id": "5ecc5a6e5f3b4633",
+        "id": "8739b254f8d7fa34",
         "type": "change",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "rules": [
             {
@@ -2209,21 +1218,21 @@
         "y": 1360,
         "wires": [
             [
-                "2a6175f51c80f0a9"
+                "8691e04d6810f9b0"
             ]
         ]
     },
     {
-        "id": "3b6cd81f4ea948a4",
+        "id": "6a5286536fd6707b",
         "type": "change",
-        "z": "f42f0c6ac0c908c0",
+        "z": "b5a831fb647ed2bb",
         "name": "",
         "rules": [
             {
                 "t": "set",
                 "p": "topic",
                 "pt": "msg",
-                "to": "my_devices/door/esp_nfc/nfc_reader_state",
+                "to": "my_devices/esp_nfc/nfc_reader_state",
                 "tot": "str"
             }
         ],
@@ -2236,15 +1245,14 @@
         "y": 1060,
         "wires": [
             [
-                "85f6466d0ae68468",
-                "558ea3c7945d7647"
+                "5034460d98b3fc62"
             ]
         ]
     },
     {
-        "id": "9a56b32916771b6e",
+        "id": "d86a34dd1eb54e0a",
         "type": "inject",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Apri Porta",
         "props": [
             {
@@ -2259,22 +1267,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/led",
+        "topic": "my_devices/esp_nfc/led",
         "payload": "1",
         "payloadType": "str",
         "x": 660,
         "y": 100,
         "wires": [
             [
-                "b458d83fe470509a",
-                "9caec3a140c566a0"
+                "9aa4afa1cd46eb2d"
             ]
         ]
     },
     {
-        "id": "bd62980b1bc5d6fe",
+        "id": "8a57a495f6c2cd17",
         "type": "ui_button",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Apri porta ",
         "group": "86f322ebf8049f50",
         "order": 3,
@@ -2289,21 +1296,20 @@
         "icon": "",
         "payload": "1",
         "payloadType": "str",
-        "topic": "my_devices/door/esp_nfc/led",
+        "topic": "my_devices/esp_nfc/led",
         "topicType": "str",
         "x": 660,
         "y": 40,
         "wires": [
             [
-                "b458d83fe470509a",
-                "9caec3a140c566a0"
+                "9aa4afa1cd46eb2d"
             ]
         ]
     },
     {
-        "id": "162b9ae52d7e8e72",
+        "id": "fca182711764c01e",
         "type": "debug",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Campanello suonato",
         "active": true,
         "tosidebar": true,
@@ -2318,9 +1324,9 @@
         "wires": []
     },
     {
-        "id": "95cd540de2b12196",
+        "id": "600b333f7413e777",
         "type": "function",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "\"Campanello suonato!\" else null",
         "func": "if (msg.payload==\"1\")\n    msg.payload = \" \";\n    else \n        return null;\nreturn msg;",
         "outputs": 1,
@@ -2333,17 +1339,17 @@
         "y": 320,
         "wires": [
             [
-                "162b9ae52d7e8e72",
-                "d61463181f808d0e",
-                "1d635f43d5d83b34",
-                "112d45c2f360f21b"
+                "fca182711764c01e",
+                "6e30422f66d72474",
+                "8384357dce307b3b",
+                "3847a6391d66efbc"
             ]
         ]
     },
     {
-        "id": "22f1018eb784b46f",
+        "id": "f6234873dbf1095b",
         "type": "ui_audio",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Campanello ",
         "group": "86f322ebf8049f50",
         "voice": "Microsoft Cosimo - Italian (Italy)",
@@ -2353,9 +1359,9 @@
         "wires": []
     },
     {
-        "id": "d61463181f808d0e",
+        "id": "6e30422f66d72474",
         "type": "ui_toast",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "position": "top right",
         "displayTime": "3",
         "highlight": "yellow",
@@ -2373,9 +1379,9 @@
         "info": "<p> ciao </p>"
     },
     {
-        "id": "112d45c2f360f21b",
+        "id": "3847a6391d66efbc",
         "type": "function",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Din Dong",
         "func": "msg.payload = \"din dong\";\nreturn msg;",
         "outputs": 1,
@@ -2388,14 +1394,14 @@
         "y": 440,
         "wires": [
             [
-                "22f1018eb784b46f"
+                "f6234873dbf1095b"
             ]
         ]
     },
     {
-        "id": "e65ad8b68ef7a0a6",
+        "id": "c885223e10871074",
         "type": "debug",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Foto arrivata",
         "active": true,
         "tosidebar": true,
@@ -2410,63 +1416,9 @@
         "wires": []
     },
     {
-        "id": "b458d83fe470509a",
-        "type": "link out",
-        "z": "3215fe15d9aa44e7",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 875,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "e9d789509278d3f9",
-        "type": "link in",
-        "z": "3215fe15d9aa44e7",
-        "name": "Campanello suonato",
-        "links": [
-            "61b1061c4dd0e714",
-            "9c638ad8aa6b7d20",
-            "689e1a7ddd93418d"
-        ],
-        "x": 245,
-        "y": 320,
-        "wires": [
-            [
-                "95cd540de2b12196"
-            ]
-        ]
-    },
-    {
-        "id": "518e81a0d326064b",
-        "type": "link in",
-        "z": "3215fe15d9aa44e7",
-        "name": "immagine",
-        "links": [
-            "fec084381cfe638b",
-            "1cce8fa5ab96b93d",
-            "463a704259457186",
-            "8a84b984d0063a27"
-        ],
-        "x": 475,
-        "y": 1040,
-        "wires": [
-            [
-                "6260282ed6e535a0",
-                "13de99df3e54ae05"
-            ]
-        ]
-    },
-    {
-        "id": "fb56339fa80b86e8",
+        "id": "28a3bd896ac2af18",
         "type": "ui_text",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "group": "86f322ebf8049f50",
         "order": 8,
         "width": 0,
@@ -2485,9 +1437,9 @@
         "wires": []
     },
     {
-        "id": "13de99df3e54ae05",
+        "id": "2b15eaa439cbcd3f",
         "type": "ui_template",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "group": "86f322ebf8049f50",
         "name": "Mostra foto",
         "order": 2,
@@ -2506,9 +1458,9 @@
         ]
     },
     {
-        "id": "6260282ed6e535a0",
+        "id": "ec8d0a7d6a374ef4",
         "type": "function",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "function 2",
         "func": "function getCharacterLength(str) {\n  // The string iterator that is used here iterates over characters,\n  // not mere code units\n  return [...str].length;\n}\n\n// msg.payload = \"Dim: \" + getCharacterLength(msg.payload);\n// var timestamp = M\n\nmsg.payload = \"Dim: \" + getCharacterLength(msg.payload) + \" Foto: \" + Math.floor(Date.now() / 1000);\nreturn msg;",
         "outputs": 1,
@@ -2521,15 +1473,15 @@
         "y": 1080,
         "wires": [
             [
-                "fb56339fa80b86e8",
-                "e65ad8b68ef7a0a6"
+                "28a3bd896ac2af18",
+                "c885223e10871074"
             ]
         ]
     },
     {
-        "id": "647b42a5c9d25428",
+        "id": "08ea1901ed172c5d",
         "type": "inject",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Reset valore label",
         "props": [
             {
@@ -2551,14 +1503,14 @@
         "y": 1240,
         "wires": [
             [
-                "fb56339fa80b86e8"
+                "28a3bd896ac2af18"
             ]
         ]
     },
     {
-        "id": "26e1c77cd8b28d7e",
+        "id": "dd823fb0dd62f340",
         "type": "ui_button",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
         "group": "86f322ebf8049f50",
         "order": 4,
@@ -2573,37 +1525,20 @@
         "icon": "",
         "payload": "1",
         "payloadType": "str",
-        "topic": "my_devices/door/esp_cam/request_send_img",
+        "topic": "my_devices/esp_cam/request_send_img",
         "topicType": "str",
         "x": 280,
         "y": 600,
         "wires": [
             [
-                "cd3c846e4e60ed19",
-                "015b2b69c837041a"
+                "0b9d5c473abc5b4b"
             ]
         ]
     },
     {
-        "id": "cd3c846e4e60ed19",
-        "type": "link out",
-        "z": "3215fe15d9aa44e7",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 485,
-        "y": 620,
-        "wires": []
-    },
-    {
-        "id": "b83ab328e12a2023",
+        "id": "e1e022f4cd7ba079",
         "type": "inject",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Mostra camera",
         "props": [
             {
@@ -2625,15 +1560,14 @@
         "y": 640,
         "wires": [
             [
-                "cd3c846e4e60ed19",
-                "015b2b69c837041a"
+                "0b9d5c473abc5b4b"
             ]
         ]
     },
     {
-        "id": "75bdbc381194053f",
+        "id": "d01d41d4ce7aa7fc",
         "type": "ui_switch",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
         "label": "Mostra video in streaming",
         "tooltip": "",
@@ -2660,16 +1594,16 @@
         "y": 740,
         "wires": [
             [
-                "e0d015103ada6d2d"
+                "d448f4a62ecc9069"
             ]
         ]
     },
     {
-        "id": "e0d015103ada6d2d",
+        "id": "d448f4a62ecc9069",
         "type": "function",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "Video in streaming o foto ",
-        "func": "// Se slider on -> richiedo invio foto ogni 500 milllisec\nif (msg.payload == true)    \n    msg.payload = 500;    \nelse \n    msg.payload = -1;    \nmsg.topic = \"my_devices/door/esp_cam/config/freq_send_img\";\n\nreturn msg;",
+        "func": "// Se slider on -> richiedo invio foto ogni 500 milllisec\nif (msg.payload == true)    \n    msg.payload = 500;    \nelse \n    msg.payload = -1;    \nmsg.topic = \"my_devices/esp_cam/config/freq_send_img\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2680,31 +1614,14 @@
         "y": 740,
         "wires": [
             [
-                "3d919d0bb7aff126",
-                "eef1a8126377f56c"
+                "05b5d54576d3bd56"
             ]
         ]
     },
     {
-        "id": "3d919d0bb7aff126",
-        "type": "link out",
-        "z": "3215fe15d9aa44e7",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "4ed927689e34b269",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 885,
-        "y": 740,
-        "wires": []
-    },
-    {
-        "id": "da465ff1662b837e",
+        "id": "7b3084d355be26c9",
         "type": "ui_button",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
         "group": "86f322ebf8049f50",
         "order": 4,
@@ -2719,23 +1636,22 @@
         "icon": "",
         "payload": "0",
         "payloadType": "str",
-        "topic": "my_devices/door/esp_cam/request_send_img",
+        "topic": "my_devices/esp_cam/request_send_img",
         "topicType": "str",
         "x": 270,
         "y": 540,
         "wires": [
             [
-                "cd3c846e4e60ed19",
-                "015b2b69c837041a"
+                "0b9d5c473abc5b4b"
             ]
         ]
     },
     {
-        "id": "06e959c762079385",
+        "id": "83dcc422ce7bd28d",
         "type": "mqtt in",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
-        "topic": "my_devices/door/esp_cam/image",
+        "topic": "my_devices/esp_cam/image",
         "qos": "0",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -2747,15 +1663,15 @@
         "y": 1000,
         "wires": [
             [
-                "13de99df3e54ae05",
-                "6260282ed6e535a0"
+                "2b15eaa439cbcd3f",
+                "ec8d0a7d6a374ef4"
             ]
         ]
     },
     {
-        "id": "9caec3a140c566a0",
+        "id": "9aa4afa1cd46eb2d",
         "type": "mqtt out",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
         "topic": "",
         "qos": "",
@@ -2771,11 +1687,11 @@
         "wires": []
     },
     {
-        "id": "ca29e69e7946295c",
+        "id": "ca9d383e428d1c80",
         "type": "mqtt in",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/button",
+        "topic": "my_devices/esp_nfc/button",
         "qos": "0",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -2787,15 +1703,14 @@
         "y": 260,
         "wires": [
             [
-                "95cd540de2b12196",
-                "24107174129b8318"
+                "600b333f7413e777"
             ]
         ]
     },
     {
-        "id": "015b2b69c837041a",
+        "id": "0b9d5c473abc5b4b",
         "type": "mqtt out",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
         "topic": "",
         "qos": "",
@@ -2811,9 +1726,9 @@
         "wires": []
     },
     {
-        "id": "eef1a8126377f56c",
+        "id": "05b5d54576d3bd56",
         "type": "mqtt out",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "name": "",
         "topic": "",
         "qos": "",
@@ -2829,24 +1744,9 @@
         "wires": []
     },
     {
-        "id": "24107174129b8318",
-        "type": "link out",
-        "z": "3215fe15d9aa44e7",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 345,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "1d635f43d5d83b34",
+        "id": "8384357dce307b3b",
         "type": "function",
-        "z": "3215fe15d9aa44e7",
+        "z": "6295ce559f308453",
         "d": true,
         "name": "Modalita' NON disturbare",
         "func": "function isSundayMorning() {\n    // Get the current date and time\n    const currentDate = new Date();\n\n    // Check if it's Sunday (0 corresponds to Sunday, 1 to Monday, and so on)\n    const isSunday = currentDate.getDay() === 1;\n\n    // Check if it's between 6 and 9 in the morning\n    const isMorning =\n        currentDate.getHours() >= 6 && currentDate.getHours() < 12;\n\n    // Return true if it's Sunday and in the specified time range, otherwise false\n    return isSunday && isMorning;\n}\n\n\nif (isSundayMorning())\n    return null;\nreturn msg;",
@@ -2860,14 +1760,14 @@
         "y": 440,
         "wires": [
             [
-                "112d45c2f360f21b"
+                "3847a6391d66efbc"
             ]
         ]
     },
     {
-        "id": "c150de1a32582ad1",
+        "id": "d88684379ecdb882",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "configurazione_esempio",
         "props": [
             {
@@ -2882,22 +1782,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "{     \"tag_autorizzati\": [   \"122.48.29.217\",     \"209.53.34.217\"     ],     \"num_tentativi_errati\": [3, 5],      \"check_tag_localmente\": true,     \"secondi_board_inattiva\": 60 }",
         "payloadType": "str",
         "x": 450,
         "y": 300,
         "wires": [
             [
-                "ebd45a88251b59c4",
-                "5c9f4feacff6b738"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "0ca43bfcba743fdd",
+        "id": "3654275cbbe1aa54",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "blocca_tag_bianco",
         "props": [
             {
@@ -2912,22 +1811,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "{     \"tag_autorizzati\": [           \"209.53.34.217\"     ]}",
         "payloadType": "json",
         "x": 450,
         "y": 340,
         "wires": [
             [
-                "ebd45a88251b59c4",
-                "5c9f4feacff6b738"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "ac4c601a4fb17446",
+        "id": "c93faa0585121d9c",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "configurazione errata",
         "props": [
             {
@@ -2942,22 +1840,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "aa",
         "payloadType": "str",
         "x": 460,
         "y": 380,
         "wires": [
             [
-                "ebd45a88251b59c4",
-                "5c9f4feacff6b738"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "781d7b0a7b2c6451",
+        "id": "f9bd8588cdb6aa2f",
         "type": "debug",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Errore",
         "active": true,
         "tosidebar": true,
@@ -2972,9 +1869,9 @@
         "wires": []
     },
     {
-        "id": "4d10bf33ea0ca03d",
+        "id": "44a7c6228e83331a",
         "type": "function",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "\"---ERRORE---\" + errore",
         "func": "msg.payload = \"---ERRORE---\\n\" + msg.payload;\nreturn msg;",
         "outputs": 1,
@@ -2987,15 +1884,15 @@
         "y": 660,
         "wires": [
             [
-                "781d7b0a7b2c6451",
-                "c960aad4ee463057"
+                "f9bd8588cdb6aa2f",
+                "349cfc3fa40ceb25"
             ]
         ]
     },
     {
-        "id": "c960aad4ee463057",
+        "id": "349cfc3fa40ceb25",
         "type": "ui_toast",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "d": true,
         "position": "top right",
         "displayTime": "5",
@@ -3013,9 +1910,9 @@
         "wires": []
     },
     {
-        "id": "530c0152c6781332",
+        "id": "14ee086b19a6bed4",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Blocca lettore NFC",
         "props": [
             {
@@ -3030,70 +1927,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/nfc_reader_state",
+        "topic": "my_devices/esp_nfc/nfc_reader_state",
         "payload": "0",
         "payloadType": "str",
         "x": 430,
         "y": 460,
         "wires": [
             [
-                "d5fbf340676057d0",
-                "b2446825f2864691"
+                "68c294407d2f7924"
             ]
         ]
     },
     {
-        "id": "ebd45a88251b59c4",
-        "type": "link out",
-        "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 905,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "d5fbf340676057d0",
-        "type": "link out",
-        "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 635,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "72429e099cc4b6ca",
-        "type": "link in",
-        "z": "8b4f62e2713401d0",
-        "name": "Errori",
-        "links": [
-            "1cb179e3ea8dfcbd",
-            "fbc653414df87932",
-            "bad121c6502fb625"
-        ],
-        "x": 325,
-        "y": 660,
-        "wires": [
-            [
-                "4d10bf33ea0ca03d"
-            ]
-        ]
-    },
-    {
-        "id": "80d7eff7809011b9",
+        "id": "73089cdfdcaa5d9d",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "d": true,
         "name": "Start mosquitto",
         "props": [
@@ -3116,14 +1964,14 @@
         "y": 820,
         "wires": [
             [
-                "6ef69cc929828414"
+                "e413825e9a7ce7ee"
             ]
         ]
     },
     {
-        "id": "b1ecc4a6fb57d96e",
+        "id": "1a18674efd2f2a46",
         "type": "debug",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "d": true,
         "name": "debug 4",
         "active": true,
@@ -3138,9 +1986,9 @@
         "wires": []
     },
     {
-        "id": "6ef69cc929828414",
+        "id": "e413825e9a7ce7ee",
         "type": "exec",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "d": true,
         "command": "",
         "addpay": "payload",
@@ -3154,20 +2002,20 @@
         "y": 820,
         "wires": [
             [
-                "b1ecc4a6fb57d96e"
+                "1a18674efd2f2a46"
             ],
             [
-                "b1ecc4a6fb57d96e"
+                "1a18674efd2f2a46"
             ],
             [
-                "b1ecc4a6fb57d96e"
+                "1a18674efd2f2a46"
             ]
         ]
     },
     {
-        "id": "9a505f532aea1171",
+        "id": "df84de1d6366b7d5",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Reset Esp camera",
         "props": [
             {
@@ -3182,37 +2030,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_cam/reset",
+        "topic": "my_devices/esp_cam/reset",
         "payload": "1",
         "payloadType": "str",
         "x": 530,
         "y": 1220,
         "wires": [
             [
-                "783b1918abc47099",
-                "583ac0a11217ea1c"
+                "be0a083d0acfc610"
             ]
         ]
     },
     {
-        "id": "783b1918abc47099",
-        "type": "link out",
-        "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "e87b3b74df0bf879",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 735,
-        "y": 1220,
-        "wires": []
-    },
-    {
-        "id": "fc9ecdbd01f81756",
+        "id": "0449c2a4e395a0ff",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Timeout 20 sec video in streaming",
         "props": [
             {
@@ -3227,22 +2059,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_cam/config/timeout_send_img",
+        "topic": "my_devices/esp_cam/config/timeout_send_img",
         "payload": "20",
         "payloadType": "str",
         "x": 580,
         "y": 1060,
         "wires": [
             [
-                "f5680f0a1887ac6a",
-                "1b9b316c5d3a78b1"
+                "3b69facdf7e8002b"
             ]
         ]
     },
     {
-        "id": "3b507158a08ca676",
+        "id": "05683727166a37c4",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "NO Timeout video in streaming",
         "props": [
             {
@@ -3257,22 +2088,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_cam/config/timeout_send_img",
+        "topic": "my_devices/esp_cam/config/timeout_send_img",
         "payload": "-1",
         "payloadType": "str",
         "x": 590,
         "y": 1000,
         "wires": [
             [
-                "f5680f0a1887ac6a",
-                "1b9b316c5d3a78b1"
+                "3b69facdf7e8002b"
             ]
         ]
     },
     {
-        "id": "30c98635292cdfe6",
+        "id": "11b3821b75191549",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Bluetooth",
         "props": [
             {
@@ -3287,22 +2117,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "{\"use_bluetooth\":2}",
         "payloadType": "str",
         "x": 540,
         "y": 80,
         "wires": [
             [
-                "ebd45a88251b59c4",
-                "5c9f4feacff6b738"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "58e573d9edf5e40c",
+        "id": "e2e8975ded5d8aa4",
         "type": "comment",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "CONFIGURAZIONI",
         "info": "",
         "x": 190,
@@ -3310,9 +2139,9 @@
         "wires": []
     },
     {
-        "id": "56791992ea15a8a2",
+        "id": "2e910279ae4d26f7",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Cambia broker (pc)",
         "props": [
             {
@@ -3334,15 +2163,14 @@
         "y": 1361.58740234375,
         "wires": [
             [
-                "ff2e5ecdcb78b946",
-                "18abb0459b5cfa38"
+                "aa50a2af2c04e5c1"
             ]
         ]
     },
     {
-        "id": "0264db7d642624b8",
+        "id": "d6506adfe08de546",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Cambia broker (broker.mqtt.cool)",
         "props": [
             {
@@ -3364,45 +2192,14 @@
         "y": 1400,
         "wires": [
             [
-                "ff2e5ecdcb78b946",
-                "18abb0459b5cfa38"
+                "aa50a2af2c04e5c1"
             ]
         ]
     },
     {
-        "id": "ff2e5ecdcb78b946",
-        "type": "link out",
-        "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio retain",
-        "mode": "link",
-        "links": [
-            "22c643a21305c065",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 525,
-        "y": 1420,
-        "wires": []
-    },
-    {
-        "id": "f5680f0a1887ac6a",
-        "type": "link out",
-        "z": "8b4f62e2713401d0",
-        "name": "Manda messaggio",
-        "mode": "link",
-        "links": [
-            "22c643a21305c065",
-            "98a6f3a8838eb818",
-            "38032b323723dc1c"
-        ],
-        "x": 805,
-        "y": 1040,
-        "wires": []
-    },
-    {
-        "id": "5c9f4feacff6b738",
+        "id": "183253437d06fa1f",
         "type": "mqtt out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
         "topic": "",
         "qos": "",
@@ -3418,9 +2215,9 @@
         "wires": []
     },
     {
-        "id": "b2446825f2864691",
+        "id": "68c294407d2f7924",
         "type": "mqtt out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
         "topic": "",
         "qos": "",
@@ -3436,11 +2233,11 @@
         "wires": []
     },
     {
-        "id": "bfc37d4e35595b58",
+        "id": "5b9b22e55ca35fb7",
         "type": "mqtt in",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/errors",
+        "topic": "my_devices/esp_nfc/errors",
         "qos": "0",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -3452,14 +2249,14 @@
         "y": 620,
         "wires": [
             [
-                "4d10bf33ea0ca03d"
+                "44a7c6228e83331a"
             ]
         ]
     },
     {
-        "id": "1b9b316c5d3a78b1",
+        "id": "3b69facdf7e8002b",
         "type": "mqtt out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
         "topic": "",
         "qos": "",
@@ -3475,9 +2272,9 @@
         "wires": []
     },
     {
-        "id": "583ac0a11217ea1c",
+        "id": "be0a083d0acfc610",
         "type": "mqtt out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
         "topic": "",
         "qos": "",
@@ -3493,9 +2290,9 @@
         "wires": []
     },
     {
-        "id": "18abb0459b5cfa38",
+        "id": "aa50a2af2c04e5c1",
         "type": "mqtt out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
         "topic": "",
         "qos": "",
@@ -3511,9 +2308,9 @@
         "wires": []
     },
     {
-        "id": "23cab53b255bccac",
+        "id": "67396c7b53298bde",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Disattiva deep sleep",
         "props": [
             {
@@ -3528,22 +2325,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "{   \"secondi_board_inattiva\": -1 }",
         "payloadType": "str",
         "x": 430,
         "y": 240,
         "wires": [
             [
-                "5c9f4feacff6b738",
-                "ebd45a88251b59c4"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "60acd09484e117d1",
+        "id": "489fdbcbca6ca8a7",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Togli configurazione retain",
         "props": [
             {
@@ -3558,22 +2354,21 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "{}",
         "payloadType": "str",
         "x": 830,
         "y": 40,
         "wires": [
             [
-                "5c9f4feacff6b738",
-                "ebd45a88251b59c4"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "d17a9d108ab648b4",
+        "id": "442c7d76598b88e0",
         "type": "inject",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Check tag ",
         "props": [
             {
@@ -3588,42 +2383,41 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "my_devices/door/esp_nfc/config",
+        "topic": "my_devices/esp_nfc/config",
         "payload": "{\"check_tag_localmente\":false}",
         "payloadType": "str",
         "x": 380,
         "y": 160,
         "wires": [
             [
-                "5c9f4feacff6b738",
-                "ebd45a88251b59c4"
+                "183253437d06fa1f"
             ]
         ]
     },
     {
-        "id": "3a9b869a43dd6795",
+        "id": "d67e299ed6a236fd",
         "type": "link in",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Tag strisciato",
         "links": [
             "cb0e70cb334fcc37",
             "f9322d9408f57b46",
-            "29371f8fc0ef3014"
+            "39a66c23f368db99"
         ],
         "x": 305,
         "y": 1960,
         "wires": [
             [
-                "808bf1b23b500200"
+                "c5b25a14a38f33da"
             ]
         ]
     },
     {
-        "id": "ba862bb41e4c2299",
+        "id": "25e6172d5ebde073",
         "type": "mqtt in",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
-        "topic": "my_devices/door/esp_nfc/tag_swiped",
+        "topic": "my_devices/esp_nfc/tag_swiped",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "3c590ebc25e0b5cc",
@@ -3635,16 +2429,16 @@
         "y": 1900,
         "wires": [
             [
-                "808bf1b23b500200"
+                "c5b25a14a38f33da"
             ]
         ]
     },
     {
-        "id": "808bf1b23b500200",
+        "id": "c5b25a14a38f33da",
         "type": "function",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Logica tag swiped -  apri porta",
-        "func": "// Messaggio non controllato dal device, lo controllo su node red\nvar mess = msg.payload;\nif (mess.includes(\"Non controllato\")){ \n    if (mess.includes(\"122.48.29.217\")){\n        msg.topic = \"my_devices/door/esp_nfc/led\";\n        msg.payload = \"1\";\n        return msg;\n    }\n}\nreturn null;",
+        "func": "// Messaggio non controllato dal device, lo controllo su node red\nvar mess = msg.payload;\nif (mess.includes(\"Non controllato\")){ \n    if (mess.includes(\"122.48.29.217\")){\n        msg.topic = \"my_devices/esp_nfc/led\";\n        msg.payload = \"1\";\n        return msg;\n    }\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3655,29 +2449,29 @@
         "y": 1920,
         "wires": [
             [
-                "57634e79de5e1528",
-                "f1adeaefeb729cac",
-                "8decfa68db795e3c"
+                "f65f3269e376d01c",
+                "bb72fe4a5bfbae0d",
+                "3370c97c6403752d"
             ]
         ]
     },
     {
-        "id": "57634e79de5e1528",
+        "id": "f65f3269e376d01c",
         "type": "link out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "Manda messaggio",
         "mode": "link",
         "links": [
-            "38032b323723dc1c"
+            "d5dd7a69242dd049"
         ],
         "x": 765,
         "y": 1880,
         "wires": []
     },
     {
-        "id": "f1adeaefeb729cac",
+        "id": "bb72fe4a5bfbae0d",
         "type": "mqtt out",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "",
         "topic": "",
         "qos": "",
@@ -3693,9 +2487,9 @@
         "wires": []
     },
     {
-        "id": "8decfa68db795e3c",
+        "id": "3370c97c6403752d",
         "type": "debug",
-        "z": "8b4f62e2713401d0",
+        "z": "4dded24dd3436822",
         "name": "debug 12",
         "active": true,
         "tosidebar": true,

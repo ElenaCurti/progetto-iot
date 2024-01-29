@@ -2017,7 +2017,7 @@
         "onceDelay": 0.1,
         "topic": "my_devices/esp_nfc/config",
         "payload": "{     \"tag_autorizzati\": [    \"209.53.34.217\"     ],     \"num_tentativi_errati\": [3, 5],      \"check_tag_localmente\": true,     \"secondi_board_inattiva\": 60 }",
-        "payloadType": "json",
+        "payloadType": "str",
         "x": 470,
         "y": 2220,
         "wires": [
@@ -2124,7 +2124,7 @@
         "id": "f5d37969540dc4c1",
         "type": "inject",
         "z": "10c2ed820032ad21",
-        "name": "Disattiva deep sleep",
+        "name": "deep sleep",
         "props": [
             {
                 "p": "payload"
@@ -2141,7 +2141,7 @@
         "topic": "my_devices/esp_nfc/config",
         "payload": "{   \"secondi_board_inattiva\": 60 }",
         "payloadType": "str",
-        "x": 370,
+        "x": 340,
         "y": 2020,
         "wires": [
             [
@@ -2199,7 +2199,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "my_devices/esp_nfc/config",
-        "payload": "{\"check_tag_localmente\":false}",
+        "payload": "{\"check_tag_localmente\":true}",
         "payloadType": "str",
         "x": 340,
         "y": 1940,
@@ -2300,6 +2300,36 @@
         "x": 1090,
         "y": 1460,
         "wires": []
+    },
+    {
+        "id": "6675100af3d45337",
+        "type": "inject",
+        "z": "10c2ed820032ad21",
+        "name": "Autorizza tag bianco e nero",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "my_devices/esp_nfc/config",
+        "payload": "{     \"tag_autorizzati\": [   \"122.48.29.217\",       \"209.53.34.217\"     ]}",
+        "payloadType": "str",
+        "x": 530,
+        "y": 2320,
+        "wires": [
+            [
+                "2fe23df3dfb4e0c6",
+                "4ca01916e6d7c63c"
+            ]
+        ]
     },
     {
         "id": "a4b2086ae847c575",

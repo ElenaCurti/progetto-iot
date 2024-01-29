@@ -10,21 +10,9 @@ import subprocess as sp
 
 # ---------------------------------------------------------------------------------------------
 
-# Le prossime due variabili servono per controllare che la connessione BT venga 
-# chiusa (per un qualche motivo) dalla ESP. Lo script terminera' al massimo dopo
-# SECONDS_KEEP_ALIVE+SECONDS_TIMEOUT_INPUT secondi dalla chiusura della connessione.
-# Per chiudere la connessione dallo script, invece, basta dare STOP come input.
-
-# Ogni SECONDS_KEEP_ALIVE viene mandato un messaggio di "keep_alive" alla board
-SECONDS_KEEP_ALIVE = 30
-
-# Ogni SECONDS_TIMEOUT_INPUT viene controllato che l'utente abbia inserito 
-# qualcosa in input, per evitare di aspettare in eterno
-SECONDS_TIMEOUT_INPUT = 10
-
 
 # Massima dimensione dei messaggi in input (in bytes)
-MAX_DIM_MESSAGES = 2000000 # TODO controlla che sia cosi'
+MAX_DIM_MESSAGES = 2000000 
 
 # ---------------------------------------------------------------------------------------------
 
@@ -70,7 +58,7 @@ def _recv_client_data(client_socket: bluetooth.BluetoothSocket):
     data = b''
     tmp_char = client_socket.recv(1)
     # c = 0
-    while tmp_char != b'\x0A':
+    while tmp_char != b'\x0A':  
         data += tmp_char
         tmp_char = client_socket.recv(1)
         # c+=1
