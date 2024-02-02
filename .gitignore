@@ -1,3 +1,10 @@
 mia_libreria/connessione_wifi/credenziali_wifi_casa.h
 CampanelloFotocamera_Esp32/.pio/libdeps/esp32dev/ESP32-OV7670-WebSocket-Camera/.git/
 prove/
+immagini_salvate/*.png
+immagini_salvate/*.txt
+NodeRed/out
+NodeRed/err
+bluetooth_pc/err
+bluetooth_pc/out
+mia_libreria/PN532/

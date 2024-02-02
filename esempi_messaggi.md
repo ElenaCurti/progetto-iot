@@ -89,7 +89,7 @@ mosquitto_pub -t "my_devices/esp_nfc/config" -m '{ "use_bluetooth": 2 }'
 Deep sleep dopo 60 sec di inattivita':
 
 `
-mosquitto_pub -t "my_devices/esp_nfc/config" -m '{ "secondi_board_inattiva": 60 }'
+mosquitto_pub -t "my_devices/esp_nfc/config" -m '{ "secondi_board_inattiva": 30 }'
 `
 
 

@@ -137,7 +137,7 @@ void messaggio_arrivato2(String topic, String payload_str){
 
   // Configurazioni "locali": frequenza invio immagini, timeout invio immagini, usa BT
   if (((String) TOPIC_CONFIGURAZIONI_CAMERA).equals(topic)) {
-    Serial.println("Distanza invio immagini: " + (String) frequenza_invio_immagini);
+    //Serial.println("Distanza invio immagini: " + (String) frequenza_invio_immagini);
     
     int usa_bluetooth = -1;
     String err = configurazioneCamJSON(payload_str, frequenza_invio_immagini, timeout_invio_immagini ,usa_bluetooth) ;
